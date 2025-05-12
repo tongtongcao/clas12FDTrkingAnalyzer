@@ -193,7 +193,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupMatchingOverview.getH1F("ifHaveSharedHits").fill(1);
             } else {
                 histoGroupMatchingOverview.getH1F("ifHaveSharedHits").fill(0);
-                
+                this.addDemoGroup(localEvent1, localEvent2, trk1.sector(), "extra1");
                 extraTracksSp1++;
                 
                 trkList_extraSample1.add(trk1);
@@ -212,7 +212,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         for (Track trk2 : localEvent2.getTracksTB()) {
             if (!map_track1_track2.containsValue(trk2)) {
                 histoGroupMatchingOverview.getH1F("ifHaveSharedHits").fill(2);
-                
+                this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "extra2");
                 extraTracksSp2++;
                 
                 trkList_extraSample2.add(trk2);

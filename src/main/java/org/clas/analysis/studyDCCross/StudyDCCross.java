@@ -19,10 +19,12 @@ import org.jlab.utils.options.OptionParser;
 import org.clas.utilities.Constants;
 import org.clas.element.Track;
 import org.clas.element.Cluster;
+import org.clas.element.Cross;
 import org.clas.graph.HistoGroup;
 import org.clas.analysis.BaseAnalysis;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
+import org.jlab.geom.prim.Point3D;
 
 /**
  *
@@ -36,28 +38,34 @@ public class StudyDCCross extends BaseAnalysis{
     public void createHistoGroupMap(){                
         HistoGroup histoGroupAvgWireDiff = new HistoGroup("avgWireDiff", 2, 2);
         HistoGroup histoGroupSlopeDiff = new HistoGroup("slopeDiff", 2, 2);
+        HistoGroup histoGroupAngleNoPseudo = new HistoGroup("angleNoPseudo", 2, 2);
         for(int i = 0; i < 3; i++){
-            H2F h2_avgWireDiffVsAvgWire = new H2F("avgWireDiffVsAvgWire for R" + (i+1), "avg. wire diff. vs avg. wire", 100, 0, 120, 100, 0, 10);
+            H2F h2_avgWireDiffVsAvgWire = new H2F("avgWireDiffVsAvgWire for R" + (i+1), "avg. wire diff. vs avg. wire", 50, 0, 120, 50, 0, 10);
             histoGroupAvgWireDiff.addDataSet(h2_avgWireDiffVsAvgWire, i);
             
             
-            H2F h2_slopeDiffVsAvgWire = new H2F("slopeDiffVsAvgWire for R" + (i+1), "difference of slope vs avg. wire", 100, 0, 120,100, -15, 15);
-            histoGroupSlopeDiff.addDataSet(h2_slopeDiffVsAvgWire, i);            
+            H2F h2_slopeDiffVsAvgWire = new H2F("slopeDiffVsAvgWire for R" + (i+1), "difference of slope vs avg. wire", 50, 0, 120,50, -15, 15);
+            histoGroupSlopeDiff.addDataSet(h2_slopeDiffVsAvgWire, i);   
+            
+            H1F h1_angleNoPseudo = new H1F("angleNoPseudo for R" + (i+1), "angle", 100, -40, 40);
+            histoGroupAngleNoPseudo.addDataSet(h1_angleNoPseudo, i); 
         }       
         histoGroupMap.put(histoGroupAvgWireDiff.getName(), histoGroupAvgWireDiff);
-        histoGroupMap.put(histoGroupSlopeDiff.getName(), histoGroupSlopeDiff);                        
+        histoGroupMap.put(histoGroupSlopeDiff.getName(), histoGroupSlopeDiff);  
+        histoGroupMap.put(histoGroupAngleNoPseudo.getName(), histoGroupAngleNoPseudo);    
     }
              
     public void processEvent(Event event){        
         //Read banks
-        LocalEvent localEvent = new LocalEvent(reader, event, Constants.AITB, true);  
+        LocalEvent localEvent = new LocalEvent(reader, event, Constants.AITB);  
         
         List<Cluster> clustersOrig = localEvent.getClustersHB();
         
         HistoGroup histoGroupAvgWire = histoGroupMap.get("avgWireDiff");
         HistoGroup histoGroupSlopeDiff = histoGroupMap.get("slopeDiff");
+        HistoGroup histoGroupAngleNoPseudo = histoGroupMap.get("angleNoPseudo");
         for(Track trk : localEvent.getTracksTB()){
-            if(trk.isValid()){
+            if(Math.abs(trk.chi2pid()) < 3 && trk.vz() > -15 && trk.vz() < 5){
                 List<Cluster> clusters = trk.getClusters();
                 Map<Integer, List<Cluster>> map_region_clusters = new HashMap();
                 for(Cluster cls : clusters){
@@ -88,15 +96,20 @@ public class StudyDCCross extends BaseAnalysis{
                     List<Cluster> clsList = map_region_clusters.get(region);
                     if(clsList.size() == 2){                        
                         double avgWireDiff = clsList.get(0).avgWire() - clsList.get(1).avgWire();
-                        histoGroupAvgWire.getH2F("avgWireDiffVsAvgWire for R" + region).fill(Math.abs(clsList.get(0).avgWire()), avgWireDiff);
-                        histoGroupSlopeDiff.getH2F("slopeDiffVsAvgWire for R" + region).fill(Math.abs(clsList.get(0).avgWire()), Math.toDegrees(Math.acos(clsList.get(1).getNormal().dot(clsList.get(0).getNormal()))) - 2*Constants.STEREOANGLE);                                                                                                
+                        histoGroupAvgWire.getH2F("avgWireDiffVsAvgWire for R" + region).fill(clsList.get(0).avgWire(), Math.abs(avgWireDiff));
+                        histoGroupSlopeDiff.getH2F("slopeDiffVsAvgWire for R" + region).fill(clsList.get(0).avgWire(), Math.toDegrees(Math.acos(clsList.get(1).getNormal().dot(clsList.get(0).getNormal()))) - 2*Constants.STEREOANGLE);                                                                                                
                     }
                 }
             }
         }
         
-        
-                        
+        for(Cross crs : localEvent.getCrossesAllHB()){
+            Point3D pointInSector = crs.getCoordsInSector(crs.x(), crs.y(), crs.z());
+            double angle = Math.toDegrees(Math.atan2(pointInSector.y(), pointInSector.x()));
+            if(crs.id() != -1){
+                histoGroupAngleNoPseudo.getH1F("angleNoPseudo for R" + crs.region()).fill(angle);
+            }
+        }                                        
     }    
     
                             

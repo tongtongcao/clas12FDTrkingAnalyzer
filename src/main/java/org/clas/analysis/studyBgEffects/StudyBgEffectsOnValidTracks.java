@@ -49,9 +49,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
     private int[] numLostClustersWith3MoreNormalHits = new int[6];
     private int[] numMatchedClustersNotAllNormalHits = new int[6];
     
-    private List<Integer> numLostEvents = new ArrayList();
-    
-    private final double RATIONORMALHITSCUTS  = 0.599;
+    private List<Integer> numLostEvents = new ArrayList();   
     
     // histogram group for post-event process
     private HistoGroup histoGroupEstimatePotentialRestorableClusters = new HistoGroup("estimatePotentialRestorableClusters", 1, 2);;
@@ -66,6 +64,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         HistoGroup histoGroupProbVsNHitsFor3MoreNormalHitsLeftForLostCluters = new HistoGroup("probVsNHitsFor3MoreNormalHitsLeftForLostCluters", 2, 3);
         HistoGroup histoGroupMatchedHitRatio = new HistoGroup("matchedHitRatio", 2, 3);
         HistoGroup histoGroupIfAllNormalHitsMatchedCluster = new HistoGroup("ifAllNormalHitsMatchedCluster", 2, 3);
+        HistoGroup histoGroupClusterSituationSample2 = new HistoGroup("clusterSituationSample2", 2, 3);
         HistoGroup histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster = new HistoGroup("normalHitRatioForNotAllNormalHitsMatchedCluster", 2, 3);
         HistoGroup histoGroupNormalHitRatioVsSizeForNotAllNormalHitsMatchedCluster = new HistoGroup("normalHitRatioVsSizeForNotAllNormalHitsMatchedCluster", 2, 3);
         HistoGroup histoGroupProbVsNormalHitRatioForNotAllNormalHitsMatchedCluster = new HistoGroup("probVsNormalHitRatioForNotAllNormalHitsMatchedCluster", 2, 3);
@@ -104,6 +103,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             h1_ifAllNormalHitsMatchedCluster.setTitleY("Counts");
             histoGroupIfAllNormalHitsMatchedCluster.addDataSet(h1_ifAllNormalHitsMatchedCluster, i);
             
+            H1F h1_clusterSituationSample2 = new H1F("clusterSituationSample2 for SL" + Integer.toString(i + 1),
+                    "cluster situation at SL" + Integer.toString(i + 1), 3,0.5, 3.5);
+            h1_clusterSituationSample2.setTitleX("cluster situation");
+            h1_clusterSituationSample2.setTitleY("counts");
+            histoGroupClusterSituationSample2.addDataSet(h1_clusterSituationSample2, i);             
+            
             H1F h1_normalHitRatioForNotAllNormalHitsMatchedCluster = new H1F("normalHitRatioForNotAllNormalHitsMatchedCluster for SL" + Integer.toString(i + 1),
                     "normal hit ratio for not-all-normal-hits matched clusters at SL" + Integer.toString(i + 1), 101, 0, 1.01);
             h1_normalHitRatioForNotAllNormalHitsMatchedCluster.setTitleX("normal hit ratio");
@@ -121,10 +126,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                     "prob vs normalHitRatio for not-all-normal-hits matched cluster at SL" + Integer.toString(i + 1), 101,0, 1.01, 101, 0, 1.01);
             h2_probVsNormalHitRatioForNotAllNormalHitsMatchedCluster.setTitleX("ratio of normal hits");
             h2_probVsNormalHitRatioForNotAllNormalHitsMatchedCluster.setTitleY("prob");
-            histoGroupProbVsNormalHitRatioForNotAllNormalHitsMatchedCluster.addDataSet(h2_probVsNormalHitRatioForNotAllNormalHitsMatchedCluster, i);  
-            
-            
-            
+            histoGroupProbVsNormalHitRatioForNotAllNormalHitsMatchedCluster.addDataSet(h2_probVsNormalHitRatioForNotAllNormalHitsMatchedCluster, i);               
         }
         
         histoGroupMap.put(histoGroupClusterMatchingStatus.getName(), histoGroupClusterMatchingStatus);   
@@ -147,7 +149,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         histoGroupMap.put(histoGroupMatchedClusters.getName(), histoGroupMatchedClusters);
         histoGroupMap.put(histoGroupMatchedHitRatio.getName(), histoGroupMatchedHitRatio);  
         histoGroupMap.put(histoGroupIfAllNormalHitsMatchedCluster.getName(), histoGroupIfAllNormalHitsMatchedCluster);   
-        histoGroupMap.put(histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster.getName(), histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster);          
+        histoGroupMap.put(histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster.getName(), histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster);  
+        histoGroupMap.put(histoGroupClusterSituationSample2.getName(), histoGroupClusterSituationSample2);         
         histoGroupMap.put(histoGroupNormalHitRatioVsSizeForNotAllNormalHitsMatchedCluster.getName(), histoGroupNormalHitRatioVsSizeForNotAllNormalHitsMatchedCluster);          
         histoGroupMap.put(histoGroupProbVsNormalHitRatioForNotAllNormalHitsMatchedCluster.getName(), histoGroupProbVsNormalHitRatioForNotAllNormalHitsMatchedCluster);  
                 
@@ -227,19 +230,19 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersAICandidates.setTitleX("# of clusters in AI candidates");
         h1_numClustersAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numClustersAICandidates, 0);          
-        H1F h1_numMatchedClustersAICandidates = new H1F("numMatchedClustersAICandidates", "# of matched clusters in AI candidates", 8, -1.5, 6.5);
+        H1F h1_numMatchedClustersAICandidates = new H1F("numMatchedClustersAICandidates", "# of matched clusters in AI candidates", 7, -0.5, 6.5);
         h1_numMatchedClustersAICandidates.setTitleX("# of matched clusters in AI candidates");
         h1_numMatchedClustersAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numMatchedClustersAICandidates, 1);        
-        H1F h1_numNomatchedClustersAICandidates = new H1F("numNomatchedClustersAICandidates", "# of nomatched clusters in AI candidates", 8, -1.5, 6.5);
+        H1F h1_numNomatchedClustersAICandidates = new H1F("numNomatchedClustersAICandidates", "# of nomatched clusters in AI candidates", 7, -0.5, 6.5);
         h1_numNomatchedClustersAICandidates.setTitleX("# of nomatched clusters in AI candidates");
         h1_numNomatchedClustersAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numNomatchedClustersAICandidates, 2);            
-        H2F h2_numMatchedAICandidatesVsNumMatchedClustering = new H2F("numMatchedAICandidatesVsNumMatchedClustering", "# of matched clusters in AI candidates vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numMatchedAICandidatesVsNumMatchedClustering = new H2F("numMatchedAICandidatesVsNumMatchedClustering", "# of matched clusters in AI candidates vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numMatchedAICandidatesVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numMatchedAICandidatesVsNumMatchedClustering.setTitleY("# of matched clusters in AI candidates");
         histoGroupAICandidates.addDataSet(h2_numMatchedAICandidatesVsNumMatchedClustering, 3);  
-        H2F h2_numNomatchedAICandidatesVsNumMatchedClustering = new H2F("numNomatchedAICandidatesVsNumMatchedClustering", "# of nomatched clusters in AI candidates vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numNomatchedAICandidatesVsNumMatchedClustering = new H2F("numNomatchedAICandidatesVsNumMatchedClustering", "# of nomatched clusters in AI candidates vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numNomatchedAICandidatesVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numNomatchedAICandidatesVsNumMatchedClustering.setTitleY("# of nomatched clusters in AI candidates");
         histoGroupAICandidates.addDataSet(h2_numNomatchedAICandidatesVsNumMatchedClustering, 4);         
@@ -247,12 +250,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersFullyMatchedAICandidates.setTitleX("# of clusters in AI candidates for fully matched");
         h1_numClustersFullyMatchedAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numClustersFullyMatchedAICandidates, 5);        
-        H1F h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates = new H1F("numNoiseClustersfor6ClustersFullyMatchedAICandidates", "# of noise clusters for fully matched 6-cluster AI candidates", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates.setTitleX("# of noise clusters for fully matched 6-cluster AI candidates");
+        H1F h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates = new H1F("numNoiseClustersfor6ClustersFullyMatchedAICandidates", "# of mixed-clusters for fully matched 6-cluster AI candidates", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates.setTitleX("# of mixed-clusters for fully matched 6-cluster AI candidates");
         h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numNoiseClustersfor6ClustersFullyMatchedAICandidates, 6);           
-        H1F h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates = new H1F("numNoiseClustersfor5ClustersFullyMatchedAICandidates", "# of noise clusters for fully matched 5-cluster AI candidates", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates.setTitleX("# of noise clusters for fully matched 5-cluster AI candidates");
+        H1F h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates = new H1F("numNoiseClustersfor5ClustersFullyMatchedAICandidates", "# of mixed-clusters for fully matched 5-cluster AI candidates", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates.setTitleX("# of mixed-clusters for fully matched 5-cluster AI candidates");
         h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates.setTitleY("Counts");
         histoGroupAICandidates.addDataSet(h1_numNoiseClustersfor5ClustersFullyMatchedAICandidates, 7);         
         histoGroupMap.put(histoGroupAICandidates.getName(), histoGroupAICandidates);
@@ -273,19 +276,19 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersHBTracks.setTitleX("# of clusters in HB tracks");
         h1_numClustersHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numClustersHBTracks, 0);          
-        H1F h1_numMatchedClustersHBTracks = new H1F("numMatchedClustersHBTracks", "# of matched clusters in HB tracks", 8, -1.5, 6.5);
+        H1F h1_numMatchedClustersHBTracks = new H1F("numMatchedClustersHBTracks", "# of matched clusters in HB tracks", 7, -0.5, 6.5);
         h1_numMatchedClustersHBTracks.setTitleX("# of matched clusters in HB tracks");
         h1_numMatchedClustersHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numMatchedClustersHBTracks, 1);        
-        H1F h1_numNomatchedClustersHBTracks = new H1F("numNomatchedClustersHBTracks", "# of nomatched clusters in HB tracks", 8, -1.5, 6.5);
+        H1F h1_numNomatchedClustersHBTracks = new H1F("numNomatchedClustersHBTracks", "# of nomatched clusters in HB tracks", 7, -0.5, 6.5);
         h1_numNomatchedClustersHBTracks.setTitleX("# of nomatched clusters in HB tracks");
         h1_numNomatchedClustersHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numNomatchedClustersHBTracks, 2);                 
-        H2F h2_numMatchedHBTracksVsNumMatchedClustering = new H2F("numMatchedHBTracksVsNumMatchedClustering", "# of matched clusters in HB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numMatchedHBTracksVsNumMatchedClustering = new H2F("numMatchedHBTracksVsNumMatchedClustering", "# of matched clusters in HB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numMatchedHBTracksVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numMatchedHBTracksVsNumMatchedClustering.setTitleY("# of matched clusters in HB tracks");
         histoGroupHBTracks.addDataSet(h2_numMatchedHBTracksVsNumMatchedClustering, 3);
-        H2F h2_numNomatchedHBTracksVsNumMatchedClustering = new H2F("numNomatchedHBTracksVsNumMatchedClustering", "# of nomatched clusters in HB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numNomatchedHBTracksVsNumMatchedClustering = new H2F("numNomatchedHBTracksVsNumMatchedClustering", "# of nomatched clusters in HB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numNomatchedHBTracksVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numNomatchedHBTracksVsNumMatchedClustering.setTitleY("# of nomatched clusters in HB tracks");
         histoGroupHBTracks.addDataSet(h2_numNomatchedHBTracksVsNumMatchedClustering, 4);  
@@ -293,12 +296,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersFullyMatchedHBTracks.setTitleX("# of clusters in HB tracks for fully matched");
         h1_numClustersFullyMatchedHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numClustersFullyMatchedHBTracks, 5);        
-        H1F h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedHBTracks", "# of noise clusters for fully matched 6-cluster HB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks.setTitleX("# of noise clusters for fully matched 6-cluster HB tracks");
+        H1F h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedHBTracks", "# of mixed-clusters for fully matched 6-cluster HB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks.setTitleX("# of mixed-clusters for fully matched 6-cluster HB tracks");
         h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numNoiseClustersfor6ClustersFullyMatchedHBTracks, 6);           
-        H1F h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedHBTracks", "# of noise clusters for fully matched 5-cluster HB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks.setTitleX("# of noise clusters for fully matched 5-cluster HB tracks");
+        H1F h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedHBTracks", "# of mixed-clusters for fully matched 5-cluster HB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks.setTitleX("# of mixed-clusters for fully matched 5-cluster HB tracks");
         h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks.setTitleY("Counts");
         histoGroupHBTracks.addDataSet(h1_numNoiseClustersfor5ClustersFullyMatchedHBTracks, 7);         
         histoGroupMap.put(histoGroupHBTracks.getName(), histoGroupHBTracks);
@@ -347,8 +350,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h2_vzHBTrackComp.setTitleY("vz in sample2 (cm)");
         histoGroupHBTrackComp.addDataSet(h2_vzHBTrackComp, 8);  
         H2F h2_pidHBTrackComp = new H2F("pidHBTrackComp", "Comparison for pid", 50, -25, 25, 50, -25, 25);
-        h2_pidHBTrackComp.setTitleX("pid in sample1 (GeV/c)");
-        h2_pidHBTrackComp.setTitleY("pid in sample2 (GeV/c)");
+        h2_pidHBTrackComp.setTitleX("pid in sample1");
+        h2_pidHBTrackComp.setTitleY("pid in sample2");
         histoGroupHBTrackComp.addDataSet(h2_pidHBTrackComp, 9);         
         H1F h1_pidStatusHBTrack = new H1F("pidStatusHBTrack", "if pid the same", 2, -0.5, 1.5);
         h1_pidStatusHBTrack.setTitleX("pid status");
@@ -360,10 +363,44 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         histoGroupHBTrackComp.addDataSet(h1_ratioNormalHitsDiffPIdHBTrack, 11);        
         histoGroupMap.put(histoGroupHBTrackComp.getName(), histoGroupHBTrackComp); 
         
+        HistoGroup histoGroupHBTrackDiff= new HistoGroup("HBTrackDiff", 3, 4);
+        H1F h1_chi2overndfHBTrackDiff = new H1F("chi2overndfHBTrackDiff", "Difference of chi2/ndf", 100, -10, 10);
+        h1_chi2overndfHBTrackDiff.setTitleX("Difference of chi2/ndf");
+        h1_chi2overndfHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_chi2overndfHBTrackDiff, 0);        
+        H1F h1_chi2pidHBTrackDiff = new H1F("chi2pidHBTrackDiff", "Difference of chi2pid", 100, -2, 2);
+        h1_chi2pidHBTrackDiff.setTitleX("Difference of chi2pid");
+        h1_chi2pidHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_chi2pidHBTrackDiff, 1);         
+        H1F h1_pHBTrackDiff = new H1F("pHBTrackDiff", "Difference of p", 100, -0.5, 0.5);
+        h1_pHBTrackDiff.setTitleX("Difference of p (GeV/c)");
+        h1_pHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_pHBTrackDiff, 3); 
+        H1F h1_thetaHBTrackDiff = new H1F("thetaHBTrackDiff", "Difference of theta", 100, -0.1, 0.1);
+        h1_thetaHBTrackDiff.setTitleX("Difference of theta (rad)");
+        h1_thetaHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_thetaHBTrackDiff, 4); 
+        H1F h1_phiHBTrackDiff = new H1F("phiHBTrackDiff", "Difference of phi", 100, -0.2, 0.2);
+        h1_phiHBTrackDiff.setTitleX("Difference of phi (rad)");
+        h1_phiHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_phiHBTrackDiff, 5);         
+        H1F h1_vxHBTrackDiff = new H1F("vxHBTrackDiff", "Difference of vx", 100, -5, 5);
+        h1_vxHBTrackDiff.setTitleX("Difference of vx (cm)");
+        h1_vxHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_vxHBTrackDiff, 6);         
+        H1F h1_vyHBTrackDiff = new H1F("vyHBTrackDiff", "Difference of vy", 100, -10, 10);
+        h1_vyHBTrackDiff.setTitleX("Difference of vy (cm)");
+        h1_vyHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_vyHBTrackDiff, 7); 
+        H1F h1_vzHBTrackDiff = new H1F("vzHBTrackDiff", "Difference of vz", 100, -10, 10);
+        h1_vzHBTrackDiff.setTitleX("Difference of vz (cm)");
+        h1_vzHBTrackDiff.setTitleY("counts");
+        histoGroupHBTrackDiff.addDataSet(h1_vzHBTrackDiff, 8);                  
+        histoGroupMap.put(histoGroupHBTrackDiff.getName(), histoGroupHBTrackDiff); 
         
         HistoGroup histoGroupMatchNoMatchCompHBTracks= new HistoGroup("matchNoMatchCompHBTracks", 2, 3);
         histoGroupMatchNoMatchCompHBTracks.addDataSet(h2_numMatchedHBTracksVsNumMatchedClustering, 0);
-        histoGroupMatchNoMatchCompHBTracks.addDataSet(h2_numNomatchedHBTracksVsNumMatchedClustering, 1);        
+        histoGroupMatchNoMatchCompHBTracks.addDataSet(h2_numNomatchedHBTracksVsNumMatchedClustering, 1);                  
         H1F h1_chi2OverNdfMatchHBTracks = new H1F("chi2OverNdfMatchHBTracks", "chi2/ndf for matched HB tracks", 100, 0, 100);
         h1_chi2OverNdfMatchHBTracks.setTitleX("chi2/ndf");
         h1_chi2OverNdfMatchHBTracks.setTitleY("Counts");
@@ -373,11 +410,22 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_chi2OverNdfNomatchHBTracks.setTitleX("chi2/ndf");
         h1_chi2OverNdfNomatchHBTracks.setTitleY("Counts");
         h1_chi2OverNdfNomatchHBTracks.setLineColor(2);
-        histoGroupMatchNoMatchCompHBTracks.addDataSet(h1_chi2OverNdfNomatchHBTracks, 2);                 
+        histoGroupMatchNoMatchCompHBTracks.addDataSet(h1_chi2OverNdfNomatchHBTracks, 2);                                                
+        H1F h1_only1NoMatchedClusterHBTracks = new H1F("only1NoMatchedClusterHBTracks", "occp. for only-1-noshared-cluster track", 2, -0.5, 1.5);
+        h1_only1NoMatchedClusterHBTracks.setTitleX("occp. for only-1-nomatched-cluster track");
+        h1_only1NoMatchedClusterHBTracks.setTitleY("Counts");
+        histoGroupMatchNoMatchCompHBTracks.addDataSet(h1_only1NoMatchedClusterHBTracks, 3);         
+        H2F h2_SLCompOnly1NoMatchedClusterHBTracks = new H2F("SLCompOnly1NoMatchedClusterHBTracks", "SL comp of no shared cluster for only-1-noshared-cluster track", 6, 0.5, 6.5, 6, 0.5, 6.5);
+        h2_SLCompOnly1NoMatchedClusterHBTracks.setTitleX("SL for no shared cluster in matched clusters");
+        h2_SLCompOnly1NoMatchedClusterHBTracks.setTitleY("SL for no shared cluster in track");
+        histoGroupMatchNoMatchCompHBTracks.addDataSet(h2_SLCompOnly1NoMatchedClusterHBTracks, 4);  
+        
+        H1F h1_only1NoMatchedClusterSameSLHBTracks = new H1F("only1NoMatchedClusterSameSLHBTracks", "occp. for only-1-noshared-cluster-sameSL track", 2, -0.5, 1.5);
+        h1_only1NoMatchedClusterSameSLHBTracks.setTitleX("occp. for only-1-nomatched-cluster-sameSL track");
+        h1_only1NoMatchedClusterSameSLHBTracks.setTitleY("Counts");
+        histoGroupMatchNoMatchCompHBTracks.addDataSet(h1_only1NoMatchedClusterSameSLHBTracks, 5); 
+        
         histoGroupMap.put(histoGroupMatchNoMatchCompHBTracks.getName(), histoGroupMatchNoMatchCompHBTracks);
-        
-        
-        
         
         HistoGroup histoGroup1NoMatchedCluster5ClustersHBTrackComp= new HistoGroup("1NoMatchedCluster5ClustersHBTrackComp", 3, 4);
         H2F h2_chi2overndf1NoMatchedCluster5ClustersHBTrackComp = new H2F("chi2overndf1NoMatchedCluster5ClustersHBTrackComp", "Comparison for chi2/ndf", 100, 0, 100, 100, 0, 100);
@@ -413,8 +461,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h2_vz1NoMatchedCluster5ClustersHBTrackComp.setTitleY("vz in sample2 (cm)");
         histoGroup1NoMatchedCluster5ClustersHBTrackComp.addDataSet(h2_vz1NoMatchedCluster5ClustersHBTrackComp, 8);  
         H2F h2_pid1NoMatchedCluster5ClustersHBTrackComp = new H2F("pid1NoMatchedCluster5ClustersHBTrackComp", "Comparison for pid", 50, -25, 25, 50, -25, 25);
-        h2_pid1NoMatchedCluster5ClustersHBTrackComp.setTitleX("pid in sample1 (GeV/c)");
-        h2_pid1NoMatchedCluster5ClustersHBTrackComp.setTitleY("pid in sample2 (GeV/c)");
+        h2_pid1NoMatchedCluster5ClustersHBTrackComp.setTitleX("pid in sample1");
+        h2_pid1NoMatchedCluster5ClustersHBTrackComp.setTitleY("pid in sample2");
         histoGroup1NoMatchedCluster5ClustersHBTrackComp.addDataSet(h2_pid1NoMatchedCluster5ClustersHBTrackComp, 9);         
         H1F h1_pidStatus1NoMatchedCluster5ClustersHBTrack = new H1F("pidStatus1NoMatchedCluster5ClustersHBTrack", "if pid the same", 2, -0.5, 1.5);
         h1_pidStatus1NoMatchedCluster5ClustersHBTrack.setTitleX("pid status");
@@ -426,7 +474,33 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         histoGroup1NoMatchedCluster5ClustersHBTrackComp.addDataSet(h1_ratioNormalHitsDiffPId1NoMatchedCluster5ClustersHBTrack, 11);        
         histoGroupMap.put(histoGroup1NoMatchedCluster5ClustersHBTrackComp.getName(), histoGroup1NoMatchedCluster5ClustersHBTrackComp); 
         
-               
+        HistoGroup histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new HistoGroup("noSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", 2, 3);
+        H2F h2_avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H2F("avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "avg wire comp", 30, 0, 120, 30, 0, 120);
+        h2_avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("avgWire for no shared cluster in matched clusters");
+        h2_avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("avgWire for no shared cluster in track ");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h2_avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 0);        
+        H2F h2_slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H2F("slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "slope comp", 30, -2, 2, 30, -2, 2);
+        h2_slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("slope for no shared cluster in matched clusters");
+        h2_slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("slope for no shared cluster in track ");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h2_slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 2);        
+        H2F h2_ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H2F("ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "ratio of norma hits comp", 30, 0, 1.01, 30, 0, 1.01);
+        h2_ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("ratio of normal hits for no shared cluster in matched clusters");
+        h2_ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("ratio of normal hits for no shared cluster in track ");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h2_ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 4);        
+        H1F h1_avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H1F("avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "avg wire diff", 30, -5, 5);
+        h1_avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("avg wire diff");
+        h1_avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("counts");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h1_avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 1);        
+        H1F h1_slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H1F("slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "slope diff", 30, -2, 2);
+        h1_slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("slope diff");
+        h1_slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("counts");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h1_slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 3);        
+        H1F h1_numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = new H1F("numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks", "# of shared hits", 10, 0, 10);
+        h1_numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleX("# of shared hits");
+        h1_numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.setTitleY("counts");
+        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.addDataSet(h1_numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks, 5);
+        
+        histoGroupMap.put(histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getName(), histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks); 
         
         ////// TB tracking level
         HistoGroup histoGroupTBTracks= new HistoGroup("TBTracks", 2, 4);
@@ -434,19 +508,19 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersTBTracks.setTitleX("# of clusters in TB tracks");
         h1_numClustersTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numClustersTBTracks, 0);          
-        H1F h1_numMatchedClustersTBTracks = new H1F("numMatchedClustersTBTracks", "# of matched clusters in TB tracks", 8, -1.5, 6.5);
+        H1F h1_numMatchedClustersTBTracks = new H1F("numMatchedClustersTBTracks", "# of matched clusters in TB tracks", 7, -0.5, 6.5);
         h1_numMatchedClustersTBTracks.setTitleX("# of matched clusters in TB tracks");
         h1_numMatchedClustersTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numMatchedClustersTBTracks, 1);        
-        H1F h1_numNomatchedClustersTBTracks = new H1F("numNomatchedClustersTBTracks", "# of nomatched clusters in TB tracks", 8, -1.5, 6.5);
+        H1F h1_numNomatchedClustersTBTracks = new H1F("numNomatchedClustersTBTracks", "# of nomatched clusters in TB tracks", 7, -0.5, 6.5);
         h1_numNomatchedClustersTBTracks.setTitleX("# of nomatched clusters in TB tracks");
         h1_numNomatchedClustersTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numNomatchedClustersTBTracks, 2);         
-        H2F h2_numMatchedTBTracksVsNumMatchedClustering = new H2F("numMatchedTBTracksVsNumMatchedClustering", "# of matched clusters in TB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numMatchedTBTracksVsNumMatchedClustering = new H2F("numMatchedTBTracksVsNumMatchedClustering", "# of matched clusters in TB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numMatchedTBTracksVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numMatchedTBTracksVsNumMatchedClustering.setTitleY("# of matched clusters in TB tracks");
         histoGroupTBTracks.addDataSet(h2_numMatchedTBTracksVsNumMatchedClustering, 3); 
-        H2F h2_numNomatchedTBTracksVsNumMatchedClustering = new H2F("numNomatchedTBTracksVsNumMatchedClustering", "# of nomatched clusters in TB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 8, -1.5, 6.5);
+        H2F h2_numNomatchedTBTracksVsNumMatchedClustering = new H2F("numNomatchedTBTracksVsNumMatchedClustering", "# of nomatched clusters in TB tracks vs # of matched clusters in clustering", 7, -0.5, 6.5, 7, -0.5, 6.5);
         h2_numNomatchedTBTracksVsNumMatchedClustering.setTitleX("# of matched clusters in clustering");
         h2_numNomatchedTBTracksVsNumMatchedClustering.setTitleY("# of nomatched clusters in TB tracks");
         histoGroupTBTracks.addDataSet(h2_numNomatchedTBTracksVsNumMatchedClustering, 4);         
@@ -454,12 +528,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersFullyMatchedTBTracks.setTitleX("# of clusters in TB tracks for fully matched");
         h1_numClustersFullyMatchedTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numClustersFullyMatchedTBTracks, 5);        
-        H1F h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedTBTracks", "# of noise clusters for fully matched 6-cluster TB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks.setTitleX("# of noise clusters for fully matched 6-cluster TB tracks");
+        H1F h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedTBTracks", "# of mixed-clusters for fully matched 6-cluster TB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks.setTitleX("# of mixed-clusters for fully matched 6-cluster TB tracks");
         h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numNoiseClustersfor6ClustersFullyMatchedTBTracks, 6);           
-        H1F h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedTBTracks", "# of noise clusters for fully matched 5-cluster TB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks.setTitleX("# of noise clusters for fully matched 5-cluster TB tracks");
+        H1F h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedTBTracks", "# of mixed-clusters for fully matched 5-cluster TB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks.setTitleX("# of mixed-clusters for fully matched 5-cluster TB tracks");
         h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks.setTitleY("Counts");
         histoGroupTBTracks.addDataSet(h1_numNoiseClustersfor5ClustersFullyMatchedTBTracks, 7);         
         histoGroupMap.put(histoGroupTBTracks.getName(), histoGroupTBTracks);
@@ -477,7 +551,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         HistoGroup histoGroupDAFWeightNormalClustersforFullyMatchedTBTracks= new HistoGroup("DAFWeightNormalClustersforFullyMatchedTBTracks", 2, 3);
         for (int i = 0; i < 6; i++) {
             H1F h1_DAFWeightNormalClustersInFullyMatchedTBTracks = new H1F("DAFWeightNormalClustersInFullyMatchedTBTracks for SL" + Integer.toString(i + 1),
-                    "DAF weight of noise clusters in fully matched TB tracks" + Integer.toString(i + 1), 101, 0, 1.01);
+                    "DAF weight of normal hits in fully matched TB tracks" + Integer.toString(i + 1), 101, 0, 1.01);
             h1_DAFWeightNormalClustersInFullyMatchedTBTracks.setTitleX("DAF weight");
             h1_DAFWeightNormalClustersInFullyMatchedTBTracks.setTitleY("Counts");
             histoGroupDAFWeightNormalClustersforFullyMatchedTBTracks.addDataSet(h1_DAFWeightNormalClustersInFullyMatchedTBTracks, i);
@@ -487,7 +561,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         HistoGroup histoGroupDAFWeightNoiseClustersforFullyMatchedTBTracks= new HistoGroup("DAFWeightNoiseClustersforFullyMatchedTBTracks", 2, 3);
         for (int i = 0; i < 6; i++) {
             H1F h1_DAFWeightNoiseClustersInFullyMatchedTBTracks = new H1F("DAFWeightNoiseClustersInFullyMatchedTBTracks for SL" + Integer.toString(i + 1),
-                    "DAF weight of noise clusters in fully matched TB tracks" + Integer.toString(i + 1), 101, 0, 1.01);
+                    "DAF weight of noise hits in fully matched TB tracks" + Integer.toString(i + 1), 101, 0, 1.01);
             h1_DAFWeightNoiseClustersInFullyMatchedTBTracks.setTitleX("DAF weight");
             h1_DAFWeightNoiseClustersInFullyMatchedTBTracks.setTitleY("Counts");
             histoGroupDAFWeightNoiseClustersforFullyMatchedTBTracks.addDataSet(h1_DAFWeightNoiseClustersInFullyMatchedTBTracks, i);
@@ -502,7 +576,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         H2F h2_chi2pidTBTrackComp = new H2F("chi2pidTBTrackComp", "Comparison for chi2pid", 100, -15, 15, 100, -15, 15);
         h2_chi2pidTBTrackComp.setTitleX("chi2pid in sample1");
         h2_chi2pidTBTrackComp.setTitleY("chi2pid in sample2");
-        histoGroupTBTrackComp.addDataSet(h2_chi2pidTBTrackComp, 1);            
+        histoGroupTBTrackComp.addDataSet(h2_chi2pidTBTrackComp, 1); 
+        H1F h1_ratioNormalHitsTBTrack = new H1F("ratioNormalHitsTBTrack", "ratio of normal hits for TB tracks", 101, 0, 1.01);
+        h1_ratioNormalHitsTBTrack.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsTBTrack.setTitleY("counts");
+        histoGroupTBTrackComp.addDataSet(h1_ratioNormalHitsTBTrack, 2);        
+        histoGroupMap.put(histoGroupTBTrackComp.getName(), histoGroupTBTrackComp); 
         H2F h2_pTBTrackComp = new H2F("pTBTrackComp", "Comparison for p", 100, 0, 12, 100, 0, 12);
         h2_pTBTrackComp.setTitleX("p in sample1 (GeV/c)");
         h2_pTBTrackComp.setTitleY("p in sample2 (GeV/c)");
@@ -528,14 +607,14 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h2_vzTBTrackComp.setTitleY("vz in sample2 (cm)");
         histoGroupTBTrackComp.addDataSet(h2_vzTBTrackComp, 8);  
         H2F h2_pidTBTrackComp = new H2F("pidTBTrackComp", "Comparison for pid", 50, -25, 25, 50, -25, 25);
-        h2_pidTBTrackComp.setTitleX("pid in sample1 (GeV/c)");
-        h2_pidTBTrackComp.setTitleY("pid in sample2 (GeV/c)");
+        h2_pidTBTrackComp.setTitleX("pid in sample1");
+        h2_pidTBTrackComp.setTitleY("pid in sample2");
         histoGroupTBTrackComp.addDataSet(h2_pidTBTrackComp, 9);         
         H1F h1_pidStatusTBTrack = new H1F("pidStatusTBTrack", "if pid the same", 2, -0.5, 1.5);
         h1_pidStatusTBTrack.setTitleX("pid status");
         h1_pidStatusTBTrack.setTitleY("counts");
         histoGroupTBTrackComp.addDataSet(h1_pidStatusTBTrack, 10);
-        H1F h1_ratioNormalHitsDiffPIdTBTrack = new H1F("ratioNormalHitsDiffPIdTBTrack", "ratio of normal hits for cases with diff. pid", 100, 0, 1);
+        H1F h1_ratioNormalHitsDiffPIdTBTrack = new H1F("ratioNormalHitsDiffPIdTBTrack", "ratio of normal hits for cases with diff. pid", 101, 0, 1.01);
         h1_ratioNormalHitsDiffPIdTBTrack.setTitleX("ratio of normal hits");
         h1_ratioNormalHitsDiffPIdTBTrack.setTitleY("counts");
         histoGroupTBTrackComp.addDataSet(h1_ratioNormalHitsDiffPIdTBTrack, 11);        
@@ -652,12 +731,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersFullyMatchedValidTBTracks.setTitleX("# of clusters in valid TB tracks for fully matched");
         h1_numClustersFullyMatchedValidTBTracks.setTitleY("Counts");
         histoGroupValidTBTracks.addDataSet(h1_numClustersFullyMatchedValidTBTracks, 3);        
-        H1F h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedValidTBTracks", "# of noise clusters for fully matched 6-cluster valid TB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks.setTitleX("# of noise clusters for fully matched 6-cluster vaid TB tracks");
+        H1F h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks = new H1F("numNoiseClustersfor6ClustersFullyMatchedValidTBTracks", "# of mixed-clusters for fully matched 6-cluster valid TB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks.setTitleX("# of mixed-clusters for fully matched 6-cluster vaid TB tracks");
         h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks.setTitleY("Counts");
         histoGroupValidTBTracks.addDataSet(h1_numNoiseClustersfor6ClustersFullyMatchedValidTBTracks, 4);           
-        H1F h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedValidTBTracks", "# of noise clusters for fully matched 5-cluster valid TB tracks", 7, -0.5, 6.5);
-        h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks.setTitleX("# of noise clusters for fully matched 5-cluster valid TB tracks");
+        H1F h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks = new H1F("numNoiseClustersfor5ClustersFullyMatchedValidTBTracks", "# of mixed-clusters for fully matched 5-cluster valid TB tracks", 7, -0.5, 6.5);
+        h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks.setTitleX("# of mixed-clusters for fully matched 5-cluster valid TB tracks");
         h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks.setTitleY("Counts");
         histoGroupValidTBTracks.addDataSet(h1_numNoiseClustersfor5ClustersFullyMatchedValidTBTracks, 5);         
         histoGroupMap.put(histoGroupValidTBTracks.getName(), histoGroupValidTBTracks);
@@ -726,8 +805,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h2_vzValidTBTrackComp.setTitleY("vz in sample2 (cm)");
         histoGroupValidTBTrackComp.addDataSet(h2_vzValidTBTrackComp, 8);  
         H2F h2_pidValidTBTrackComp = new H2F("pidValidTBTrackComp", "Comparison for pid", 50, -25, 25, 50, -25, 25);
-        h2_pidValidTBTrackComp.setTitleX("pid in sample1 (GeV/c)");
-        h2_pidValidTBTrackComp.setTitleY("pid in sample2 (GeV/c)");
+        h2_pidValidTBTrackComp.setTitleX("pid in sample1");
+        h2_pidValidTBTrackComp.setTitleY("pid in sample2");
         histoGroupValidTBTrackComp.addDataSet(h2_pidValidTBTrackComp, 9);         
         H1F h1_pidStatusValidTBTrack = new H1F("pidStatusValidTBTrack", "if pid the same", 2, -0.5, 1.5);
         h1_pidStatusValidTBTrack.setTitleX("pid status");
@@ -888,7 +967,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 clustersInValidTBTracks1.addAll(trk.getClusters());
             }
         }
-                
+                  
         ////// Make cluster map between clusters in TB tracks of sample1 and clusters from clustering of sample2
         // Priorities for map most matched hits (priority 1), highest normal ratio (priority 2) and closest avgWire (priority 3)  
         Map<Cluster, Cluster> map_cls1_cls2_matched = new HashMap();             
@@ -897,15 +976,17 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             List<Cluster> matchedClustersWithMostMatchedHits = new ArrayList();
             int maxMatchedHits = -1;
             for(Cluster cls2 : localEvent2.getClusters()){
-                int numMatchedHits = cls1.clusterMatchedHits(cls2);
-                if(numMatchedHits > 0){
-                    if(numMatchedHits > maxMatchedHits) {
-                        maxMatchedHits = numMatchedHits;
-                        matchedClustersWithMostMatchedHits.clear();
-                        matchedClustersWithMostMatchedHits.add(cls2);                    
-                    }
-                    else if(numMatchedHits == maxMatchedHits){
-                        matchedClustersWithMostMatchedHits.add(cls2);
+                if(cls2.getRatioNormalHits() >= ratioNormalHitsCut){
+                    int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                    if(numMatchedHits > 0){
+                        if(numMatchedHits > maxMatchedHits) {
+                            maxMatchedHits = numMatchedHits;
+                            matchedClustersWithMostMatchedHits.clear();
+                            matchedClustersWithMostMatchedHits.add(cls2);                    
+                        }
+                        else if(numMatchedHits == maxMatchedHits){
+                            matchedClustersWithMostMatchedHits.add(cls2);
+                        }
                     }
                 }
             }            
@@ -937,7 +1018,9 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                            clsWithCloestAvgWire = cls2;
                        }
                    }          
-                   if(clsWithCloestAvgWire != null && clsWithCloestAvgWire.getRatioNormalHits() >= ratioNormalHitsCut) map_cls1_cls2_matched.put(cls1, clsWithCloestAvgWire);
+                   if(clsWithCloestAvgWire != null) {
+                       map_cls1_cls2_matched.put(cls1, clsWithCloestAvgWire);
+                   }
                 }
             }             
         }
@@ -1002,6 +1085,11 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             }
         }
         
+        HistoGroup histoGroupClusterSituationSample2 = histoGroupMap.get("clusterSituationSample2");
+        for(Cluster cls2: clsListExtraSample2){
+            histoGroupClusterSituationSample2.getH1F("clusterSituationSample2 for SL" + cls2.superlayer()).fill(3);
+        }
+        
         // Study matched clusters
         List<Cluster> allNormalHitsMatchedClusters2 = new ArrayList();
         HistoGroup histoGroupMatchedClusters = histoGroupMap.get("matchedClusters");
@@ -1017,9 +1105,11 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             histoGroupMatchedHitRatio.getH2F("matchedHitRatio for SL" + cls1.superlayer()).fill((double)numMatchedHits/cls1.size(), (double)numMatchedHits/cls2.size());
             
             if(cls2.getRatioNormalHits() == 1) {
+                histoGroupClusterSituationSample2.getH1F("clusterSituationSample2 for SL" + cls2.superlayer()).fill(1);
                 histoGroupIfAllNormalHitsMatchedCluster.getH1F("ifAllNormalHitsMatchedCluster for SL" + cls2.superlayer()).fill(1);
             }
             else {
+                histoGroupClusterSituationSample2.getH1F("clusterSituationSample2 for SL" + cls2.superlayer()).fill(2);
                 histoGroupIfAllNormalHitsMatchedCluster.getH1F("ifAllNormalHitsMatchedCluster for SL" + cls2.superlayer()).fill(0);
                 histoGroupNormalHitRatioForNotAllNormalHitsMatchedCluster.getH1F("normalHitRatioForNotAllNormalHitsMatchedCluster for SL" + cls2.superlayer()).fill(cls2.getRatioNormalHits());                                    
             
@@ -1045,11 +1135,11 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
   
        // map between valid track and matched/nomatched cluters
        Map<Track, List<Cluster>> map_validTrack_matchedClusters_clustering = new HashMap();
-       Map<Track, List<Integer>> map_validTrack_nomatchedClusterSs_clustering = new HashMap();
+       Map<Track, List<Integer>> map_validTrack_nomatchedClusters_clustering = new HashMap();
         for(Track trk1 : localEvent1.getTracksTB()){
             if(trk1.isValid(true)){
                map_validTrack_matchedClusters_clustering.put(trk1, new ArrayList());
-               map_validTrack_nomatchedClusterSs_clustering.put(trk1, new ArrayList());
+               map_validTrack_nomatchedClusters_clustering.put(trk1, new ArrayList());
                for(Cluster cls1 : trk1.getClusters()){
                     boolean flag = false;
                     for(Cluster cls1Matched : map_cls1_cls2_matched.keySet()){
@@ -1059,7 +1149,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                             break;
                         } 
                     }
-                    if(!flag) map_validTrack_nomatchedClusterSs_clustering.get(trk1).add(cls1.superlayer());
+                    if(!flag) map_validTrack_nomatchedClusters_clustering.get(trk1).add(cls1.superlayer());
                 } 
             }
         }
@@ -1073,7 +1163,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 
                 int numLostClusters = 0;
                 for(Cluster cls1 : map_cls1_hits2.keySet()){
-                    if(trk1.getClusters().contains(cls1) && map_cls1_hits2.get(cls1).size() == 0){
+                    if(trk1.getClusters().contains(cls1) && map_cls1_hits2.get(cls1).size() <= 2){
                        numLostClusters++;
                     }
                 }  
@@ -1098,7 +1188,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         HistoGroup histoGroupNormalHitRatioNoiseClustersfor5or6MatchedClustersWithValidTracks = histoGroupMap.get("normalHitRatioNoiseClustersfor5or6MatchedClustersWithValidTracks"); 
         for(Track trk1 : map_validTrack_matchedClusters_clustering.keySet()){            
             List<Cluster> matchedClusters2 = map_validTrack_matchedClusters_clustering.get(trk1);
-            List<Integer> nomatchedClusterSLs = map_validTrack_nomatchedClusterSs_clustering.get(trk1);
+            List<Integer> nomatchedClusterSLs = map_validTrack_nomatchedClusters_clustering.get(trk1);
           
                 
             histoGroupClustersOnValidTracks.getH1F("numLostClustersOnValidTracks").fill(nomatchedClusterSLs.size());
@@ -1186,7 +1276,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 List<Cluster> nomatchedClusters = new ArrayList();
                 boolean flag = false;
                 for(AICandidate cand2 : aiCandidates2){ 
-                    if(cand2.sector() == matchedClusters2.get(0).sector()){
+                    if(!matchedClusters2.isEmpty() && cand2.sector() == matchedClusters2.get(0).sector()){
                         List<Cluster> sharedClustersTemp = getSharedClusters(matchedClusters2, cand2.getClusters());
                         if(sharedClustersTemp.size() > sharedClusters.size()){
                             flag = true;
@@ -1207,10 +1297,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                     histoGroupAICandidates.getH1F("numNomatchedClustersAICandidates").fill(nomatchedClusters.size());
                     histoGroupAICandidates.getH2F("numNomatchedAICandidatesVsNumMatchedClustering").fill(matchedClusters2.size(), nomatchedClusters.size());
                 } else{
-                    histoGroupAICandidates.getH1F("numMatchedClustersAICandidates").fill(-1);
-                    histoGroupAICandidates.getH2F("numMatchedAICandidatesVsNumMatchedClustering").fill(matchedClusters2.size(), -1);
-                    histoGroupAICandidates.getH1F("numNomatchedClustersAICandidates").fill(-1);
-                    histoGroupAICandidates.getH2F("numNomatchedAICandidatesVsNumMatchedClustering").fill(matchedClusters2.size(), -1);
+                    histoGroupAICandidates.getH1F("numMatchedClustersAICandidates").fill(0);
+                    histoGroupAICandidates.getH2F("numMatchedAICandidatesVsNumMatchedClustering").fill(matchedClusters2.size(), 0);
+                    histoGroupAICandidates.getH1F("numNomatchedClustersAICandidates").fill(trk1.nClusters());
+                    histoGroupAICandidates.getH2F("numNomatchedAICandidatesVsNumMatchedClustering").fill(matchedClusters2.size(), trk1.nClusters());
                 }                
                                 
                 if(sharedClusters.size() >= 5 && nomatchedClusters.size() == 0){
@@ -1245,7 +1335,9 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         HistoGroup histoGroupNormalHitRatioNoiseClustersforFullyMatchedHBTracks = histoGroupMap.get("normalHitRatioNoiseClustersforFullyMatchedHBTracks");         
         HistoGroup histoGroupMatchNoMatchCompHBTracks = histoGroupMap.get("matchNoMatchCompHBTracks");   
         HistoGroup histoGroupHBTrackComp = histoGroupMap.get("HBTrackComp");
+        HistoGroup histoGroupHBTrackDiff = histoGroupMap.get("HBTrackDiff");
         HistoGroup histoGroup1NoMatchedCluster5ClustersHBTrackComp = histoGroupMap.get("1NoMatchedCluster5ClustersHBTrackComp");
+        HistoGroup histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks = histoGroupMap.get("noSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks");                
         List<Track> hbTracks2 = localEvent2.getTracksHB();
         for(Track trk2 : hbTracks2){                                
             histoGroupHBTracks.getH1F("numClustersHBTracks").fill(trk2.getClusters().size());
@@ -1254,40 +1346,71 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         // map between matchedCluster and clusters on HB tracks with most shared clusters
         for(Track trk1 : map_validTrack_matchedClusters_clustering.keySet()){
             List<Cluster> matchedClusters2 = map_validTrack_matchedClusters_clustering.get(trk1);
+            Map<Cluster, Cluster> sharedClusterMap = new HashMap();
             List<Cluster> sharedClusters = new ArrayList();
-            List<Cluster> nomatchedClusters = new ArrayList();
+            List<Cluster> nosharedClustersTrk2 = new ArrayList();
+            List<Cluster> nosharedClusters2 = new ArrayList();
             boolean flag = false;
             Track matchedTrk2 = null;
             for(Track trk2 : hbTracks2){ 
-                if(trk2.sector() == matchedClusters2.get(0).sector()){
-                    List<Cluster> sharedClustersTemp = getSharedClusters(matchedClusters2, trk2.getClusters());
-                    if(sharedClustersTemp.size() > sharedClusters.size()){
+                if(!matchedClusters2.isEmpty() && trk2.sector() == matchedClusters2.get(0).sector()){
+                    Map<Cluster, Cluster> sharedClusterMapTemp = getSharedClusterMap(matchedClusters2, trk2.getClusters());                    
+                    if(sharedClusterMapTemp.size() > sharedClusterMap.size()){
                         flag = true;
-                        sharedClusters.clear();
-                        sharedClusters.addAll(sharedClustersTemp);
-                        nomatchedClusters.clear();
-                        nomatchedClusters.addAll(trk2.getClusters());
-                        nomatchedClusters.removeAll(sharedClusters);
+                        sharedClusterMap.clear();
+                        sharedClusterMap.putAll(sharedClusterMapTemp);
+                        nosharedClustersTrk2.clear();
+                        nosharedClustersTrk2.addAll(trk2.getClusters());
+                        nosharedClustersTrk2.removeAll(sharedClusterMapTemp.values());
                         matchedTrk2 = trk2;
+                        
+                        nosharedClusters2.clear();
+                        nosharedClusters2.addAll(matchedClusters2);
+                        nosharedClusters2.removeAll(sharedClusterMapTemp.keySet());
                     }                            
                 }
             }
+            
+            sharedClusters.addAll(sharedClusterMap.values());
             map_validTrack_matchedClusters_HBTracks.put(trk1, sharedClusters);
-            map_validTrack_nomatchedClusters_HBTracks.put(trk1, nomatchedClusters);
-                                    
+            map_validTrack_nomatchedClusters_HBTracks.put(trk1, nosharedClustersTrk2);
+                        
             if(flag){
                 histoGroupHBTracks.getH1F("numMatchedClustersHBTracks").fill(sharedClusters.size());
                 histoGroupHBTracks.getH2F("numMatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), sharedClusters.size());
-                histoGroupHBTracks.getH1F("numNomatchedClustersHBTracks").fill(nomatchedClusters.size());            
-                histoGroupHBTracks.getH2F("numNomatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), nomatchedClusters.size());
+                histoGroupHBTracks.getH1F("numNomatchedClustersHBTracks").fill(nosharedClustersTrk2.size());            
+                histoGroupHBTracks.getH2F("numNomatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), nosharedClustersTrk2.size());
                                 
-                if(matchedClusters2.size() >= 5 && nomatchedClusters.size() >= 1){
+                if(matchedClusters2.size() >= 5 && nosharedClustersTrk2.size() >= 1){
                     histoGroupMatchNoMatchCompHBTracks.getH1F("chi2OverNdfNomatchHBTracks").fill(matchedTrk2.chi2()/matchedTrk2.NDF());
                 }
                 
                 
-                if((matchedClusters2.size() == 6 && sharedClusters.size() == 5 && nomatchedClusters.size() == 1) || (matchedClusters2.size() == 5 && sharedClusters.size() == 4 && nomatchedClusters.size() == 1)){
-                    if((matchedClusters2.size() == 5 && sharedClusters.size() == 4 && nomatchedClusters.size() == 1)){
+                if((matchedClusters2.size() == 6 && sharedClusters.size() == 5 && nosharedClustersTrk2.size() == 1) || (matchedClusters2.size() == 5 && sharedClusters.size() == 4 && nosharedClustersTrk2.size() == 1)){
+                    histoGroupMatchNoMatchCompHBTracks.getH1F("only1NoMatchedClusterHBTracks").fill(1);                                        
+                    histoGroupMatchNoMatchCompHBTracks.getH2F("SLCompOnly1NoMatchedClusterHBTracks").fill(nosharedClusters2.get(0).superlayer(), nosharedClustersTrk2.get(0).superlayer());
+                    
+                    if(nosharedClusters2.get(0).superlayer() == nosharedClustersTrk2.get(0).superlayer()){
+                        histoGroupMatchNoMatchCompHBTracks.getH1F("only1NoMatchedClusterSameSLHBTracks").fill(1);
+                        
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH2F("avgWireCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).avgWire(), nosharedClustersTrk2.get(0).avgWire());
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH2F("slopeCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).fitSlope(), nosharedClustersTrk2.get(0).fitSlope());
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH2F("ratioNormalHitsCompNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).getRatioNormalHits(), nosharedClustersTrk2.get(0).getRatioNormalHits());
+                                                
+                        
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).avgWire() - nosharedClustersTrk2.get(0).avgWire());
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).fitSlope() - nosharedClustersTrk2.get(0).fitSlope());
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).clusterMatchedHits(nosharedClustersTrk2.get(0)));                        
+                        
+                        addDemoGroup(localEvent1, localEvent2, trk1.sector(), "SameSL" + nosharedClusters2.get(0).superlayer());
+                    }
+                    else{
+                       histoGroupMatchNoMatchCompHBTracks.getH1F("only1NoMatchedClusterSameSLHBTracks").fill(0); 
+                       addDemoGroup(localEvent1, localEvent2, trk1.sector(), "DiffSL" + nosharedClusters2.get(0).superlayer()+"SL"+nosharedClustersTrk2.get(0).superlayer());
+                    }
+                    
+                    //addDemoGroup(localEvent1, localEvent2, trk1.sector(), "contaminatedHBTracksSL"+nosharedClustersTrk2.get(0).superlayer()+"ch"+(matchedTrk2.chi2()/matchedTrk2.NDF()));
+                    if((matchedClusters2.size() == 5 && sharedClusters.size() == 4 && nosharedClustersTrk2.size() == 1)){
                         
                         histoGroup1NoMatchedCluster5ClustersHBTrackComp.getH2F("chi2overndf1NoMatchedCluster5ClustersHBTrackComp").fill(trk1.chi2()/trk1.NDF(), matchedTrk2.chi2()/matchedTrk2.NDF());                    
                         histoGroup1NoMatchedCluster5ClustersHBTrackComp.getH2F("chi2pid1NoMatchedCluster5ClustersHBTrackComp").fill(trk1.chi2pid(), matchedTrk2.chi2pid());                       
@@ -1304,21 +1427,24 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                         }
                         else{
                             histoGroup1NoMatchedCluster5ClustersHBTrackComp.getH1F("pidStatus1NoMatchedCluster5ClustersHBTrack").fill(0);                                        
-                        }
-                        
-                        
-                        addDemoGroup(localEvent1, localEvent2, trk1.sector(), "contaminatedHBTracksSL"+nomatchedClusters.get(0).superlayer()+"ch"+(matchedTrk2.chi2()/matchedTrk2.NDF())); 
-                    }
+                        }                        
+                                                 
+                    }                                          
                 }
-                
-            } else {
-                histoGroupHBTracks.getH1F("numMatchedClustersHBTracks").fill(-1);
-                histoGroupHBTracks.getH2F("numMatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), -1);                
-                histoGroupHBTracks.getH1F("numNomatchedClustersHBTracks").fill(-1);            
-                histoGroupHBTracks.getH2F("numNomatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), -1);
+                else if(matchedClusters2.size() <= 4 || (matchedClusters2.size() == 6 && sharedClusters.size() < 5 && nosharedClustersTrk2.size() > 1) | (matchedClusters2.size() == 5 && sharedClusters.size() < 4 && nosharedClustersTrk2.size() > 1)){
+                    histoGroupMatchNoMatchCompHBTracks.getH1F("only1NoMatchedClusterHBTracks").fill(0);
+                    
+                    addDemoGroup(localEvent1, localEvent2, trk1.sector(), "#M" + matchedClusters2.size() + "#S" + sharedClusters.size() + "#NC" + nosharedClusters2.size() + "#NT" + nosharedClustersTrk2.size());
+                }
+            } else {                
+                histoGroupMatchNoMatchCompHBTracks.getH1F("only1NoMatchedClusterHBTracks").fill(0);
+                histoGroupHBTracks.getH1F("numMatchedClustersHBTracks").fill(0);
+                histoGroupHBTracks.getH2F("numMatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), 0);                
+                histoGroupHBTracks.getH1F("numNomatchedClustersHBTracks").fill(trk1.nClusters());            
+                histoGroupHBTracks.getH2F("numNomatchedHBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), trk1.nClusters());
             }            
 
-            if(sharedClusters.size() >= 5 && nomatchedClusters.size() == 0){
+            if(sharedClusters.size() >= 5 && nosharedClustersTrk2.size() == 0){
                 histoGroupHBTracks.getH1F("numClustersFullyMatchedHBTracks").fill(sharedClusters.size());                 
                 histoGroupMatchNoMatchCompHBTracks.getH1F("chi2OverNdfMatchHBTracks").fill(matchedTrk2.chi2()/matchedTrk2.NDF());
                 
@@ -1333,7 +1459,16 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                     histoGroupHBTrackComp.getH2F("vxHBTrackComp").fill(trk1.vx(), matchedTrk2.vx());                    
                     histoGroupHBTrackComp.getH2F("vyHBTrackComp").fill(trk1.vy(), matchedTrk2.vy());                    
                     histoGroupHBTrackComp.getH2F("vzHBTrackComp").fill(trk1.vz(), matchedTrk2.vz()); 
-                    histoGroupHBTrackComp.getH2F("pidHBTrackComp").fill(trk1.pid()/100., matchedTrk2.pid()/100.);                                                                  
+                    histoGroupHBTrackComp.getH2F("pidHBTrackComp").fill(trk1.pid()/100., matchedTrk2.pid()/100.);  
+                                        
+                    histoGroupHBTrackDiff.getH1F("chi2overndfHBTrackDiff").fill(trk1.chi2()/trk1.NDF() - matchedTrk2.chi2()/matchedTrk2.NDF());                    
+                    histoGroupHBTrackDiff.getH1F("chi2pidHBTrackDiff").fill(trk1.chi2pid() - matchedTrk2.chi2pid());                    
+                    histoGroupHBTrackDiff.getH1F("pHBTrackDiff").fill(trk1.p() - matchedTrk2.p());                    
+                    histoGroupHBTrackDiff.getH1F("thetaHBTrackDiff").fill(trk1.theta() - matchedTrk2.theta());                    
+                    histoGroupHBTrackDiff.getH1F("phiHBTrackDiff").fill(trk1.phi() - matchedTrk2.phi());                    
+                    histoGroupHBTrackDiff.getH1F("vxHBTrackDiff").fill(trk1.vx() - matchedTrk2.vx());                    
+                    histoGroupHBTrackDiff.getH1F("vyHBTrackDiff").fill(trk1.vy() - matchedTrk2.vy());                    
+                    histoGroupHBTrackDiff.getH1F("vzHBTrackDiff").fill(trk1.vz() - matchedTrk2.vz());
                     
                     if(trk1.pid() == matchedTrk2.pid()){
                         histoGroupHBTrackComp.getH1F("pidStatusHBTrack").fill(1); 
@@ -1389,7 +1524,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             boolean flag = false;
             Track matchedTrk2 = null;
             for(Track trk2 : tbTracks2){ 
-                if(trk2.sector() == matchedClusters2.get(0).sector()){
+                if(!matchedClusters2.isEmpty() && trk2.sector() == matchedClusters2.get(0).sector()){
                     List<Cluster> sharedClustersTemp = getSharedClusters(matchedClusters2, trk2.getClusters());
                     if(sharedClustersTemp.size() > sharedClusters.size()){
                         flag = true;
@@ -1411,10 +1546,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 histoGroupTBTracks.getH1F("numNomatchedClustersTBTracks").fill(nomatchedClusters.size());            
                 histoGroupTBTracks.getH2F("numNomatchedTBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), nomatchedClusters.size());
             } else {
-                histoGroupTBTracks.getH1F("numMatchedClustersTBTracks").fill(-1);
-                histoGroupTBTracks.getH2F("numMatchedTBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), -1);
-                histoGroupTBTracks.getH1F("numNomatchedClustersTBTracks").fill(-1);            
-                histoGroupTBTracks.getH2F("numNomatchedTBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), -1);
+                histoGroupTBTracks.getH1F("numMatchedClustersTBTracks").fill(0);
+                histoGroupTBTracks.getH2F("numMatchedTBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), 0);
+                histoGroupTBTracks.getH1F("numNomatchedClustersTBTracks").fill(trk1.nClusters());            
+                histoGroupTBTracks.getH2F("numNomatchedTBTracksVsNumMatchedClustering").fill(matchedClusters2.size(), trk1.nClusters());
             }
 
             if(sharedClusters.size() >= 5 && nomatchedClusters.size() == 0){
@@ -1423,7 +1558,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 
                 if(matchedTrk2 != null){
                     histoGroupTBTrackComp.getH2F("chi2overndfTBTrackComp").fill(trk1.chi2()/trk1.NDF(), matchedTrk2.chi2()/matchedTrk2.NDF());                    
-                    histoGroupTBTrackComp.getH2F("chi2pidTBTrackComp").fill(trk1.chi2pid(), matchedTrk2.chi2pid());                       
+                    histoGroupTBTrackComp.getH2F("chi2pidTBTrackComp").fill(trk1.chi2pid(), matchedTrk2.chi2pid()); 
+                    histoGroupTBTrackComp.getH1F("ratioNormalHitsTBTrack").fill(matchedTrk2.getRatioNormalHits());                     
                     histoGroupTBTrackComp.getH2F("pTBTrackComp").fill(trk1.p(), matchedTrk2.p());                    
                     histoGroupTBTrackComp.getH2F("thetaTBTrackComp").fill(trk1.theta(), matchedTrk2.theta());                    
                     histoGroupTBTrackComp.getH2F("phiTBTrackComp").fill(trk1.phi(), matchedTrk2.phi());                    
@@ -1601,6 +1737,20 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         
         return sharedClusters;
     }
+    
+    public Map<Cluster, Cluster> getSharedClusterMap(List<Cluster> clusters1, List<Cluster> clusters2){
+        Map<Cluster, Cluster> sharedClusterMap = new HashMap();
+        for(Cluster cls1 : clusters1){
+            for(Cluster cls2 : clusters2){
+                if(cls2.id() == cls1.id()){
+                    sharedClusterMap.put(cls1, cls2);
+                    break;
+                }
+            }
+        }
+        
+        return sharedClusterMap;
+    }
 
     public void postEventProcess() {                         
         H1F h1_allNormalClusters = new H1F("allNormalClusters", "normal clusters", 6, 0.5, 6.5);
@@ -1667,15 +1817,25 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         histoGroupTrackLostSummary2.addDataSet(h1_numTrackLostSummary2, 3);
         
         H1F h1_ratioRemainingMatchedTrackLostSummary2 = new H1F("ratioRemainingMatchedTrackLostSummary2", "ratio of remaining matched tracks", 7, 0.5, 7.5);
+        double[] ratio = new double[7];
+        double[] ratio_err = new double[7];
         for(int i = 0; i < 7; i++){
+            ratio[i] = numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0];
+            ratio_err[i] = Math.sqrt(numAllTrackLostSummary2[i] * numAllTrackLostSummary2[0] * numAllTrackLostSummary2[0] + numAllTrackLostSummary2[i] * numAllTrackLostSummary2[i] * numAllTrackLostSummary2[0]) / Math.pow(numAllTrackLostSummary2[0], 2);
             h1_ratioRemainingMatchedTrackLostSummary2.setBinContent(i, numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0]);
-            if(i < 6) System.out.print(numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0] + ", ");
-            else System.out.println(numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0]);
         }
         
         h1_ratioRemainingMatchedTrackLostSummary2.setTitleX("ratio of remaining matched tracks");
         h1_ratioRemainingMatchedTrackLostSummary2.setTitleY("ratio");  
         histoGroupTrackLostSummary2.addDataSet(h1_ratioRemainingMatchedTrackLostSummary2, 4);
+        
+        System.out.println("+-----------------------------------------------------------------------------------------------------+");
+        System.out.println("                                   Evolution of tracking efficiency                                   ");
+        System.out.println("           |     origin |  denoising | clustering |         AI |HB tracking |TB tracking | valid cuts |");        
+        System.out.println(String.format("efficiency " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
+                ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6]));
+        System.out.println(String.format("error      " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
+                ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6]));
 
         
     }
@@ -1695,7 +1855,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         parser.addOption("-mDemo", "1000", "maxium for number of demonstrated cases");
         parser.addOption("-trkType"      ,"22",   "tracking type: 12 (ConvTB) or 22 (AITB)");
         parser.addOption("-mc", "1", "if mc (0/1)");
-        parser.addOption("-ratioNormalHitsCut", "0.", "ratio of normal hits cut for matched clustered between nobg and bg samples");
+        parser.addOption("-ratioNormalHitsCut", "0", "ratio of normal hits cut for matched clustered between nobg and bg samples");
         parser.addOption("-uRWell", "0", "if uRWell is included (0/1)");
 
 
@@ -1770,12 +1930,11 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 }
             }
 
-            analysis.postEventProcess();
-
             progress.showStatus();
             reader1.close();
             reader2.close();
             analysis.saveHistos(histoName);
+            analysis.postEventProcess();
         } else {
             analysis.readHistos(inputList.get(0));
         }

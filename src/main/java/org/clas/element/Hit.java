@@ -27,6 +27,12 @@ public class Hit implements Comparable<Hit> {
     private int LR;
     private double dafWeight = -999.;
     
+    private int tid = -999; // track id
+    private double tProp = -999.;
+    private double tFlight = -999.;
+    private double t0 = -999.;
+    private double beta = -999.;
+    
     private int indexTDC = -1;
     private int order = -1;
         
@@ -102,6 +108,46 @@ public class Hit implements Comparable<Hit> {
     public int LR(){
         return LR;
     }
+    
+    public void setTid(int tid){
+        this.tid = tid;
+    }
+    
+    public int tid(){
+        return tid;
+    }
+    
+    public void setTProp(double tProp){
+        this.tProp = tProp;
+    }
+    
+    public double tProp(){
+        return tProp;
+    }
+    
+    public void setTFlight(double tFlight){
+        this.tFlight = tFlight;
+    }
+    
+    public double tFlight(){
+        return tFlight;
+    }    
+    
+    public void setT0(double t0){
+        this.t0 = t0;
+    }     
+    
+    public double t0(){
+        return t0;
+    }
+    
+    public void setBeta(double beta){
+        this.beta = beta;
+    }     
+    
+    public double beta(){
+        return beta;
+    }    
     
     public void indexTDC(int indexTDC){
         this.indexTDC = indexTDC;

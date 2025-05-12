@@ -18,6 +18,7 @@ org/clas/analysis/uRWellUpdate/URWellReconstruction.class
 org/clas/fiducials/EleDCFiducial.class
 org/clas/analysis/studyDCCross/StudyDCCross.class
 org/clas/analysis/studyDCTDCBank/StudyDCTDCBank.class
+org/clas/element/RecEvent.class
 org/clas/supports/OrderEvents.class
 org/clas/element/URWellCross.class
 org/clas/fit/ClusterFitLC.class
@@ -58,5 +59,6 @@ org/clas/physicsEvent/BasePhysicsEvent.class
 org/clas/analysis/trackingEfficiency/TrackingEfficiency.class
 org/clas/element/Cross.class
 org/clas/utilities/Constants$1.class
+org/clas/analysis/pass3Tracking/ExplorePass3Tracking.class
 org/clas/element/URWellCluster.class
 org/clas/fiducials/HadronDCFiducial.class

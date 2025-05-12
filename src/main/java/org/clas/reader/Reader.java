@@ -19,6 +19,7 @@ import org.clas.element.Cluster;
 import org.clas.element.Cross;
 import org.clas.element.Track;
 import org.clas.element.AICandidate;
+import org.clas.element.RecEvent;
 import org.clas.element.URWellADC;
 import org.clas.element.URWellHit;
 import org.clas.element.URWellCluster;
@@ -57,7 +58,26 @@ public class Reader {
             return runconfig;
         }               
         else return null;   
-    } 
+    }
+    
+    //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22)
+    public RecEvent readRecEvent(Event event, int type) {
+        Bank recEventBank = banks.getRecEventBank(type);
+        
+        RecEvent recEvent = null;
+        
+        if(recEventBank != null){
+            event.read(recEventBank);
+            if(recEventBank.getRows() == 1){
+                recEvent = new RecEvent(type,
+                                recEventBank.getFloat("startTime", 0),
+                                  recEventBank.getFloat("RFTime", 0));
+            }
+        }
+                   
+        
+        return recEvent;
+    }    
     
     public List<Track> readTracks(Event event) {
         return readTracks(event, Constants.AITB);
@@ -86,6 +106,7 @@ public class Reader {
             // create tracks list from track bank
             for(int it = 0; it < trackingBank.getRows(); it++){
                 Track track = new Track(type,
+                                        trackingBank.getInt("id", it),
                                         trackingBank.getByte("q", it),
                                         trackingBank.getFloat("p0_x", it),
                                         trackingBank.getFloat("p0_y", it),
@@ -148,6 +169,7 @@ public class Reader {
                 if(((int) Math.abs(status)/1000)==2) { 
                     int index = trackBank.getShort("index", it);
                     Track track = new Track(type,
+                                        -1,
                                         particleBank.getByte("charge", pindex),
                                         particleBank.getFloat("px", pindex),
                                         particleBank.getFloat("py", pindex),
@@ -344,7 +366,23 @@ public class Reader {
         ArrayList<TDC> tdcs = new ArrayList();
         if(dcTDCBank != null){
             tdcs = readTDCs(event);
-        }         
+        }
+        
+
+        List<Integer> idList = new ArrayList();
+        List<Integer> tidList = new ArrayList();
+        List<Float> tPropList = new ArrayList();
+        List<Float> tFlightList = new ArrayList();
+        if(type==Constants.CONVHB || type==Constants.AIHB) {
+            Bank hitTrkIdBank = banks.getHBTrackingHitTrkIdBank(type);
+            event.read(hitTrkIdBank);
+            for(int loop = 0; loop < hitTrkIdBank.getRows(); loop++){
+                idList.add(hitTrkIdBank.getInt("id", loop));
+                tidList.add(hitTrkIdBank.getInt("tid", loop));
+                tPropList.add(hitTrkIdBank.getFloat("TProp", loop));
+                tFlightList.add(hitTrkIdBank.getFloat("TFlight", loop));                
+            }
+        }
         
         Bank hitBank = null;
         if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
@@ -378,6 +416,12 @@ public class Reader {
                         );
                 
                 if(type==Constants.CONVTB || type==Constants.AITB){  
+                    hit.setTid(hitBank.getInt("trkID", loop));
+                    hit.setT0(hitBank.getFloat("T0", loop));
+                    hit.setTFlight(hitBank.getFloat("TFlight", loop));
+                    hit.setTProp(hitBank.getFloat("TProp", loop));
+                    hit.setBeta(hitBank.getFloat("beta", loop));
+                    
                     try{
                         hit.dafWeight(hitBank.getFloat("DAFWeight", loop));
                     }              
@@ -400,8 +444,18 @@ public class Reader {
                         break;
                     }
                 }
-                      
                 
+                if((type==Constants.CONVHB || type==Constants.AIHB) && !idList.isEmpty()) { 
+                    for(int i = 0; i < idList.size(); i++){
+                        if(hit.id() == idList.get(i)){
+                            hit.setTid(tidList.get(i));
+                            hit.setTProp(tPropList.get(i));
+                            hit.setTFlight(tFlightList.get(i));
+                            break;
+                        }
+                    }
+                } 
+
                 hits.add(hit);
             }
         }

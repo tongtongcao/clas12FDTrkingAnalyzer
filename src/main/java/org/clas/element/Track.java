@@ -20,6 +20,7 @@ public class Track implements Comparable<Track> {
     // ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22)
     private int trackType = 22;
     
+    private int id = -1;
     private int trackIndex = 0;
     // from tracking bank
     private LorentzVector trackVector = new LorentzVector(0.0,0.0,0.0,0);
@@ -58,15 +59,15 @@ public class Track implements Comparable<Track> {
     private double ratioNormalHits = -1;
     
     public Track() {
-        this.initTrack(1, 0, 0., 0., 0., 0., 0., 0.);
+        this.initTrack(1, -1, 0, 0., 0., 0., 0., 0., 0.);
     }
 
     public Track(Track t) {
-        this.initTrack(t.type(), t.charge(), t.px(), t.py(), t.pz(), t.vertex().x(), t.vertex().y(), t.vertex().z());
+        this.initTrack(t.type(), t.id(), t.charge(), t.px(), t.py(), t.pz(), t.vertex().x(), t.vertex().y(), t.vertex().z());
     }
     
-    public Track(int type, int charge, double px, double py, double pz, double vx, double vy, double vz) {
-        this.initTrack(type, charge, px, py, pz, vx, vy, vz);
+    public Track(int type, int id, int charge, double px, double py, double pz, double vx, double vy, double vz) {
+        this.initTrack(type, id, charge, px, py, pz, vx, vy, vz);
     }
             
     public static Track copyFrom(Track p){
@@ -82,6 +83,7 @@ public class Track implements Comparable<Track> {
         this.trackVector.setPxPyPzM(track.vector().px(), track.vector().py(), track.vector().pz(), track.vector().mass());
         this.trackVertex.setXYZ(track.vertex().x(), track.vertex().y(), track.vertex().z());        
         this.trackCharge = track.charge(); 
+        this.id = track.id();
         this.trackType = track.type();
     }
     
@@ -94,8 +96,9 @@ public class Track implements Comparable<Track> {
         this.vector().setPxPyPzE(0.0, 0.0, 0.0, 0.0);
     }
     
-    public final void initTrack(int type, int charge, double px, double py, double pz, double vx, double vy, double vz) {
+    public final void initTrack(int type, int id, int charge, double px, double py, double pz, double vx, double vy, double vz) {
         this.trackType   = type;
+        this.id = id;
         this.trackCharge = charge;
         this.trackVector.setPxPyPzM(px, py, pz, 0);
         this.trackVertex.setXYZ(vx, vy, vz);
@@ -105,6 +108,10 @@ public class Track implements Comparable<Track> {
         for(int i=0; i<this.trackCrosses.length; i++) {
             this.trackCrosses[i] = new Vector3(0,0,0);
         }
+    }
+    
+    public int id() {
+        return id;
     }
 
     public int index() {
@@ -384,6 +391,11 @@ public class Track implements Comparable<Track> {
         } 
         separateNormalBgHits();
     } 
+    
+    public List<Cross> getCrosses(){
+        return crosses;
+    } 
+    
     
     public List<Cluster> getClusters(){
         return clusters;

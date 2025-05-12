@@ -41,6 +41,7 @@ public class Banks {
     private Bank cvHBSegmentBank;
     private Bank cvHBClusterBank;
     private Bank cvHBHitBank;
+    private Bank cvHBHitTrkIdBank;
     private Bank cvTBParticleBank;
     private Bank cvTBTrajectoryBank;
     private Bank cvTBTrackBank;
@@ -49,6 +50,8 @@ public class Banks {
     private Bank cvTBSegmentBank;
     private Bank cvTBClusterBank;
     private Bank cvTBHitBank;
+    private Bank cvRecHBEventBank;
+    private Bank cvRecTBEventBank;
     
     // ai banks
     private Bank aiCandidates;
@@ -60,6 +63,7 @@ public class Banks {
     private Bank aiHBSegmentBank;
     private Bank aiHBClusterBank;
     private Bank aiHBHitBank;
+    private Bank aiHBHitTrkIdBank;
     private Bank aiTBParticleBank;
     private Bank aiTBTrajectoryBank;
     private Bank aiTBTrackBank;
@@ -68,6 +72,8 @@ public class Banks {
     private Bank aiTBSegmentBank;
     private Bank aiTBClusterBank;
     private Bank aiTBHitBank;
+    private Bank aiRecHBEventBank;
+    private Bank aiRecTBEventBank;
     
 
     public Banks(SchemaFactory schema) {
@@ -122,6 +128,12 @@ public class Banks {
         if(schema.hasSchema("HitBasedTrkg::HBHits")) {
             this.cvHBHitBank        = new Bank(schema.getSchema("HitBasedTrkg::HBHits"));
         }
+        if(schema.hasSchema("HitBasedTrkg::HBHitTrkId")) {
+            this.cvHBHitTrkIdBank   = new Bank(schema.getSchema("HitBasedTrkg::HBHitTrkId"));
+        }
+        if(schema.hasSchema("RECHB::Event")) {
+            this.cvRecHBEventBank   = new Bank(schema.getSchema("RECHB::Event"));
+        }        
 
         // Conventional TB banks
         if(schema.hasSchema("REC::Particle"))
@@ -145,6 +157,9 @@ public class Banks {
         if(schema.hasSchema("TimeBasedTrkg::TBHits")) {
             this.cvTBHitBank        = new Bank(schema.getSchema("TimeBasedTrkg::TBHits"));
         }
+        if(schema.hasSchema("REC::Event")) {
+            this.cvRecTBEventBank   = new Bank(schema.getSchema("REC::Event"));
+        }   
 
         // AI HB banks
         if(schema.hasSchema("ai::tracks"))
@@ -170,6 +185,12 @@ public class Banks {
         if(schema.hasSchema("HitBasedTrkg::AIHits")) {
             this.aiHBHitBank        = new Bank(schema.getSchema("HitBasedTrkg::AIHits"));
         }
+        if(schema.hasSchema("HitBasedTrkg::AIHitTrkId")) {
+            this.aiHBHitTrkIdBank   = new Bank(schema.getSchema("HitBasedTrkg::AIHitTrkId"));
+        }
+        if(schema.hasSchema("RECHBAI::Event")) {
+            this.aiRecHBEventBank   = new Bank(schema.getSchema("RECHBAI::Event"));
+        }         
 
         // AI TB banks
         if(schema.hasSchema("RECAI::Particle"))
@@ -192,7 +213,10 @@ public class Banks {
         }            
         if(schema.hasSchema("TimeBasedTrkg::AIHits")) {
             this.aiTBHitBank        = new Bank(schema.getSchema("TimeBasedTrkg::AIHits"));
-        }       
+        }
+        if(schema.hasSchema("RECAI::Event")) {
+            this.aiRecTBEventBank   = new Bank(schema.getSchema("RECAI::Event"));
+        } 
     }
 
     public Bank getRunConfig() {
@@ -350,6 +374,33 @@ public class Banks {
                 return aiHBHitBank;
             case Constants.AITB:
                 return aiTBHitBank;
+            default:
+                return null;                 
+        }  
+    }
+    
+    public Bank getHBTrackingHitTrkIdBank(int type){
+        switch(type){
+            case Constants.CONVHB:
+                return cvHBHitTrkIdBank;
+            case Constants.AIHB:
+                return aiHBHitTrkIdBank;
+            default:
+                return null; 
+            
+        }
+    }
+    
+    public Bank getRecEventBank(int type) {
+        switch(type) {
+            case Constants.CONVHB:
+                return cvRecHBEventBank;
+            case Constants.CONVTB:
+                return cvRecTBEventBank;
+            case Constants.AIHB:
+                return aiRecHBEventBank;
+            case Constants.AITB:
+                return aiRecTBEventBank;
             default:
                 return null;                 
         }  

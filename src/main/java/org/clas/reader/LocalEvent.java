@@ -14,6 +14,7 @@ import org.clas.element.Cluster;
 import org.clas.element.Cross;
 import org.clas.element.Track;
 import org.clas.element.AICandidate;
+import org.clas.element.RecEvent;
 import org.clas.element.URWellADC;
 import org.clas.element.URWellHit;
 import org.clas.element.URWellCluster;
@@ -58,6 +59,8 @@ public class LocalEvent {
     private List<URWellCluster> uRWellClusters = new ArrayList();
     private List<URWellCross> uRWellCrosses = new ArrayList();
     private List<URWellCross> uRWellCrossesNoCuts = new ArrayList();
+    private RecEvent recHBEvent = null;
+    private RecEvent recTBEvent = null;
     
     public LocalEvent(Reader reader, Event event){
         this.reader = reader;
@@ -149,7 +152,7 @@ public class LocalEvent {
                 if(crs.getCluster1() != null && crs.getCluster2() != null) break;
             }
         }
-        
+                
         // TDC
         tdcs = reader.readTDCs(event);       
               
@@ -202,6 +205,9 @@ public class LocalEvent {
             tracksHB = reader.readTracks(event, trkType);                  
             for(Track trk : tracksHB) {
                 trk.setCrosses(crossesAllHB);
+                for(Cross crs : trk.getCrosses()){
+                    if(!crossesHB.contains(crs)) crossesHB.add(crs);                    
+                }
                 trk.setHitsClusters(clustersAllHB);
                 for(Cluster cls : trk.getClusters()){
                     if(!clustersHB.contains(cls)) clustersHB.add(cls);                    
@@ -210,6 +216,9 @@ public class LocalEvent {
                     }
                 }
             }
+            
+            recHBEvent = reader.readRecEvent(event, trkType);
+            
             if(readURWell){
                 for(Track trk : tracksHB){
                     for(URWellCross uRWellCross : uRWellCrosses){
@@ -239,6 +248,9 @@ public class LocalEvent {
             tracksHB = reader.readTracks(event, trkType-1);                  
             for(Track trk : tracksHB) {
                 trk.setCrosses(crossesAllHB);
+                for(Cross crs : trk.getCrosses()){
+                    if(!crossesHB.contains(crs)) crossesHB.add(crs);                    
+                }
                 trk.setHitsClusters(clustersAllHB);
                 for(Cluster cls : trk.getClusters()){
                     if(!clustersHB.contains(cls)) clustersHB.add(cls);                    
@@ -247,6 +259,8 @@ public class LocalEvent {
                     }
                 }
             }
+            
+            recHBEvent = reader.readRecEvent(event, trkType-1);
 
             // Clusters in TB tracks
             hitsAllTB = reader.readHits(event, trkType);
@@ -264,6 +278,9 @@ public class LocalEvent {
             tracksTB = reader.readTracks(event, trkType);                 
             for(Track trk : tracksTB) {
                 trk.setCrosses(crossesAllTB);
+                for(Cross crs : trk.getCrosses()){
+                    if(!crossesTB.contains(crs)) crossesTB.add(crs);                    
+                }
                 trk.setHitsClusters(clustersAllTB);                
                 for(Cluster cls : trk.getClusters()){
                     if(!clustersTB.contains(cls)) clustersTB.add(cls);                    
@@ -272,6 +289,8 @@ public class LocalEvent {
                     }
                 }
             }
+            
+            recTBEvent = reader.readRecEvent(event, trkType);
            
             if(readURWell){
                 for(Track trk : tracksHB){
@@ -429,7 +448,13 @@ public class LocalEvent {
         }
     }
     
+    public RecEvent getRecHBEvent(){
+        return recHBEvent;
+    }
     
+    public RecEvent getRecTBEvent(){
+        return recTBEvent;
+    }
     
     
 } 

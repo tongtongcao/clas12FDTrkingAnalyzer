@@ -159,6 +159,37 @@ public class Cross implements Comparable<Cross> {
     
     public Cluster getCluster2(){
         return cluster2;
+    }
+
+
+    /**
+     *
+     * @param X
+     * @param Y
+     * @param Z
+     * @return rotated coords from tilted sector coordinate system to the sector
+     * coordinate system
+     */
+    public Point3D getCoordsInSector(double X, double Y, double Z) {
+        double rz = -X * Constants.SIN25 + Z * Constants.COS25;
+        double rx = X * Constants.COS25 + Z * Constants.SIN25;
+
+        return new Point3D(rx, Y, rz);
+    }
+
+    /**
+     *
+     * @param X
+     * @param Y
+     * @param Z
+     * @return rotated coords from tilted sector coordinate system to the lab
+     * frame
+     */
+    public Point3D getCoordsInLab(double X, double Y, double Z) {
+        Point3D PointInSec = this.getCoordsInSector(X, Y, Z);
+        double rx = PointInSec.x() * Constants.COSSECTOR60[this.sector() - 1] - PointInSec.y() * Constants.SINSECTOR60[this.sector() - 1];
+        double ry = PointInSec.x() * Constants.SINSECTOR60[this.sector() - 1] + PointInSec.y() * Constants.COSSECTOR60[this.sector() - 1];
+        return new Point3D(rx, ry, PointInSec.z());
     }    
                   
     

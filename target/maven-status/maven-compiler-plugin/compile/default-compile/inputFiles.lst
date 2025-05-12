@@ -13,10 +13,12 @@
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/element/MCParticle.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/analysis/compareTracks/CompareTracks.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/reader/Banks.java
+/Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/analysis/pass3Tracking/ExplorePass3Tracking.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/analysis/studyBgEffects/StudyBgEffectsURWell.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/analysis/studyBgEffects/BgEffectsClustering.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/analysis/studyBgEffects/StudyBgEffectsDenoisingClustering.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/demo/DemoBase.java
+/Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/element/RecEvent.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/physicsEvent/BasePhysicsEvent.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/reader/Reader.java
 /Users/caot/research/clas12/softwares/clas12FDTrkingAnalyzer/src/main/java/org/clas/demo/DemoSectorWithURWell.java
