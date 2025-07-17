@@ -41,7 +41,8 @@ import org.clas.reader.LocalEvent;
  * @author Tongtong Cao
  */
 public class AvgWireShiftFakeClusters extends BaseAnalysis {   
-
+    private double ratioNormalHitsCut = 0.8;
+    
     public AvgWireShiftFakeClusters() {
     }
 
@@ -51,23 +52,122 @@ public class AvgWireShiftFakeClusters extends BaseAnalysis {
 
     @Override
     public void createHistoGroupMap() {
-        ////// All tracks
+        HistoGroup histoGroupAvgWireDiff= new HistoGroup("avgWireDiff", 3, 1);
+        for (int i = 0; i < 3; i++) {
+            H1F h1_avgWireDiff = new H1F("avgWireDiff for R" + Integer.toString(i + 1), "avgWireDiff for R" + Integer.toString(i + 1), 100, -100, 100);
+            h1_avgWireDiff.setTitleX("avgWireDiff");
+            h1_avgWireDiff.setTitleY("Counts");
+            histoGroupAvgWireDiff.addDataSet(h1_avgWireDiff, i);  
+        }
+        
+        
+        
+        histoGroupMap.put(histoGroupAvgWireDiff.getName(), histoGroupAvgWireDiff);    
         
     }
 
     public void processEvent(Event event1, Event event2) {
+        
         //// Read banks
         LocalEvent localEvent1 = new LocalEvent(reader, event1, 12);
         LocalEvent localEvent2 = new LocalEvent(reader, event2, 11);
         
         List<Track> trackList1 = new ArrayList();    
-        List<Track> trackList2 = new ArrayList();    
+        List<Track> trackList2 = new ArrayList();
+        
+        List<Cluster> clusterList1 = new ArrayList(); // Clusters on valid TB tracks in sample 1
+        List<Cluster> clusterList2 = localEvent2.getClusters(); // all clusters from clustering
 
         for(Track trk : localEvent1.getTracksTB()){
-            if(trk.isValid()) trackList1.add(trk);
+            if(trk.isValid()) {
+                trackList1.add(trk);
+                for(Cluster cls : trk.getClusters()){
+                    if(!clusterList1.contains(cls)) clusterList1.add(cls);
+                }
+            }
         }
          
-        trackList2 = localEvent2.getTracksHB();
+        ////// Make cluster map between clusters in TB tracks of sample1 and clusters from clustering of sample2
+        // Priorities for map most matched hits (priority 1), highest normal ratio (priority 2) and closest avgWire (priority 3)  
+        Map<Cluster, Cluster> map_cls1_cls2_matched = new HashMap();             
+        for(Cluster cls1 : clusterList2){
+            List<Cluster> matchedClustersWithMostMatchedHits = new ArrayList();
+            int maxMatchedHits = -1;
+            for(Cluster cls2 : localEvent2.getClusters()){
+                if(cls2.getRatioNormalHits() >= ratioNormalHitsCut){
+                    int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                    if(numMatchedHits > 0){
+                        if(numMatchedHits > maxMatchedHits) {
+                            maxMatchedHits = numMatchedHits;
+                            matchedClustersWithMostMatchedHits.clear();
+                            matchedClustersWithMostMatchedHits.add(cls2);                    
+                        }
+                        else if(numMatchedHits == maxMatchedHits){
+                            matchedClustersWithMostMatchedHits.add(cls2);
+                        }
+                    }
+                }
+            }            
+            
+            if(matchedClustersWithMostMatchedHits.size() == 1) map_cls1_cls2_matched.put(cls1, matchedClustersWithMostMatchedHits.get(0));
+            else if(matchedClustersWithMostMatchedHits.size() > 1){
+                List<Cluster> clustersWithMaxNormalRatio = new ArrayList();
+                double maxNormalRatio = -1;                                            
+                for(Cluster cls2 : matchedClustersWithMostMatchedHits){
+                    double normalRatio = cls2.getRatioNormalHits();
+                    if(normalRatio > maxNormalRatio) {
+                        maxNormalRatio = normalRatio;
+                        clustersWithMaxNormalRatio.clear();
+                        clustersWithMaxNormalRatio.add(cls2);                    
+                    }
+                    else if(normalRatio == maxNormalRatio){
+                        clustersWithMaxNormalRatio.add(cls2);
+                    }
+                }
+                
+                if(clustersWithMaxNormalRatio.size() == 1) map_cls1_cls2_matched.put(cls1, clustersWithMaxNormalRatio.get(0));
+                else if(clustersWithMaxNormalRatio.size() > 1){
+                   double closestAvgWire = 10000;
+                   Cluster clsWithCloestAvgWire = null;
+                   for(Cluster cls2 : clustersWithMaxNormalRatio){ 
+                       double absDiffAvgWire = Math.abs(cls1.avgWire() - cls2.avgWire());
+                       if(absDiffAvgWire < closestAvgWire) {
+                           closestAvgWire = absDiffAvgWire;
+                           clsWithCloestAvgWire = cls2;
+                       }
+                   }          
+                   if(clsWithCloestAvgWire != null) {
+                       map_cls1_cls2_matched.put(cls1, clsWithCloestAvgWire);
+                   }
+                }
+            }             
+        }
+        
+        ////// Make a map between matched cluster and unmatched cluster list with same sector and same superlayer in sample 2
+        List<Cluster> unmatchedClusterList2 = new ArrayList();
+        unmatchedClusterList2.addAll(clusterList2);
+        unmatchedClusterList2.removeAll(map_cls1_cls2_matched.values());
+
+        Map<Cluster, List<Cluster>> map_matchedCls2_unmatchedCls2List = new HashMap();
+        for(Cluster matchedCls : map_cls1_cls2_matched.values()){
+            List<Cluster> unmatchedCls2List = new ArrayList();
+            for(Cluster unmatchedCls : unmatchedClusterList2){
+                if(unmatchedCls.sector() == matchedCls.sector() && unmatchedCls.superlayer() == matchedCls.superlayer()){
+                    unmatchedCls2List.add(unmatchedCls);
+                }
+            }
+            if(!unmatchedCls2List.isEmpty()) map_matchedCls2_unmatchedCls2List.put(matchedCls, unmatchedCls2List);
+        }
+        
+        ////// Make plots for diffenrce of average wire between matched and unmatched clusters
+        HistoGroup histoGroupAvgWireDiff = histoGroupMap.get("avgWireDiff");  
+        for(Cluster matchedCls2 : map_matchedCls2_unmatchedCls2List.keySet()){
+            List<Cluster> unmatchedCls2List = map_matchedCls2_unmatchedCls2List.get(matchedCls2);
+            for(Cluster unmatchedCls2 : unmatchedCls2List){
+                histoGroupAvgWireDiff.getH1F("avgWireDiff for R" + Integer.toString((matchedCls2.superlayer()+ 1)/2)).fill(unmatchedCls2.avgWire() - matchedCls2.avgWire());
+            }
+        }
+        
         
         
     }
@@ -157,7 +257,7 @@ public class AvgWireShiftFakeClusters extends BaseAnalysis {
         if (displayPlots) {
             JFrame frame = new JFrame();
             EmbeddedCanvasTabbed canvas = analysis.plotHistos();
-            frame.setSize(1200, 1200);
+            frame.setSize(1200, 500);
             frame.add(canvas);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
