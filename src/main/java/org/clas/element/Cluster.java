@@ -1,15 +1,14 @@
 package org.clas.element;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+
 
 import org.jlab.geom.prim.Vector3D;
-import org.jlab.geom.prim.Path3D;
 
 import org.clas.fit.ClusterFitLC;
 import org.clas.fit.LineFitter;
 import org.clas.utilities.Constants;
-import org.jlab.geom.prim.Point3D;
 /**
  *
  * @author Tongtong
