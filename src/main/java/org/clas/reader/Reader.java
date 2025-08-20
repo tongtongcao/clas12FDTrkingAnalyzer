@@ -263,7 +263,7 @@ public class Reader {
                         crossBank.getFloat("z", loop),
                         crossBank.getFloat("err_x", loop),
                         crossBank.getFloat("err_y", loop),
-                        crossBank.getFloat("err_x", loop),
+                        crossBank.getFloat("err_z", loop),
                         crossBank.getFloat("ux", loop),
                         crossBank.getFloat("uy", loop),
                         crossBank.getFloat("uz", loop),

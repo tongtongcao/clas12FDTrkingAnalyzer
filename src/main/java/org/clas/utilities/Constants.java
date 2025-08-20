@@ -28,7 +28,6 @@ public class Constants {
         
     public static boolean MC = true;
     public static boolean URWELL = true;
-    public static int URWELLRegions = 1;
     
     public static double CHI2MAX = Double.POSITIVE_INFINITY;
     public static double ZMIN = -15;
@@ -76,5 +75,7 @@ public class Constants {
     public static double INTERVALDCSL1L1L2TSC = 1.15848; // cm
     public static double DCSL1L1ZTSC = 229.27948; // cm
     public static double DCSL1L1W1XTSC = -83.7509153; // cm
-    public static double YDCSL1L1W1LC = 1.732051;      
+    public static double YDCSL1L1W1LC = 1.732051;
+    
+    public static int URWELLRegions = 1;
 }
