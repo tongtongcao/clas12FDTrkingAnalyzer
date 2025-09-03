@@ -122,6 +122,23 @@ public class LocalEvent {
                     } // time and energy cuts for status as 0
                 }
             }
+            else if(Constants.URWELLRegions == 2){
+                for(URWellHit hit : allURWellHits){
+                    if(hit.layer() == 3 || hit.layer() == 4) uRWellHits.add(hit);
+                }
+                for(URWellCluster cls : allURWellClusters){
+                    if(cls.layer() == 3 || cls.layer() == 4) {
+                        cls.setHits(uRWellHits);
+                        uRWellClusters.add(cls);
+                    }
+                }
+                for(URWellCross crs : allURWellCrosses){
+                    if(crs.region() == Constants.URWELLRegions) {
+                        uRWellCrossesNoCuts.add(crs);
+                        if(crs.status() == 0) uRWellCrosses.add(crs);
+                    } // time and energy cuts for status as 0
+                }
+            }
             else{
                 uRWellHits = allURWellHits;
                 uRWellClusters = allURWellClusters;
@@ -168,14 +185,22 @@ public class LocalEvent {
         hitsClustering = new ArrayList();
         for(Cluster cls : clusters){
             hitsClustering.addAll(cls.getHits());
-            for(URWellCross uRWellCross : uRWellCrosses){
-                if(cls.getMatchedURWellCrossId() == uRWellCross.id()){
-                    cls.setMatchedURWellCross(uRWellCross);
+            List<URWellCross> matchedURWellCrosses = new ArrayList();             
+            for (URWellCross uRWellCross : uRWellCrosses) {
+                if (uRWellCross.id() == cls.getMatchedURWellCrossIds()[0]) {
+                    matchedURWellCrosses.add(uRWellCross);
                     uRWellCross.setIsUsedClustering(true);
                     break;
                 }
             }
-            
+            for (URWellCross uRWellCross : uRWellCrosses) {
+                if (uRWellCross.id() == cls.getMatchedURWellCrossIds()[1]) {
+                    matchedURWellCrosses.add(uRWellCross);
+                    uRWellCross.setIsUsedClustering(true);
+                    break;
+                }
+            }            
+            cls.setMatchedURWellCrosses(matchedURWellCrosses);            
         }                      
         
         // Clusters in AI candidates
@@ -225,13 +250,22 @@ public class LocalEvent {
             
             if(readURWell){
                 for(Track trk : tracksHB){
+                    List<URWellCross> matchedURWellCrosses = new ArrayList(); 
                     for(URWellCross uRWellCross : uRWellCrosses){
-                        if(trk.uRWellCrossId() == uRWellCross.id()){
-                            trk.setURWellCross(uRWellCross);
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
+                            matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
                     }
+                    for(URWellCross uRWellCross : uRWellCrosses){
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
+                            matchedURWellCrosses.add(uRWellCross);
+                            uRWellCross.setIsUsedHB(true);
+                            break;
+                        }
+                    }                                        
+                    trk.setURWellCrosses(matchedURWellCrosses);
                 }
             }
         }
@@ -298,23 +332,41 @@ public class LocalEvent {
            
             if(readURWell){
                 for(Track trk : tracksHB){
+                    List<URWellCross> matchedURWellCrosses = new ArrayList(); 
                     for(URWellCross uRWellCross : uRWellCrosses){
-                        if(trk.uRWellCrossId() == uRWellCross.id()){
-                            trk.setURWellCross(uRWellCross);
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
+                            matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
                     }
+                    for(URWellCross uRWellCross : uRWellCrosses){
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
+                            matchedURWellCrosses.add(uRWellCross);
+                            uRWellCross.setIsUsedHB(true);
+                            break;
+                        }
+                    }                                        
+                    trk.setURWellCrosses(matchedURWellCrosses);
                 }
                 
                 for(Track trk : tracksTB){
+                    List<URWellCross> matchedURWellCrosses = new ArrayList(); 
                     for(URWellCross uRWellCross : uRWellCrosses){
-                        if(trk.uRWellCrossId() == uRWellCross.id()){
-                            trk.setURWellCross(uRWellCross);
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
+                            matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedTB(true);
                             break;
                         }
                     }
+                    for(URWellCross uRWellCross : uRWellCrosses){
+                        if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
+                            matchedURWellCrosses.add(uRWellCross);
+                            uRWellCross.setIsUsedTB(true);
+                            break;
+                        }
+                    }                                        
+                    trk.setURWellCrosses(matchedURWellCrosses);
                 }
             }
         }

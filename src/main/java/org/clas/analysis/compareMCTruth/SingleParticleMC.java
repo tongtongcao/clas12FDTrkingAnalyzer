@@ -105,22 +105,22 @@ public class SingleParticleMC extends BaseAnalysis{
         
         
         HistoGroup histoDiffGroup = new HistoGroup("Diff", 3, 2);
-        H1F h1_p_diff = new H1F("pDiff", "#Deltap/p", 100, -1, 1);
+        H1F h1_p_diff = new H1F("pDiff", "#Deltap/p", 100, -0.2, 0.2);
         h1_p_diff.setTitleX("#Deltap/p");
         h1_p_diff.setTitleY("Counts");
-        H1F h1_theta_diff = new H1F("thetaDiff", "#Delta#theta", 100, -20, 20);
+        H1F h1_theta_diff = new H1F("thetaDiff", "#Delta#theta", 100, -1, 1);
         h1_theta_diff.setTitleX("#Delta#theta (deg)");
         h1_theta_diff.setTitleY("Counts");
-        H1F h1_phi_diff = new H1F("phiDiff", "#Delta#phi", 100, -30, 30);
+        H1F h1_phi_diff = new H1F("phiDiff", "#Delta#phi", 100, -5, 5);
         h1_phi_diff.setTitleX("#Delta#phi (deg)");
         h1_phi_diff.setTitleY("Counts");
-        H1F h1_vx_diff = new H1F("vxDiff", "#DeltaV_x", 100, -40, 40);
+        H1F h1_vx_diff = new H1F("vxDiff", "#DeltaV_x", 100, -2, 2);
         h1_vx_diff.setTitleX("#DeltaV_x (cm)");
         h1_vx_diff.setTitleY("Counts");     
-        H1F h1_vy_diff = new H1F("vyDiff", "#DeltaV_y", 100, -40, 40);
+        H1F h1_vy_diff = new H1F("vyDiff", "#DeltaV_y", 100, -2, 2);
         h1_vy_diff.setTitleX("#DeltaV_y (cm)");
         h1_vy_diff.setTitleY("Counts");                
-        H1F h1_vz_diff = new H1F("vzDiff", "#DeltaV_z", 100, -100, 100);
+        H1F h1_vz_diff = new H1F("vzDiff", "#DeltaV_z", 100, -5, 5);
         h1_vz_diff.setTitleX("#DeltaV_z (cm)");
         h1_vz_diff.setTitleY("Counts");        
         histoDiffGroup.addDataSet(h1_p_diff, 0);
@@ -208,7 +208,7 @@ public class SingleParticleMC extends BaseAnalysis{
     }
     
     public void postEventProcessing(){
-        /*
+        
         HistoGroup histoDiffGroup = histoGroupMap.get("Diff");
         F1D func_p  = new F1D("func_p","[amp]*gaus(x,[mean],[sigma])", -0.015,0.01);
         func_p.setParameter(0, histoDiffGroup.getH1F("pDiff").getMax());
@@ -275,7 +275,7 @@ public class SingleParticleMC extends BaseAnalysis{
         System.out.println("# of electron tracks with mis-identified as pi-: " + numMisPIDPiminusElectrons);
         System.out.println("# of electron tracks with correct PID: " + numCorrectPIDElectrons);
         System.out.println("ratio: " + ((double)numMisPIDPiminusElectrons/numCorrectPIDElectrons));
-*/
+
     }
                         
     public static void main(String[] args){

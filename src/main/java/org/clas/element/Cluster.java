@@ -41,8 +41,8 @@ public class Cluster implements Comparable<Cluster> {
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
     
-    private int matchedURWellCrossId = -1;
-    private URWellCross matchedURWellCross = null;
+    private int[] matchedURWellCrossIds = {-1, -1};
+    private List<URWellCross> matchedURWellCrosses = null;
     
     private double linearFitSlope;
     private double linearFitIntercept;
@@ -319,11 +319,11 @@ public class Cluster implements Comparable<Cluster> {
         if(fit.lineFit()){        
             double slope = fit.getLineFitter().slope();                
             double intercept = fit.getLineFitter().intercept();
-
-            double x = URWellCross.getXRelativeDCSL1LC();
+            
             URWellCross selectedCross = null;
             double minABSResidual = 999;
             for(URWellCross crs : crosses){
+                double x = URWellCross.getXRelativeDCSL1LC(crs.region());
                 double y = crs.getYRelativeDCSL1LC();
                 double absResidual = Math.abs(x * slope + intercept - y);
                 if(absResidual < minABSResidual && absResidual < 1){
@@ -336,34 +336,38 @@ public class Cluster implements Comparable<Cluster> {
         else return null;
     }
     
-    public void setMatchedURWellCross(URWellCross uRWellCross){
-        this.matchedURWellCross = uRWellCross;
+    public void setMatchedURWellCrosses(List<URWellCross> uRWellCrosses){
+        this.matchedURWellCrosses = new ArrayList();
+        this.matchedURWellCrosses.addAll(uRWellCrosses);
     }
     
-    public URWellCross getMatchedURWellCross(){
-        return matchedURWellCross;
+    public List<URWellCross> getMatchedURWellCrosses(){
+        return matchedURWellCrosses;
     }
     
-    public void setMatchedURWellCrossId(int uRWellCrossId){
-        this.matchedURWellCrossId = uRWellCrossId;
+    public void setMatchedURWellCrossIds(int uRWellCross1Id, int uRWellCross2Id){
+        this.matchedURWellCrossIds[0] = uRWellCross1Id;
+        this.matchedURWellCrossIds[1] = uRWellCross2Id;
     }
     
-    public int getMatchedURWellCrossId(){
-        return matchedURWellCrossId;
+    public int[] getMatchedURWellCrossIds(){
+        return matchedURWellCrossIds;
     }
     
+    /*
     public double getURWellResidualWithDCURWellFitting(){
         ClusterFitLC fit = new ClusterFitLC(this);
-        if(this.matchedURWellCross != null){
+        if(this.matchedURWellCrosses != null){
             fit.addURWell(this.matchedURWellCross);
             fit.lineFit();
             double slope = fit.getLineFitter().slope();
             double intercept = fit.getLineFitter().intercept();
-            double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - this.matchedURWellCross.getYRelativeDCSL1LC();
+            double residual = slope * URWellCross.getXRelativeDCSL1LC(this.matchedURWellCross.region()) + intercept - this.matchedURWellCross.getYRelativeDCSL1LC();
             return residual;
         }
         else return -9999;
     }
+*/
     
     public double getURWellResidualWithDCURWellFitting(URWellCross crs){
         ClusterFitLC fit = new ClusterFitLC(this);
@@ -372,7 +376,7 @@ public class Cluster implements Comparable<Cluster> {
             fit.lineFit();
             double slope = fit.getLineFitter().slope();
             double intercept = fit.getLineFitter().intercept();
-            double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+            double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
             return residual;
         }
         else return -9999;
@@ -443,8 +447,8 @@ public class Cluster implements Comparable<Cluster> {
         this.numBgHits = cls.getNumBgHits();
         this.ratioNormalHits = cls.getRatioNormalHits();
 
-        this.matchedURWellCrossId = cls.getMatchedURWellCrossId();
-        this.matchedURWellCross = cls.getMatchedURWellCross();
+        this.matchedURWellCrossIds = cls.getMatchedURWellCrossIds();
+        this.matchedURWellCrosses = cls.getMatchedURWellCrosses();
 
         this.linearFitSlope = cls.getLinearFitSlope();
         this.linearFitIntercept = cls.getLinearFitIntercept();

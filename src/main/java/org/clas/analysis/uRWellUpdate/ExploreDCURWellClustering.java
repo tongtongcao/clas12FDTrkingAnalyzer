@@ -245,7 +245,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                 double minAbsResidual = 9999;
                 for(URWellCross crs : uRWellCrosses){
                     if(crs.sector() == cls.sector()){
-                        double x = URWellCross.getXRelativeDCSL1LC();
+                        double x = URWellCross.getXRelativeDCSL1LC(crs.region());
                         double y = crs.getYRelativeDCSL1LC();
                         double absResidual = Math.abs(slope * x + intercept - y);
                         if(absResidual < minAbsResidual){
@@ -261,7 +261,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
         HistoGroup histoGroupFit = histoGroupMap.get("fit");
         for(Cluster cls : map_cluster_uRWellCross.keySet()){
             URWellCross crs = map_cluster_uRWellCross.get(cls);                                              
-            double x = URWellCross.getXRelativeDCSL1LC();
+            double x = URWellCross.getXRelativeDCSL1LC(crs.region());
             double y = crs.getYRelativeDCSL1LC();     
             
             for(Hit hit : cls.getHitsAtMostLeftLayer()){
@@ -328,7 +328,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     fit.lineFit();
                     double slope = fit.getLineFitter().slope();
                     double intercept = fit.getLineFitter().intercept();
-                    double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                    double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                     histoGroupResidual.getH1F("residual2Layers").fill(residual);
                     histoGroupFitProb.getH1F("fitProb2Layers").fill(fit.getLineFitter().getProb());
                     
@@ -336,7 +336,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     if(fit.lineFit()){
                         slope = fit.getLineFitter().slope();
                         intercept = fit.getLineFitter().intercept();
-                        residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                        residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                         histoGroupResidualWithURWell.getH1F("residual2LayersWithURWell").fill(residual);
                         histoGroupFitProbWithURWell.getH1F("fitProb2LayersWithURWell").fill(fit.getLineFitter().getProb());
                     }
@@ -355,7 +355,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     fit.lineFit();
                     double slope = fit.getLineFitter().slope();
                     double intercept = fit.getLineFitter().intercept();
-                    double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                    double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                     histoGroupResidual.getH1F("residual3Layers").fill(residual);
                     histoGroupFitProb.getH1F("fitProb3Layers").fill(fit.getLineFitter().getProb());
                     
@@ -363,7 +363,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     if(fit.lineFit()){
                         slope = fit.getLineFitter().slope();
                         intercept = fit.getLineFitter().intercept();
-                        residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                        residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                         histoGroupResidualWithURWell.getH1F("residual3LayersWithURWell").fill(residual);
                         histoGroupFitProbWithURWell.getH1F("fitProb3LayersWithURWell").fill(fit.getLineFitter().getProb());
                     }
@@ -382,7 +382,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     fit.lineFit();
                     double slope = fit.getLineFitter().slope();
                     double intercept = fit.getLineFitter().intercept();
-                    double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                    double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                     histoGroupResidual.getH1F("residual4Layers").fill(residual);
                     histoGroupFitProb.getH1F("fitProb4Layers").fill(fit.getLineFitter().getProb());
                     
@@ -390,7 +390,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     if(fit.lineFit()){
                         slope = fit.getLineFitter().slope();
                         intercept = fit.getLineFitter().intercept();
-                        residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                        residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                         histoGroupResidualWithURWell.getH1F("residual4LayersWithURWell").fill(residual);
                         histoGroupFitProbWithURWell.getH1F("fitProb4LayersWithURWell").fill(fit.getLineFitter().getProb());
                     }
@@ -409,7 +409,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     fit.lineFit();
                     double slope = fit.getLineFitter().slope();
                     double intercept = fit.getLineFitter().intercept();
-                    double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                    double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                     histoGroupResidual.getH1F("residual5Layers").fill(residual);
                     histoGroupFitProb.getH1F("fitProb5Layers").fill(fit.getLineFitter().getProb());                    
                     
@@ -417,7 +417,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     if(fit.lineFit()){
                         slope = fit.getLineFitter().slope();
                         intercept = fit.getLineFitter().intercept();
-                        residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                        residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                         histoGroupResidualWithURWell.getH1F("residual5LayersWithURWell").fill(residual);
                         histoGroupFitProbWithURWell.getH1F("fitProb5LayersWithURWell").fill(fit.getLineFitter().getProb());
                     }
@@ -437,7 +437,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     fit.lineFit();
                     double slope = fit.getLineFitter().slope();
                     double intercept = fit.getLineFitter().intercept();
-                    double residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                    double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                     histoGroupResidual.getH1F("residual6Layers").fill(residual);
                     histoGroupFitProb.getH1F("fitProb6Layers").fill(fit.getLineFitter().getProb());
                     
@@ -445,7 +445,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
                     if(fit.lineFit()){
                         slope = fit.getLineFitter().slope();
                         intercept = fit.getLineFitter().intercept();
-                        residual = slope * URWellCross.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
+                        residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
                         histoGroupResidualWithURWell.getH1F("residual6LayersWithURWell").fill(residual);
                         histoGroupFitProbWithURWell.getH1F("fitProb6LayersWithURWell").fill(fit.getLineFitter().getProb());
                     }
@@ -516,7 +516,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
         parser.addOption("-o"          ,"",     "output file name prefix");
-        parser.addOption("-n"          ,"-1",   "maximum number of events to process");        
+        parser.addOption("-n"          ,"-1",   "maximum number of events to process");     
         parser.addOption("-plot"       ,"1",    "display histograms (0/1)");
         parser.addOption("-demo", "1", "display case demo (0/1)");
         parser.addOption("-mDemo", "100", "maxium for number of demonstrated cases");
@@ -533,6 +533,7 @@ public class ExploreDCURWellClustering extends BaseAnalysis{
         int maxDemoCases = parser.getOption("-mDemo").intValue();
         boolean readHistos   = (parser.getOption("-histo").intValue()!=0); 
         Constants.MAXDEMOCASES = maxDemoCases;
+        Constants.URWELLRegions = 1;
         
         List<String> inputList = parser.getInputList();
         if(inputList.isEmpty()==true){

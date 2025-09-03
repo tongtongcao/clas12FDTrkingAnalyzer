@@ -34,7 +34,7 @@ public class Track implements Comparable<Track> {
     private Vector3[] trackCrosses = new Vector3[3];
     private int[] clusterIds = new int[6];
     private int[] crossIds = new int[6];    
-    private int uRWellCrossId = -1;
+    private int uRWellCrossIds[] = new int[2];
     private int   trackSL = 0;
     
     // from particle bank
@@ -47,7 +47,7 @@ public class Track implements Comparable<Track> {
     private double[]  trackEdge       = new double[9];  // size set to contain 3 DC regions, 3 FTOF and ECAL layers
     private boolean inFiducial = true;
     
-    private URWellCross uRWellCross = null;
+    private List<URWellCross> uRWellCrosses = null;
     private boolean trackMatch   = false;
     private boolean trackPredict = false;  
     private List<Cross> crosses = null;
@@ -59,8 +59,10 @@ public class Track implements Comparable<Track> {
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
     
-    private Point3D uRWellProjectionGlobal = null;
-    private Point3D uRWellProjectionLocal = null;
+    private Point3D uRWellProjectionGlobalR1 = null;
+    private Point3D uRWellProjectionLocalR1 = null;
+    private Point3D uRWellProjectionGlobalR2 = null;
+    private Point3D uRWellProjectionLocalR2 = null;    
     
     public Track() {
         this.initTrack(1, -1, 0, 0., 0., 0., 0., 0., 0.);
@@ -265,21 +267,23 @@ public class Track implements Comparable<Track> {
         this.trackNDF = trackNDF;
     }
     
-    public int uRWellCrossId(){
-        return this.uRWellCrossId;
+    public int[] uRWellCrossIds(){
+        return this.uRWellCrossIds;
     }
     
-    public void uRWellCrossId(int uRWellCrossId){
-        this.uRWellCrossId = uRWellCrossId;
+    public void uRWellCrossIds(int uRWellCross1Id, int uRWellCross2Id){
+        this.uRWellCrossIds[0] = uRWellCross1Id;
+        this.uRWellCrossIds[1] = uRWellCross2Id;
     }
     
-    public void setURWellCross(URWellCross uRWellCross){
-        this.uRWellCross = uRWellCross;
+    public void setURWellCrosses(List<URWellCross> uRWellCrosses){
+        this.uRWellCrosses = new ArrayList();
+        this.uRWellCrosses.addAll(uRWellCrosses);
         
     }
     
-    public URWellCross getURWellCross(){
-        return this.uRWellCross;
+    public List<URWellCross> getURWellCrosses(){
+        return this.uRWellCrosses;
     }
     
     public int[] crossIds() {
@@ -812,18 +816,51 @@ public class Track implements Comparable<Track> {
         return ratioNormalHits;
     }
     
-    public void setURWellProjection(double xGlobal, double yGlobal, double zGlobal, double xLocal, double yLocal, double zLocal){
-        uRWellProjectionGlobal = new Point3D(xGlobal, yGlobal, zGlobal);
-        uRWellProjectionLocal = new Point3D(xLocal, yLocal, zLocal);
+    public void setURWellProjectionR1(double xGlobal, double yGlobal, double zGlobal){
+        uRWellProjectionGlobalR1 = new Point3D(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR1 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
     }
     
-    public Point3D getURWellProjectionGlobal(){
-        return uRWellProjectionGlobal;
+    public Point3D getURWellProjectionGlobalR1(){
+        return uRWellProjectionGlobalR1;
     }
     
-    public Point3D getURWellProjectionLocal(){
-        return uRWellProjectionLocal;
+    public Point3D getURWellProjectionLocalR1(){
+        return uRWellProjectionLocalR1;
     }
+    
+    public void setURWellProjectionR2(double xGlobal, double yGlobal, double zGlobal){
+        uRWellProjectionGlobalR2 = new Point3D(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR2 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
+    }
+    
+    public Point3D getURWellProjectionGlobalR2(){
+        return uRWellProjectionGlobalR2;
+    }
+    
+    public Point3D getURWellProjectionLocalR2(){
+        return uRWellProjectionLocalR2;
+    }    
+    
+
+    /**
+     *
+     * @param X
+     * @param Y
+     * @param Z
+     * @return rotated coords from tilted sector coordinate system to the lab
+     * frame
+     */
+    public Point3D getCoordsInLocal(double X, double Y, double Z) {
+                        
+        double rx = X * Constants.COSSECTOR60[this.sector() - 1] + Y * Constants.SINSECTOR60[this.sector() - 1];
+        double ry = -X * Constants.SINSECTOR60[this.sector() - 1] + Y * Constants.COSSECTOR60[this.sector() - 1];
+        
+        double rrz = rx * Constants.SIN25 + Z * Constants.COS25;
+        double rrx = rx * Constants.COS25 - Z * Constants.SIN25;
+        
+        return new Point3D(rrx, ry, rrz);
+    }    
     
 
     @Override

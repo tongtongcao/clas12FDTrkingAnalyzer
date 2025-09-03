@@ -247,6 +247,7 @@ public class TestClusteringUpdate extends BaseAnalysis {
         ////// Read banks
         LocalEvent localEvent1 = new LocalEvent(reader1, event1, trkType, true);
         LocalEvent localEvent2 = new LocalEvent(reader2, event2, trkType, true); 
+    
         
 /*
         List<Cluster> clusters1TB = new ArrayList();
@@ -266,6 +267,8 @@ public class TestClusteringUpdate extends BaseAnalysis {
             }
         }
 */        
+
+    /*
         List<Cluster> clusters1 = localEvent1.getClusters(); 
         List<Cluster> clusters2 = localEvent2.getClusters();           
         
@@ -550,7 +553,9 @@ public class TestClusteringUpdate extends BaseAnalysis {
             
             //if(cls2.getRatioNormalHits() == 0) addDemoGroupLoopClusters(localEvent1, localEvent2, cls2.sector(), "ex2R" + cls2.getRatioNormalHits());
             //if(cls2.getRatioNormalHits() == 1) addDemoGroupLoopClusters(localEvent1, localEvent2, cls2.sector(), "ex2R" + cls2.getRatioNormalHits());
-        }                          
+        } 
+     */   
+       
     }
     
     public void postEventProcess(){

@@ -28,7 +28,8 @@ public class URWellCross implements Comparable<URWellCross> {
     private boolean isUsedHB = false;
     private boolean isUsedTB = false;
     
-    private static double xRelativeDCSL1LC = 1 - (Constants.DCSL1L1ZTSC - Constants.URWELLR1ZTSC)/Constants.INTERVALDCSL1L1L2TSC; // Layer number relative to DC SL1
+    private static double xRelativeDCSL1LC[] = {1 - (Constants.DCSL1L1ZTSC - Constants.URWELLZTSC[0])/Constants.INTERVALDCSL1L1L2TSC,
+        1 - (Constants.DCSL1L1ZTSC - Constants.URWELLZTSC[1])/Constants.INTERVALDCSL1L1L2TSC}; // Layer number relative to DC SL1
     private double yRelativeToDCSL1LC;
     
     public URWellCross(int id, int status, int sector, int region, int cluster1Id, int cluster2Id, 
@@ -155,8 +156,8 @@ public class URWellCross implements Comparable<URWellCross> {
         else return false;
     }
     
-    public static double getXRelativeDCSL1LC(){
-        return xRelativeDCSL1LC;
+    public static double getXRelativeDCSL1LC(int region){
+        return xRelativeDCSL1LC[region - 1];
     }
     
     // Calculate x along DC SL1 direction at the plane y = 0 in TSC
