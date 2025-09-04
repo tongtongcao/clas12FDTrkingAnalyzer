@@ -165,8 +165,12 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             Track matchedTrack = null;
             for (Track trk2 : trackList2) {
                 int numMatchedHits = trk1.matchedHits(trk2);
-                if(Constants.URWELL && trk1.getURWellCross() != null && trk2.getURWellCross() != null){
-                    if(trk1.getURWellCross().isMatchedCross(trk2.getURWellCross())) numMatchedHits+=2;
+                if(Constants.URWELL && !trk1.getURWellCrosses().isEmpty() && !trk2.getURWellCrosses().isEmpty()){
+                    for(URWellCross crs1 : trk1.getURWellCrosses()){
+                        for(URWellCross crs2 : trk2.getURWellCrosses()){
+                            if(crs1.isMatchedCross(crs2)) numMatchedHits+=2;
+                        }
+                    }
                 }
                 if (numMatchedHits > maxMatchedHits) {
                     maxMatchedHits = numMatchedHits;
@@ -272,8 +276,12 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             Track matchedTrack = null;
             for (Track trk2 : validTrackListSp2) {
                 int numMatchedHits = trk1.matchedHits(trk2);
-                if(Constants.URWELL && trk1.getURWellCross() != null && trk2.getURWellCross() != null){
-                    if(trk1.getURWellCross().isMatchedCross(trk2.getURWellCross())) numMatchedHits+=2;
+                if(Constants.URWELL && !trk1.getURWellCrosses().isEmpty() && !trk2.getURWellCrosses().isEmpty()){
+                    for(URWellCross crs1 : trk1.getURWellCrosses()){
+                        for(URWellCross crs2 : trk2.getURWellCrosses()){
+                            if(crs1.isMatchedCross(crs2)) numMatchedHits+=2;
+                        }
+                    }
                 }
                 if (numMatchedHits > maxMatchedHits) {
                     maxMatchedHits = numMatchedHits;
@@ -367,7 +375,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraValidTracks1.getHistoVz().fill(trk1.vz());
 
-                //this.addDemoGroup(localEvent1, localEvent2, trk1.sector());
+                this.addDemoGroup(localEvent1, localEvent2, trk1.sector());
 
             }
             for (Track trk2 : trkList_validExtraSample2) {
@@ -379,7 +387,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
 
-                //this.addDemoGroup(localEvent1, localEvent2, trk2.sector());
+                this.addDemoGroup(localEvent1, localEvent2, trk2.sector());
             }
         }
     }

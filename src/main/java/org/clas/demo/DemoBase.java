@@ -231,7 +231,7 @@ public class DemoBase{
         List<Double> locX = new ArrayList();
         List<Double> locY = new ArrayList();
         
-        locX.add(URWellCross.getXRelativeDCSL1LC());
+        locX.add(URWellCross.getXRelativeDCSL1LC(uRWellCross.region()));
         locY.add(uRWellCross.getYRelativeDCSL1LC());
                 
         GraphErrors graph = new GraphErrors(name, new DataVector(locX), new DataVector(locY));
@@ -247,7 +247,7 @@ public class DemoBase{
         List<Double> locX = new ArrayList();
         List<Double> locY = new ArrayList();
         for(URWellCross crs : uRWellCrosses){
-            locX.add(URWellCross.getXRelativeDCSL1LC());
+            locX.add(URWellCross.getXRelativeDCSL1LC(crs.region()));
             locY.add(crs.getYRelativeDCSL1LC());
         }
         

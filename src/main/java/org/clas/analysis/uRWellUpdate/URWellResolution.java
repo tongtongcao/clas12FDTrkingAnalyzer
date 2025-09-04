@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Random;
 import javax.swing.JFrame;
 
+import org.jlab.geom.prim.Point3D;
+import org.jlab.geom.prim.Line3D;
+import org.jlab.geom.prim.Vector3D;
+
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
@@ -49,37 +53,81 @@ public class URWellResolution extends BaseAnalysis{
     
     @Override
     public void createHistoGroupMap(){
-        HistoGroup histoGroupURWellResolution = new HistoGroup("uRWellResolution", 2, 2);
-        H1F h1_xURWellResolutionHB= new H1F("xURWellResolutionHB","uRWell x resolution at HB level" , 100, -2, 2);
-        h1_xURWellResolutionHB.setTitleX("Diff. between measurent and projection");
-        h1_xURWellResolutionHB.setTitleY("Counts");
-        histoGroupURWellResolution.addDataSet(h1_xURWellResolutionHB, 0);  
+        HistoGroup histoGroupURWellResolutionR1 = new HistoGroup("uRWellResolutionR1", 2, 2);
+        H1F h1_xURWellResolutionHBR1= new H1F("xURWellResolutionHBR1","uRWell x resolution at HB level" , 100, -2, 2);
+        h1_xURWellResolutionHBR1.setTitleX("Diff. between measurent and projection");
+        h1_xURWellResolutionHBR1.setTitleY("Counts");
+        histoGroupURWellResolutionR1.addDataSet(h1_xURWellResolutionHBR1, 0);                  
+        H1F h1_yURWellResolutionHBR1= new H1F("yURWellResolutionHBR1","uRWell y resolution at HB level" , 100, -10, 10);
+        h1_yURWellResolutionHBR1.setTitleX("Diff. between measurent and projection");
+        h1_yURWellResolutionHBR1.setTitleY("Counts");
+        histoGroupURWellResolutionR1.addDataSet(h1_yURWellResolutionHBR1, 1);  
+        H1F h1_xURWellResolutionTBR1= new H1F("xURWellResolutionTBR1","uRWell x resolution at TB level" , 100, -0.4, 0.4);
+        h1_xURWellResolutionTBR1.setTitleX("Diff. between measurent and projection");
+        h1_xURWellResolutionTBR1.setTitleY("Counts");
+        histoGroupURWellResolutionR1.addDataSet(h1_xURWellResolutionTBR1, 2);  
+        H1F h1_yURWellResolutionTBR1= new H1F("yURWellResolutionTBR1","uRWell y resolution at TB level" , 100, -2, 2);
+        h1_yURWellResolutionTBR1.setTitleX("Diff. between measurent and projection");
+        h1_yURWellResolutionTBR1.setTitleY("Counts");
+        histoGroupURWellResolutionR1.addDataSet(h1_yURWellResolutionTBR1, 3);                  
+        histoGroupMap.put(histoGroupURWellResolutionR1.getName(), histoGroupURWellResolutionR1);
+                      
+        HistoGroup histoGroupURWellResolutionR2 = new HistoGroup("uRWellResolutionR2", 2, 2);
+        H1F h1_xURWellResolutionHBR2= new H1F("xURWellResolutionHBR2","uRWell x resolution at HB level" , 100, -2, 2);
+        h1_xURWellResolutionHBR2.setTitleX("Diff. between measurent and projection");
+        h1_xURWellResolutionHBR2.setTitleY("Counts");
+        histoGroupURWellResolutionR2.addDataSet(h1_xURWellResolutionHBR2, 0);                  
+        H1F h1_yURWellResolutionHBR2= new H1F("yURWellResolutionHBR2","uRWell y resolution at HB level" , 100, -10, 10);
+        h1_yURWellResolutionHBR2.setTitleX("Diff. between measurent and projection");
+        h1_yURWellResolutionHBR2.setTitleY("Counts");
+        histoGroupURWellResolutionR2.addDataSet(h1_yURWellResolutionHBR2, 1);  
+        H1F h1_xURWellResolutionTBR2= new H1F("xURWellResolutionTBR2","uRWell x resolution at TB level" , 100, -0.4, 0.4);
+        h1_xURWellResolutionTBR2.setTitleX("Diff. between measurent and projection");
+        h1_xURWellResolutionTBR2.setTitleY("Counts");
+        histoGroupURWellResolutionR2.addDataSet(h1_xURWellResolutionTBR2, 2);  
+        H1F h1_yURWellResolutionTBR2= new H1F("yURWellResolutionTBR2","uRWell y resolution at TB level" , 100, -2, 2);
+        h1_yURWellResolutionTBR2.setTitleX("Diff. between measurent and projection");
+        h1_yURWellResolutionTBR2.setTitleY("Counts");
+        histoGroupURWellResolutionR2.addDataSet(h1_yURWellResolutionTBR2, 3);                  
+        histoGroupMap.put(histoGroupURWellResolutionR2.getName(), histoGroupURWellResolutionR2); 
         
+        HistoGroup histoGroupMeasResolutionR1 = new HistoGroup("measResolutionR1", 2, 2);
+        H1F h1_c1MeasResolutionHBR1= new H1F("c1MeasResolutionHBR1","c1 meas. resolution at HB level" , 100, -2, 2);
+        h1_c1MeasResolutionHBR1.setTitleX("Tracking projection to cluster line");
+        h1_c1MeasResolutionHBR1.setTitleY("Counts");
+        histoGroupMeasResolutionR1.addDataSet(h1_c1MeasResolutionHBR1, 0);                  
+        H1F h1_c2MeasResolutionHBR1= new H1F("c2MeasResolutionHBR1","c2 meas. resolution at HB level" , 100, -2, 2);
+        h1_c2MeasResolutionHBR1.setTitleX("Tracking projection to cluster line");
+        h1_c2MeasResolutionHBR1.setTitleY("Counts");
+        histoGroupMeasResolutionR1.addDataSet(h1_c2MeasResolutionHBR1, 1);         
+        H1F h1_c1MeasResolutionTBR1= new H1F("c1MeasResolutionTBR1","c1 meas. resolution at TB level" , 100, -0.4, 0.4);
+        h1_c1MeasResolutionTBR1.setTitleX("Tracking projection to cluster line");
+        h1_c1MeasResolutionTBR1.setTitleY("Counts");
+        histoGroupMeasResolutionR1.addDataSet(h1_c1MeasResolutionTBR1, 2);                  
+        H1F h1_c2MeasResolutionTBR1= new H1F("c2MeasResolutionTBR1","c2 meas. resolution at TB level" , 100, -0.4, 0.4);
+        h1_c2MeasResolutionTBR1.setTitleX("Tracking projection to cluster line");
+        h1_c2MeasResolutionTBR1.setTitleY("Counts");
+        histoGroupMeasResolutionR1.addDataSet(h1_c2MeasResolutionTBR1, 3);                 
+        histoGroupMap.put(histoGroupMeasResolutionR1.getName(), histoGroupMeasResolutionR1);          
         
-        H1F h1_yURWellResolutionHB= new H1F("yURWellResolutionHB","uRWell y resolution at HB level" , 100, -10, 10);
-        h1_yURWellResolutionHB.setTitleX("Diff. between measurent and projection");
-        h1_yURWellResolutionHB.setTitleY("Counts");
-        histoGroupURWellResolution.addDataSet(h1_yURWellResolutionHB, 1);  
-        
-        
-        H1F h1_xURWellResolutionTB= new H1F("xURWellResolutionTB","uRWell x resolution at TB level" , 100, -0.4, 0.4);
-        h1_xURWellResolutionTB.setTitleX("Diff. between measurent and projection");
-        h1_xURWellResolutionTB.setTitleY("Counts");
-        histoGroupURWellResolution.addDataSet(h1_xURWellResolutionTB, 2);  
-        
-        
-        H1F h1_yURWellResolutionTB= new H1F("yURWellResolutionTB","uRWell y resolution at TB level" , 100, -2, 2);
-        h1_yURWellResolutionTB.setTitleX("Diff. between measurent and projection");
-        h1_yURWellResolutionTB.setTitleY("Counts");
-        histoGroupURWellResolution.addDataSet(h1_yURWellResolutionTB, 3);  
-        
-        
-        histoGroupMap.put(histoGroupURWellResolution.getName(), histoGroupURWellResolution);
-        
-         
-               
- 
-
+        HistoGroup histoGroupMeasResolutionR2 = new HistoGroup("measResolutionR2", 2, 2);
+        H1F h1_c1MeasResolutionHBR2= new H1F("c1MeasResolutionHBR2","c1 meas. resolution at HB level" , 100, -2, 2);
+        h1_c1MeasResolutionHBR2.setTitleX("Tracking projection to cluster line");
+        h1_c1MeasResolutionHBR2.setTitleY("Counts");
+        histoGroupMeasResolutionR2.addDataSet(h1_c1MeasResolutionHBR2, 0);                  
+        H1F h1_c2MeasResolutionHBR2= new H1F("c2MeasResolutionHBR2","c2 meas. resolution at HB level" , 100, -2, 2);
+        h1_c2MeasResolutionHBR2.setTitleX("Tracking projection to cluster line");
+        h1_c2MeasResolutionHBR2.setTitleY("Counts");
+        histoGroupMeasResolutionR2.addDataSet(h1_c2MeasResolutionHBR2, 1);         
+        H1F h1_c1MeasResolutionTBR2= new H1F("c1MeasResolutionTBR2","c1 meas. resolution at TB level" , 100, -0.4, 0.4);
+        h1_c1MeasResolutionTBR2.setTitleX("Tracking projection to cluster line");
+        h1_c1MeasResolutionTBR2.setTitleY("Counts");
+        histoGroupMeasResolutionR2.addDataSet(h1_c1MeasResolutionTBR2, 2);                  
+        H1F h1_c2MeasResolutionTBR2= new H1F("c2MeasResolutionTBR2","c2 meas. resolution at TB level" , 100, -0.4, 0.4);
+        h1_c2MeasResolutionTBR2.setTitleX("Tracking projection to cluster line");
+        h1_c2MeasResolutionTBR2.setTitleY("Counts");
+        histoGroupMeasResolutionR2.addDataSet(h1_c2MeasResolutionTBR2, 3);                 
+        histoGroupMap.put(histoGroupMeasResolutionR2.getName(), histoGroupMeasResolutionR2);          
     }
              
     public void processEvent(Event event){        
@@ -92,66 +140,201 @@ public class URWellResolution extends BaseAnalysis{
         List<URWellCross> crosses = localEvent.getURWellCrosses();
         
         
-        HistoGroup histoGroupURWellResolution = histoGroupMap.get("uRWellResolution");
-        if(tracksHB.size() == 1 && crosses.size() == 1 && tracksHB.get(0).chi2()/tracksHB.get(0).NDF() < 5){
-            histoGroupURWellResolution.getH1F("xURWellResolutionHB").fill(tracksHB.get(0).getURWellProjectionLocal().x() - crosses.get(0).pointLocal().x());
-            histoGroupURWellResolution.getH1F("yURWellResolutionHB").fill(tracksHB.get(0).getURWellProjectionLocal().y() - crosses.get(0).pointLocal().y());
+        HistoGroup histoGroupURWellResolutionR1 = histoGroupMap.get("uRWellResolutionR1");
+        HistoGroup histoGroupURWellResolutionR2 = histoGroupMap.get("uRWellResolutionR2");
+
+        HistoGroup histoGroupMeasResolutionR1 = histoGroupMap.get("measResolutionR1");
+        HistoGroup histoGroupMeasResolutionR2 = histoGroupMap.get("measResolutionR2");   
+        
+        Vector3D norm = new Vector3D(0, 0, 1);
+        
+        if(tracksHB.size() == 1 && crosses.size() == 2 && tracksHB.get(0).chi2()/tracksHB.get(0).NDF() < 5){
+            Point3D projR1 = tracksHB.get(0).getURWellProjectionLocalR1();
+            Point3D projR2 = tracksHB.get(0).getURWellProjectionLocalR2();
+            for(URWellCross crs : crosses){
+                if(crs.region() == 1){
+                    histoGroupURWellResolutionR1.getH1F("xURWellResolutionHBR1").fill(tracksHB.get(0).getURWellProjectionLocalR1().x() - crs.pointLocal().x());
+                    histoGroupURWellResolutionR1.getH1F("yURWellResolutionHBR1").fill(tracksHB.get(0).getURWellProjectionLocalR1().y() - crs.pointLocal().y());
+                    
+                    Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
+                    histoGroupMeasResolutionR1.getH1F("c1MeasResolutionHBR1").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().dot(norm)));
+                    Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
+                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionHBR1").fill(lineC2.distance(projR1).length() * Math.signum(lineC2.direction().dot(norm)));
+                }
+                if(crs.region() == 2){
+                    histoGroupURWellResolutionR2.getH1F("xURWellResolutionHBR2").fill(tracksHB.get(0).getURWellProjectionLocalR2().x() - crs.pointLocal().x());
+                    histoGroupURWellResolutionR2.getH1F("yURWellResolutionHBR2").fill(tracksHB.get(0).getURWellProjectionLocalR2().y() - crs.pointLocal().y());
+                    
+                    Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
+                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionHBR2").fill(lineC1.distance(projR2).length() * Math.signum(lineC1.direction().dot(norm)));
+                    Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
+                    histoGroupMeasResolutionR2.getH1F("c2MeasResolutionHBR2").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().dot(norm)));
+                }
+            }   
         }
         
-        if(tracksTB.size() == 1 && crosses.size() == 1 && tracksTB.get(0).chi2()/tracksTB.get(0).NDF() < 5){
-            histoGroupURWellResolution.getH1F("xURWellResolutionTB").fill(tracksTB.get(0).getURWellProjectionLocal().x() - crosses.get(0).pointLocal().x());
-            histoGroupURWellResolution.getH1F("yURWellResolutionTB").fill(tracksTB.get(0).getURWellProjectionLocal().y() - crosses.get(0).pointLocal().y());
-        }
-        
-
-        
-
-
-        
-        
-        
-        
+        if(tracksTB.size() == 1 && crosses.size() == 2 && tracksTB.get(0).chi2()/tracksTB.get(0).NDF() < 5){
+            Point3D projR1 = tracksTB.get(0).getURWellProjectionLocalR1();
+            Point3D projR2 = tracksTB.get(0).getURWellProjectionLocalR2();
+            for(URWellCross crs : crosses){
+                if(crs.region() == 1){
+                    histoGroupURWellResolutionR1.getH1F("xURWellResolutionTBR1").fill(tracksTB.get(0).getURWellProjectionLocalR1().x() - crs.pointLocal().x());
+                    histoGroupURWellResolutionR1.getH1F("yURWellResolutionTBR1").fill(tracksTB.get(0).getURWellProjectionLocalR1().y() - crs.pointLocal().y());
+                    
+                    Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
+                    histoGroupMeasResolutionR1.getH1F("c1MeasResolutionTBR1").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR1).direction()).dot(norm)));
+                    Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
+                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionTBR1").fill(lineC2.distance(projR1).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR1).direction()).dot(norm)));                    
+                }
+                if(crs.region() == 2){
+                    histoGroupURWellResolutionR2.getH1F("xURWellResolutionTBR2").fill(tracksTB.get(0).getURWellProjectionLocalR2().x() - crs.pointLocal().x());
+                    histoGroupURWellResolutionR2.getH1F("yURWellResolutionTBR2").fill(tracksTB.get(0).getURWellProjectionLocalR2().y() - crs.pointLocal().y());
+                    
+                    Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
+                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionTBR2").fill(lineC1.distance(projR2).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR2).direction()).dot(norm)));
+                    Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
+                    histoGroupMeasResolutionR2.getH1F("c2MeasResolutionTBR2").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR2).direction()).dot(norm)));                                        
+                }
+            }
+        }   
     }
     
     public void postEventProcess() {
-        HistoGroup histoGroupURWellResolution = histoGroupMap.get("uRWellResolution");
+        HistoGroup histoGroupURWellResolutionR1 = histoGroupMap.get("uRWellResolutionR1");        
+        F1D func_xHBR1  = new F1D("func_xHBR1","[amp]*gaus(x,[mean],[sigma])", -0.3,0.3);
+        func_xHBR1.setParameter(0, histoGroupURWellResolutionR1.getH1F("xURWellResolutionHBR1").getMax());
+        func_xHBR1.setParameter(1, 0.0);
+        func_xHBR1.setParameter(2, 0.15);
+        func_xHBR1.setLineColor(2);
+        func_xHBR1.setOptStat(1110);
+        func_xHBR1.setLineWidth(2);
+        histoGroupURWellResolutionR1.getH1F("xURWellResolutionHBR1").fit(func_xHBR1);        
+        F1D func_yHBR1  = new F1D("func_yHBR1","[amp]*gaus(x,[mean],[sigma])", -2,2);
+        func_yHBR1.setParameter(0, histoGroupURWellResolutionR1.getH1F("yURWellResolutionHBR1").getMax());
+        func_yHBR1.setParameter(1, 0.0);
+        func_yHBR1.setParameter(2, 1);
+        func_yHBR1.setLineColor(2);
+        func_yHBR1.setOptStat(1110);
+        func_yHBR1.setLineWidth(2);
+        histoGroupURWellResolutionR1.getH1F("yURWellResolutionHBR1").fit(func_yHBR1);        
+        F1D func_xTBR1  = new F1D("func_xTBR1","[amp]*gaus(x,[mean],[sigma])", -0.06,0.06);
+        func_xTBR1.setParameter(0, histoGroupURWellResolutionR1.getH1F("xURWellResolutionTBR1").getMax());
+        func_xTBR1.setParameter(1, 0.0);
+        func_xTBR1.setParameter(2, 0.03);
+        func_xTBR1.setLineColor(2);
+        func_xTBR1.setOptStat(1110);
+        func_xTBR1.setLineWidth(2);
+        histoGroupURWellResolutionR1.getH1F("xURWellResolutionTBR1").fit(func_xTBR1);                        
+        F1D func_yTBR1  = new F1D("func_yTBR1","[amp]*gaus(x,[mean],[sigma])", -0.4,0.4);
+        func_yTBR1.setParameter(0, histoGroupURWellResolutionR1.getH1F("yURWellResolutionTBR1").getMax());
+        func_yTBR1.setParameter(1, 0.0);
+        func_yTBR1.setParameter(2, 0.2);
+        func_yTBR1.setLineColor(2);
+        func_yTBR1.setOptStat(1110);
+        func_yTBR1.setLineWidth(2);
+        histoGroupURWellResolutionR1.getH1F("yURWellResolutionTBR1").fit(func_yTBR1);
         
-        F1D func_xHB  = new F1D("func_p","[amp]*gaus(x,[mean],[sigma])", -0.3,0.3);
-        func_xHB.setParameter(0, 700);
-        func_xHB.setParameter(1, 0.0);
-        func_xHB.setParameter(2, 0.15);
-        func_xHB.setLineColor(2);
-        func_xHB.setOptStat(1110);
-        func_xHB.setLineWidth(2);
-        histoGroupURWellResolution.getH1F("xURWellResolutionHB").fit(func_xHB);
+        HistoGroup histoGroupURWellResolutionR2 = histoGroupMap.get("uRWellResolutionR2");        
+        F1D func_xHBR2  = new F1D("func_xHBR2","[amp]*gaus(x,[mean],[sigma])", -0.3,0.3);
+        func_xHBR2.setParameter(0, histoGroupURWellResolutionR2.getH1F("xURWellResolutionHBR2").getMax());
+        func_xHBR2.setParameter(1, 0.0);
+        func_xHBR2.setParameter(2, 0.15);
+        func_xHBR2.setLineColor(2);
+        func_xHBR2.setOptStat(1110);
+        func_xHBR2.setLineWidth(2);
+        histoGroupURWellResolutionR2.getH1F("xURWellResolutionHBR2").fit(func_xHBR2);        
+        F1D func_yHBR2  = new F1D("func_yHBR2","[amp]*gaus(x,[mean],[sigma])", -2,2);
+        func_yHBR2.setParameter(0, histoGroupURWellResolutionR2.getH1F("yURWellResolutionHBR2").getMax());
+        func_yHBR2.setParameter(1, 0.0);
+        func_yHBR2.setParameter(2, 1);
+        func_yHBR2.setLineColor(2);
+        func_yHBR2.setOptStat(1110);
+        func_yHBR2.setLineWidth(2);
+        histoGroupURWellResolutionR2.getH1F("yURWellResolutionHBR2").fit(func_yHBR2);        
+        F1D func_xTBR2  = new F1D("func_xTBR2","[amp]*gaus(x,[mean],[sigma])", -0.06,0.06);
+        func_xTBR2.setParameter(0, histoGroupURWellResolutionR2.getH1F("xURWellResolutionTBR2").getMax());
+        func_xTBR2.setParameter(1, 0.0);
+        func_xTBR2.setParameter(2, 0.03);
+        func_xTBR2.setLineColor(2);
+        func_xTBR2.setOptStat(1110);
+        func_xTBR2.setLineWidth(2);
+        histoGroupURWellResolutionR2.getH1F("xURWellResolutionTBR2").fit(func_xTBR2);                        
+        F1D func_yTBR2  = new F1D("func_yTBR2","[amp]*gaus(x,[mean],[sigma])", -0.4,0.4);
+        func_yTBR2.setParameter(0, histoGroupURWellResolutionR2.getH1F("yURWellResolutionTBR2").getMax());
+        func_yTBR2.setParameter(1, 0.0);
+        func_yTBR2.setParameter(2, 0.2);
+        func_yTBR2.setLineColor(2);
+        func_yTBR2.setOptStat(1110);
+        func_yTBR2.setLineWidth(2);
+        histoGroupURWellResolutionR2.getH1F("yURWellResolutionTBR2").fit(func_yTBR2);  
         
-        F1D func_yHB  = new F1D("func_p","[amp]*gaus(x,[mean],[sigma])", -2,2);
-        func_yHB.setParameter(0, 500);
-        func_yHB.setParameter(1, 0.0);
-        func_yHB.setParameter(2, 1);
-        func_yHB.setLineColor(2);
-        func_yHB.setOptStat(1110);
-        func_yHB.setLineWidth(2);
-        histoGroupURWellResolution.getH1F("yURWellResolutionHB").fit(func_yHB);
+        HistoGroup histoGroupMeasResolutionR1 = histoGroupMap.get("measResolutionR1");       
+        F1D func_c1HBR1  = new F1D("func_c1HBR1","[amp]*gaus(x,[mean],[sigma])", -0.6,0.6);
+        func_c1HBR1.setParameter(0, histoGroupMeasResolutionR1.getH1F("c1MeasResolutionHBR1").getMax());
+        func_c1HBR1.setParameter(1, 0.0);
+        func_c1HBR1.setParameter(2, 0.15);
+        func_c1HBR1.setLineColor(2);
+        func_c1HBR1.setOptStat(1110);
+        func_c1HBR1.setLineWidth(2);
+        histoGroupMeasResolutionR1.getH1F("c1MeasResolutionHBR1").fit(func_c1HBR1);        
+        F1D func_c2HBR1  = new F1D("func_c2HBR1","[amp]*gaus(x,[mean],[sigma])", -0.6,0.6);
+        func_c2HBR1.setParameter(0, histoGroupMeasResolutionR1.getH1F("c2MeasResolutionHBR1").getMax());
+        func_c2HBR1.setParameter(1, 0.0);
+        func_c2HBR1.setParameter(2, 0.15);
+        func_c2HBR1.setLineColor(2);
+        func_c2HBR1.setOptStat(1110);
+        func_c2HBR1.setLineWidth(2);
+        histoGroupMeasResolutionR1.getH1F("c2MeasResolutionHBR1").fit(func_c2HBR1);        
+        F1D func_c1TBR1  = new F1D("func_c1TBR1","[amp]*gaus(x,[mean],[sigma])", -0.12,0.12);
+        func_c1TBR1.setParameter(0, histoGroupMeasResolutionR1.getH1F("c1MeasResolutionTBR1").getMax());
+        func_c1TBR1.setParameter(1, 0.0);
+        func_c1TBR1.setParameter(2, 0.03);
+        func_c1TBR1.setLineColor(2);
+        func_c1TBR1.setOptStat(1110);
+        func_c1TBR1.setLineWidth(2);
+        histoGroupMeasResolutionR1.getH1F("c1MeasResolutionTBR1").fit(func_c1TBR1);                        
+        F1D func_c2TBR1  = new F1D("func_c2TBR1","[amp]*gaus(x,[mean],[sigma])", -0.12,0.12);
+        func_c2TBR1.setParameter(0, histoGroupMeasResolutionR1.getH1F("c2MeasResolutionTBR1").getMax());
+        func_c2TBR1.setParameter(1, 0.0);
+        func_c2TBR1.setParameter(2, 0.03);
+        func_c2TBR1.setLineColor(2);
+        func_c2TBR1.setOptStat(1110);
+        func_c2TBR1.setLineWidth(2);
+        histoGroupMeasResolutionR1.getH1F("c2MeasResolutionTBR1").fit(func_c2TBR1); 
         
-        F1D func_xTB  = new F1D("func_p","[amp]*gaus(x,[mean],[sigma])", -0.06,0.06);
-        func_xTB.setParameter(0, 850);
-        func_xTB.setParameter(1, 0.0);
-        func_xTB.setParameter(2, 0.03);
-        func_xTB.setLineColor(2);
-        func_xTB.setOptStat(1110);
-        func_xTB.setLineWidth(2);
-        histoGroupURWellResolution.getH1F("xURWellResolutionTB").fit(func_xTB);        
-                
-        F1D func_yTB  = new F1D("func_p","[amp]*gaus(x,[mean],[sigma])", -0.4,0.4);
-        func_yTB.setParameter(0, 700);
-        func_yTB.setParameter(1, 0.0);
-        func_yTB.setParameter(2, 0.2);
-        func_yTB.setLineColor(2);
-        func_yTB.setOptStat(1110);
-        func_yTB.setLineWidth(2);
-        histoGroupURWellResolution.getH1F("yURWellResolutionTB").fit(func_yTB);
-                      
+        HistoGroup histoGroupMeasResolutionR2 = histoGroupMap.get("measResolutionR2");       
+        F1D func_c1HBR2  = new F1D("func_c1HBR2","[amp]*gaus(x,[mean],[sigma])", -0.6,0.6);
+        func_c1HBR2.setParameter(0, histoGroupMeasResolutionR2.getH1F("c1MeasResolutionHBR2").getMax());
+        func_c1HBR2.setParameter(1, 0.0);
+        func_c1HBR2.setParameter(2, 0.15);
+        func_c1HBR2.setLineColor(2);
+        func_c1HBR2.setOptStat(1110);
+        func_c1HBR2.setLineWidth(2);
+        histoGroupMeasResolutionR2.getH1F("c1MeasResolutionHBR2").fit(func_c1HBR2);        
+        F1D func_c2HBR2  = new F1D("func_c2HBR2","[amp]*gaus(x,[mean],[sigma])", -0.6,0.6);
+        func_c2HBR2.setParameter(0, histoGroupMeasResolutionR2.getH1F("c2MeasResolutionHBR2").getMax());
+        func_c2HBR2.setParameter(1, 0.0);
+        func_c2HBR2.setParameter(2, 0.15);
+        func_c2HBR2.setLineColor(2);
+        func_c2HBR2.setOptStat(1110);
+        func_c2HBR2.setLineWidth(2);
+        histoGroupMeasResolutionR2.getH1F("c2MeasResolutionHBR2").fit(func_c2HBR2);        
+        F1D func_c1TBR2  = new F1D("func_c1TBR2","[amp]*gaus(x,[mean],[sigma])", -0.12,0.12);
+        func_c1TBR2.setParameter(0, histoGroupMeasResolutionR2.getH1F("c1MeasResolutionTBR2").getMax());
+        func_c1TBR2.setParameter(1, 0.0);
+        func_c1TBR2.setParameter(2, 0.03);
+        func_c1TBR2.setLineColor(2);
+        func_c1TBR2.setOptStat(1110);
+        func_c1TBR2.setLineWidth(2);
+        histoGroupMeasResolutionR2.getH1F("c1MeasResolutionTBR2").fit(func_c1TBR2);                        
+        F1D func_c2TBR2  = new F1D("func_c2TBR2","[amp]*gaus(x,[mean],[sigma])", -0.12,0.12);
+        func_c2TBR2.setParameter(0, histoGroupMeasResolutionR2.getH1F("c2MeasResolutionTBR2").getMax());
+        func_c2TBR2.setParameter(1, 0.0);
+        func_c2TBR2.setParameter(2, 0.03);
+        func_c2TBR2.setLineColor(2);
+        func_c2TBR2.setOptStat(1110);
+        func_c2TBR2.setLineWidth(2);
+        histoGroupMeasResolutionR2.getH1F("c2MeasResolutionTBR2").fit(func_c2TBR2);                                               
     }            
                             
     public static void main(String[] args){
@@ -176,6 +359,7 @@ public class URWellResolution extends BaseAnalysis{
         int maxDemoCases = parser.getOption("-mDemo").intValue();
         boolean readHistos   = (parser.getOption("-histo").intValue()!=0); 
         Constants.MAXDEMOCASES = maxDemoCases;
+        //Constants.URWELLRegions = 1;
         
         List<String> inputList = parser.getInputList();
         if(inputList.isEmpty()==true){

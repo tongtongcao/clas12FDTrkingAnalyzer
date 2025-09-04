@@ -42,11 +42,6 @@ public class TestClusteringUpdate extends BaseAnalysis {
     
     @Override
     public void createHistoGroupMap() {        
-        HistoGroup histoGroupClusterSize = new HistoGroup("clusterSize", 2, 3);
-        HistoGroup histoGroupHitDistSample1 = new HistoGroup("hitDistSample1", 2, 3);
-        HistoGroup histoGroupHitDistSample2 = new HistoGroup("hitDistSample2", 2, 3);
-        HistoGroup histoGroupRatioNormalHitsSample1 = new HistoGroup("ratioNormalHitsSample1", 2, 3);
-        HistoGroup histoGroupRatioNormalHitsSample2 = new HistoGroup("ratioNormalHitsSample2", 2, 3);
         HistoGroup histoGroupClusterMatching = new HistoGroup("clusterMatching", 2, 3);
         HistoGroup histoGroupNormalRatioExtraSample1 = new HistoGroup("normalRatioExtraSample1", 2, 3);  
         HistoGroup histoGroupNormalRatioExtraSample2 = new HistoGroup("normalRatioExtraSample2", 2, 3); 
@@ -57,45 +52,7 @@ public class TestClusteringUpdate extends BaseAnalysis {
         HistoGroup histoGroupIfBothNormalOrNoiseClusters = new HistoGroup("ifBothNormalOrNoiseClusters", 2, 3);
         HistoGroup histoGroupNormalRatioMatchedClusters = new HistoGroup("normalRatioMatchedClusters", 2, 3);                
         
-        for (int i = 0; i < 6; i++) {
-            H1F h1_clusterSizeSample1 = new H1F("clusterSizeSample1 for SL" + Integer.toString(i + 1),
-                    "cluster size for SL" + Integer.toString(i + 1), 12, 0, 12);
-            h1_clusterSizeSample1.setTitleX("cluster size");
-            h1_clusterSizeSample1.setTitleY("Counts");
-            h1_clusterSizeSample1.setLineColor(1);
-            histoGroupClusterSize.addDataSet(h1_clusterSizeSample1, i);
-            
-            H1F h1_clusterSizeSample2 = new H1F("clusterSizeSample2 for SL" + Integer.toString(i + 1),
-                    "cluster size for SL" + Integer.toString(i + 1), 12, 0, 12);
-            h1_clusterSizeSample2.setTitleX("cluster size");
-            h1_clusterSizeSample2.setTitleY("Counts");
-            h1_clusterSizeSample2.setLineColor(2);
-            histoGroupClusterSize.addDataSet(h1_clusterSizeSample2, i);
-            
-            H2F h2_hitDistSample1 = new H2F("hitDistSample1 for SL" + Integer.toString(i + 1),
-                    "normal vs bg hits for SL" + Integer.toString(i + 1), 12, 0, 12, 12, 0, 12);
-            h2_hitDistSample1.setTitleX("normal hits");
-            h2_hitDistSample1.setTitleY("bg hits");
-            histoGroupHitDistSample1.addDataSet(h2_hitDistSample1, i);
-            
-            H2F h2_hitDistSample2 = new H2F("hitDistSample2 for SL" + Integer.toString(i + 1),
-                    "normal vs bg hits for SL" + Integer.toString(i + 1), 12, 0, 12, 12, 0, 12);
-            h2_hitDistSample2.setTitleX("normal hits");
-            h2_hitDistSample2.setTitleY("bg hits");
-            histoGroupHitDistSample2.addDataSet(h2_hitDistSample2, i);
-            
-            H1F h1_ratioNormalHitsSample1 = new H1F("ratioNormalHitsSample1 for SL" + Integer.toString(i + 1),
-                    "ratio of normal hits in clusters for SL" + Integer.toString(i + 1), 101, 0, 1.01);
-            h1_ratioNormalHitsSample1.setTitleX("ratio of normal hits");
-            h1_ratioNormalHitsSample1.setTitleY("Counts");
-            histoGroupRatioNormalHitsSample1.addDataSet(h1_ratioNormalHitsSample1, i);            
-            
-            H1F h1_ratioNormalHitsSample2 = new H1F("ratioNormalHitsSample2 for SL" + Integer.toString(i + 1),
-                    "ratio of normal hits in clusters for SL" + Integer.toString(i + 1), 101, 0, 1.01);
-            h1_ratioNormalHitsSample2.setTitleX("ratio of normal hits");
-            h1_ratioNormalHitsSample2.setTitleY("Counts");
-            histoGroupRatioNormalHitsSample2.addDataSet(h1_ratioNormalHitsSample2, i);
-            
+        for (int i = 0; i < 6; i++) {            
             H1F h1_clusterMatching = new H1F("clusterMatching for SL" + Integer.toString(i + 1),
                     "clusterMatching for SL" + Integer.toString(i + 1), 3, -0.5, 2.5);
             h1_clusterMatching.setTitleX("if matched hits exist");
@@ -127,13 +84,13 @@ public class TestClusteringUpdate extends BaseAnalysis {
             histoGroupIfPerfectMatch.addDataSet(h1_ifPerfectMatch, i);
             
             H1F h1_matchedHitRatioSample1MatchedClusters = new H1F("matchedHitRatioSample1MatchedClusters for SL" + Integer.toString(i + 1),
-                    "ratio of normal hits for SL" + Integer.toString(i + 1), 101, 0, 1.01);
+                    "ratio of matched hits for SL" + Integer.toString(i + 1), 101, 0, 1.01);
             h1_matchedHitRatioSample1MatchedClusters.setTitleX("ratio of matched hits");
             h1_matchedHitRatioSample1MatchedClusters.setTitleY("Counts");
             h1_matchedHitRatioSample1MatchedClusters.setLineColor(1);
             histoGroupMatchedHitRatio.addDataSet(h1_matchedHitRatioSample1MatchedClusters, i);
             H1F h1_matchedHitRatioSample2MatchedClusters = new H1F("matchedHitRatioSample2MatchedClusters for SL" + Integer.toString(i + 1),
-                    "ratio of normal hits for SL" + Integer.toString(i + 1), 101, 0, 1.01);
+                    "ratio of matched hits for SL" + Integer.toString(i + 1), 101, 0, 1.01);
             h1_matchedHitRatioSample2MatchedClusters.setTitleX("ratio of matched hits");
             h1_matchedHitRatioSample2MatchedClusters.setTitleY("Counts");
             h1_matchedHitRatioSample2MatchedClusters.setLineColor(2);
@@ -165,11 +122,6 @@ public class TestClusteringUpdate extends BaseAnalysis {
             histoGroupNormalRatioMatchedClusters.addDataSet(h1_normalRatioSample2MatchedClusters, i);                                                                                    
         }
         
-        histoGroupMap.put(histoGroupClusterSize.getName(), histoGroupClusterSize);
-        histoGroupMap.put(histoGroupHitDistSample1.getName(), histoGroupHitDistSample1);
-        histoGroupMap.put(histoGroupHitDistSample2.getName(), histoGroupHitDistSample2);
-        histoGroupMap.put(histoGroupRatioNormalHitsSample1.getName(), histoGroupRatioNormalHitsSample1); 
-        histoGroupMap.put(histoGroupRatioNormalHitsSample2.getName(), histoGroupRatioNormalHitsSample2); 
         histoGroupMap.put(histoGroupClusterMatching.getName(), histoGroupClusterMatching);
         histoGroupMap.put(histoGroupNormalRatioExtraSample1.getName(), histoGroupNormalRatioExtraSample1);
         histoGroupMap.put(histoGroupNormalRatioExtraSample2.getName(), histoGroupNormalRatioExtraSample2);
@@ -178,77 +130,15 @@ public class TestClusteringUpdate extends BaseAnalysis {
         histoGroupMap.put(histoGroupMatchedHitRatio.getName(), histoGroupMatchedHitRatio); 
         histoGroupMap.put(histoGroupNormalRatioMatchedClustersComp.getName(), histoGroupNormalRatioMatchedClustersComp);  
         histoGroupMap.put(histoGroupIfBothNormalOrNoiseClusters.getName(), histoGroupIfBothNormalOrNoiseClusters); 
-        histoGroupMap.put(histoGroupNormalRatioMatchedClusters.getName(), histoGroupNormalRatioMatchedClusters); 
-        
-        
-        HistoGroup histoGroupURWellMatchedClustersAllNormalHitsSP1 = new HistoGroup("uRWellMatchedClusterAllNormalHitsSP1", 2, 3);
-        H2F h2_uRWellIdCompMatchedCluster = new H2F("uRWellIdCompMatchedCluster","Compare of uRWell Id" , 110, -5, 105, 110, -5, 105);
-        h2_uRWellIdCompMatchedCluster.setTitleX("uRWell Id for clusters in sample1");
-        h2_uRWellIdCompMatchedCluster.setTitleY("uRWell Id for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellIdCompMatchedCluster, 0);          
-        H2F h2_uRWellResidualCompMatchedCluster = new H2F("uRWellResidualCompMatchedCluster","Compare of uRWell residual" , 100, -0.2, 0.2, 100, -0.2, 0.2);
-        h2_uRWellResidualCompMatchedCluster.setTitleX("uRWell residual for clusters in sample1");
-        h2_uRWellResidualCompMatchedCluster.setTitleY("uRWell residual for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellResidualCompMatchedCluster, 1);                  
-        H2F h2_uRWellIdCompPerfectMatchedCluster = new H2F("uRWellIdCompPerfectMatchedCluster","all-DC-hit-matched clusters" , 110, -5, 105, 110, -5, 105);
-        h2_uRWellIdCompPerfectMatchedCluster.setTitleX("uRWell Id for clusters in sample1");
-        h2_uRWellIdCompPerfectMatchedCluster.setTitleY("uRWell Id for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellIdCompPerfectMatchedCluster, 2);          
-        H2F h2_uRWellResidualCompPerfectMatchedCluster = new H2F("uRWellResidualCompPerfectMatchedCluster","all-DC-hit-matched clusters" , 100, -0.2, 0.2, 100, -0.2, 0.2);
-        h2_uRWellResidualCompPerfectMatchedCluster.setTitleX("uRWell residual for clusters in sample1");
-        h2_uRWellResidualCompPerfectMatchedCluster.setTitleY("uRWell residual for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellResidualCompPerfectMatchedCluster, 3);            
-        H2F h2_uRWellIdCompNotPerfectMatchedCluster = new H2F("uRWellIdCompNotPerfectMatchedCluster","not-all-DC-hit-matched clusters" , 110, -5, 105, 110, -5, 105);
-        h2_uRWellIdCompNotPerfectMatchedCluster.setTitleX("uRWell Id for clusters in sample1");
-        h2_uRWellIdCompNotPerfectMatchedCluster.setTitleY("uRWell Id for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellIdCompNotPerfectMatchedCluster, 4);          
-        H2F h2_uRWellResidualCompNotPerfectMatchedCluster = new H2F("uRWellResidualCompNotPerfectMatchedCluster","not-all-DC-hit-matched clusters" , 100, -0.2, 0.2, 100, -0.2, 0.2);
-        h2_uRWellResidualCompNotPerfectMatchedCluster.setTitleX("uRWell residual for clusters in sample1");
-        h2_uRWellResidualCompNotPerfectMatchedCluster.setTitleY("uRWell residual for clusters in sample2");
-        histoGroupURWellMatchedClustersAllNormalHitsSP1.addDataSet(h2_uRWellResidualCompNotPerfectMatchedCluster, 5);                  
-        histoGroupMap.put(histoGroupURWellMatchedClustersAllNormalHitsSP1.getName(), histoGroupURWellMatchedClustersAllNormalHitsSP1); 
-        
-        HistoGroup histoGroupEfficiencyClusteringWithURWell = new HistoGroup("efficiencyClusteringWithURWell", 2, 3);
-        H1F h1_ifMatchedCluster = new H1F("ifMatchedCluster", "if matched cluster", 6, -0.5, 5.5);
-        h1_ifMatchedCluster.setTitleX("if matched cluster");
-        h1_ifMatchedCluster.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_ifMatchedCluster, 0);
-                
-        H1F h1_uRWellResidualNoMatchedClusterWithURWell = new H1F("uRWellResidualNoMatchedClusterWithURWell", "no matched clustere with uRWell", 100, -0.2, 0.2);
-        h1_uRWellResidualNoMatchedClusterWithURWell.setTitleX("uRWell residual");
-        h1_uRWellResidualNoMatchedClusterWithURWell.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_uRWellResidualNoMatchedClusterWithURWell, 1);
-        
-        H1F h1_uRWellResidualBothNoiseClusterURWell = new H1F("uRWellResidualBothNoiseClusterURWell", "matched clustere with both-noise-clusters uRWell", 100, -0.2, 0.2);
-        h1_uRWellResidualBothNoiseClusterURWell.setTitleX("if matched cluster");
-        h1_uRWellResidualBothNoiseClusterURWell.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_uRWellResidualBothNoiseClusterURWell, 2);
-        
-        H1F h1_uRWellResidualOnlyCluster2NormalURWell = new H1F("uRWellResidualOnlyCluster2NormalURWell", "matched clustere with only-normal-cluster2 uRWell", 100, -0.2, 0.2);
-        h1_uRWellResidualOnlyCluster2NormalURWell.setTitleX("if matched cluster");
-        h1_uRWellResidualOnlyCluster2NormalURWell.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_uRWellResidualOnlyCluster2NormalURWell, 3);
-        
-        H1F h1_uRWellResidualOnlyCluster1NormalURWell = new H1F("uRWellResidualOnlyCluster1NormalURWell", "matched clustere with only-normal-cluster1 uRWell", 100, -0.2, 0.2);
-        h1_uRWellResidualOnlyCluster1NormalURWell.setTitleX("if matched cluster");
-        h1_uRWellResidualOnlyCluster1NormalURWell.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_uRWellResidualOnlyCluster1NormalURWell, 4);
-        
-        H1F h1_uRWellResidualBothNormalClusterURWell = new H1F("uRWellResidualBothNormalClusterURWell", "matched clustere with both-normal-clusters uRWell", 100, -0.2, 0.2);
-        h1_uRWellResidualBothNormalClusterURWell.setTitleX("if matched cluster");
-        h1_uRWellResidualBothNormalClusterURWell.setTitleY("counts");
-        histoGroupEfficiencyClusteringWithURWell.addDataSet(h1_uRWellResidualBothNormalClusterURWell, 5);
-        
-        
-        histoGroupMap.put(histoGroupEfficiencyClusteringWithURWell.getName(), histoGroupEfficiencyClusteringWithURWell); 
+        histoGroupMap.put(histoGroupNormalRatioMatchedClusters.getName(), histoGroupNormalRatioMatchedClusters);        
     }
     
     public void processEvent(Event event1, Event event2, int trkType) {
         ////// Read banks
         LocalEvent localEvent1 = new LocalEvent(reader1, event1, trkType, true);
         LocalEvent localEvent2 = new LocalEvent(reader2, event2, trkType, true); 
-        
-/*
+    
+        /*
         List<Cluster> clusters1TB = new ArrayList();
         for(Track trk : localEvent1.getTracksTB()){
             if(trk.isValid(true)){
@@ -264,8 +154,9 @@ public class TestClusteringUpdate extends BaseAnalysis {
                     break;
                 }   
             }
-        }
-*/        
+        } 
+        */
+
         List<Cluster> clusters1 = localEvent1.getClusters(); 
         List<Cluster> clusters2 = localEvent2.getClusters();           
         
@@ -452,88 +343,7 @@ public class TestClusteringUpdate extends BaseAnalysis {
         }
         for(Cluster cls1 : map_cls1_cls2_matched.keySet()){
             if(cls1.superlayer() == 1) map_cls1_cls2_matched_SL1.put(cls1, map_cls1_cls2_matched.get(cls1));
-        }
-        
-        HistoGroup histoGroupURWellMatchedClustersAllNormalHitsSP1 = histoGroupMap.get("uRWellMatchedClusterAllNormalHitsSP1");
-        HistoGroup histoGroupEfficiencyClusteringWithURWell  = histoGroupMap.get("efficiencyClusteringWithURWell");
-        
-        
-        for(Cluster cls1 : map_cls1_cls2_matched_SL1.keySet()){
-            if(cls1.getRatioNormalHits() == 1){
-                Cluster cls2 = map_cls1_cls2_matched_SL1.get(cls1);
-                
-                List<URWellCross> uRWellCrosses1 = new ArrayList();
-                for(URWellCross crs1 : localEvent1.getURWellCrosses()){
-                    if(crs1.sector() == cls1.sector()) uRWellCrosses1.add(crs1);
-                }
-                URWellCross matchedURWellCross1 = cls1.getMatchedURWell(uRWellCrosses1);
-                int uRWellId1 = -1;
-                if(matchedURWellCross1 != null) uRWellId1 = matchedURWellCross1.id();
-
-                int uRWellId2 = cls2.getMatchedURWellCrossId(); 
-                URWellCross matchedURWellCross2 = cls2.getMatchedURWellCross();
-                double uRWellResidual1 = cls1.getURWellResidualWithDCURWellFitting(matchedURWellCross1);
-                double uRWellResidual2 = cls2.getURWellResidualWithDCURWellFitting();
-
-                histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellIdCompMatchedCluster").fill(uRWellId1, uRWellId2);
-                histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellResidualCompMatchedCluster").fill(uRWellResidual1, uRWellResidual2);
-
-                int numMatchedHits = cls1.clusterMatchedHits(cls2);
-                double ratioMatchedHits1 = (double)numMatchedHits/cls1.size();
-                double ratioMatchedHits2 = (double)numMatchedHits/cls2.size();
-                if(ratioMatchedHits1 == 1 && ratioMatchedHits2 == 1){
-                    histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellIdCompPerfectMatchedCluster").fill(uRWellId1, uRWellId2);
-                    histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellResidualCompPerfectMatchedCluster").fill(uRWellResidual1, uRWellResidual2);                     
-                }
-                else{
-                    histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellIdCompNotPerfectMatchedCluster").fill(uRWellId1, uRWellId2);
-                    histoGroupURWellMatchedClustersAllNormalHitsSP1.getH2F("uRWellResidualCompNotPerfectMatchedCluster").fill(uRWellResidual1, uRWellResidual2);                     
-                }
-                
-                if(matchedURWellCross1 != null && matchedURWellCross1.isBothClustersNormal() &&  Math.abs(uRWellResidual1) < uRWellResidualCut){
-
-                    if(matchedURWellCross2!= null){
-                        if(matchedURWellCross2.isBothClustersNormal()){
-                            if(uRWellId2 == uRWellId1){
-                                histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(5);
-                                histoGroupEfficiencyClusteringWithURWell.getH1F("uRWellResidualBothNormalClusterURWell").fill(cls2.getURWellResidualWithDCURWellFitting());
-                            }
-                            else{
-                                histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(5);
-                            }
-                            
-                        }
-                        else if(matchedURWellCross2.isCluster1Normal()){
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(3);
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("uRWellResidualOnlyCluster1NormalURWell").fill(cls2.getURWellResidualWithDCURWellFitting(matchedURWellCross1));
-                            
-                            //addDemoGroupLoopClusters(localEvent1, localEvent2, cls1.sector(), "onlyCls1Normal");
-                        }
-                        else if(matchedURWellCross2.isCluster2Normal()){
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(2);
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("uRWellResidualOnlyCluster2NormalURWell").fill(cls2.getURWellResidualWithDCURWellFitting(matchedURWellCross1));
-                            
-                            //addDemoGroupLoopClusters(localEvent1, localEvent2, cls1.sector(), "onlyCls2Normal");
-                        }
-                        else{
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(1);
-                            histoGroupEfficiencyClusteringWithURWell.getH1F("uRWellResidualBothNoiseClusterURWell").fill(cls2.getURWellResidualWithDCURWellFitting(matchedURWellCross1));
-                            
-                            //addDemoGroupLoopClusters(localEvent1, localEvent2, cls1.sector(), "BothNoiseCls");
-                        }                        
-                    }
-                    else{
-                        histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster").fill(0);
-                        histoGroupEfficiencyClusteringWithURWell.getH1F("uRWellResidualNoMatchedClusterWithURWell").fill(cls2.getURWellResidualWithDCURWellFitting(matchedURWellCross1));
-                        
-                        //addDemoGroupLoopClusters(localEvent1, localEvent2, cls1.sector(), "missedURWell " + cls2.getURWellResidualWithDCURWellFitting(matchedURWellCross1));
-                    }
-                }
-                
-            }         
-            
-        }
-        
+        }                
 
         ////// Extra clusters
         for(Cluster cls1 : clsListExtraSample1){
@@ -549,20 +359,12 @@ public class TestClusteringUpdate extends BaseAnalysis {
             histoGroupNormalRatioExtraSample2.getH1F("normalRatioExtraSample2 for SL" + cls2.superlayer()).fill(cls2.getRatioNormalHits());
             
             //if(cls2.getRatioNormalHits() == 0) addDemoGroupLoopClusters(localEvent1, localEvent2, cls2.sector(), "ex2R" + cls2.getRatioNormalHits());
-            //if(cls2.getRatioNormalHits() == 1) addDemoGroupLoopClusters(localEvent1, localEvent2, cls2.sector(), "ex2R" + cls2.getRatioNormalHits());
-        }                          
+            if(cls2.getRatioNormalHits() == 1) addDemoGroupLoopClusters(localEvent1, localEvent2, cls2.sector(), "ex2R" + cls2.getRatioNormalHits());
+        }    
+       
     }
     
     public void postEventProcess(){
-        HistoGroup histoGroupEfficiencyClusteringWithURWell = histoGroupMap.get("efficiencyClusteringWithURWell");
-        H1F h1_ifMatchedCluster = histoGroupEfficiencyClusteringWithURWell.getH1F("ifMatchedCluster");
-        System.out.println("total cases: " + h1_ifMatchedCluster.getEntries());
-        System.out.println("cases for matched cluster without uRWell: " + h1_ifMatchedCluster.getBinContent(0));
-        System.out.println("cases with both-noise-cluster uRWell: " + h1_ifMatchedCluster.getBinContent(1));
-        System.out.println("cases with cluster2-normal-cluster uRWell: " + h1_ifMatchedCluster.getBinContent(2));
-        System.out.println("cases with cluster1-normal-cluster uRWell: " + h1_ifMatchedCluster.getBinContent(3));
-        System.out.println("cases with another both-normal-cluster uRWell: " + h1_ifMatchedCluster.getBinContent(4));
-        System.out.println("cases with the same both-normal-cluster uRWell: " + h1_ifMatchedCluster.getBinContent(5)); 
     }              
     
     public static void main(String[] args) {

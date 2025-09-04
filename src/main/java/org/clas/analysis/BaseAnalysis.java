@@ -341,8 +341,13 @@ public abstract class BaseAnalysis {
             demo.addBaseLocalSuperlayerWithURWell();
             demo.addGraphsDenoisingWithURWell();
             demo.addClusterGraphs(cls1, DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
-            demo.addURWellGraph(cls1.getMatchedURWellCross(), DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
-            if(cls1.getMatchedURWellCrossId() != -1) demo.getGraphList().get(0).setTitle("cls" + cls1.id() + " size" + cls1.size() + " uId" + cls1.getMatchedURWellCrossId());
+            demo.addURWellGraph(cls1.getMatchedURWellCrosses(), DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
+            if(cls1.getMatchedURWellCrossIds()[0] != -1 && cls1.getMatchedURWellCrossIds()[1] == -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls1.id() + " size" + cls1.size() + " u1Id" + cls1.getMatchedURWellCrossIds()[0]);
+            else if(cls1.getMatchedURWellCrossIds()[0] == -1 && cls1.getMatchedURWellCrossIds()[1] != -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls1.id() + " size" + cls1.size() + " u2Id" + cls1.getMatchedURWellCrossIds()[1]);
+            else if(cls1.getMatchedURWellCrossIds()[0] != -1 && cls1.getMatchedURWellCrossIds()[1] != -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls1.id() + " size" + cls1.size() + " uIds" + cls1.getMatchedURWellCrossIds()[0] + "," + cls1.getMatchedURWellCrossIds()[1]);
             else demo.getGraphList().get(0).setTitle("cluster" + cls1.id() + " size" + cls1.size());
             for(GraphErrors gr : demo.getGraphList()){
                 grGroup.addDataSet(gr, i);
@@ -356,8 +361,13 @@ public abstract class BaseAnalysis {
             demo.addBaseLocalSuperlayerWithURWell();
             demo.addGraphsDenoisingWithURWell();
             demo.addClusterGraphs(cls2, DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
-            demo.addURWellGraph(cls2.getMatchedURWellCross(), DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
-            if(cls2.getMatchedURWellCrossId() != -1) demo.getGraphList().get(0).setTitle("cls" + cls2.id() + " size" + cls2.size() + " uId" + cls2.getMatchedURWellCrossId());
+            demo.addURWellGraph(cls2.getMatchedURWellCrosses(), DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());
+            if(cls2.getMatchedURWellCrossIds()[0] != -1 && cls2.getMatchedURWellCrossIds()[1] == -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls2.id() + " size" + cls2.size() + " u1Id" + cls2.getMatchedURWellCrossIds()[0]);
+            else if(cls2.getMatchedURWellCrossIds()[0] == -1 && cls2.getMatchedURWellCrossIds()[1] != -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls2.id() + " size" + cls2.size() + " u2Id" + cls2.getMatchedURWellCrossIds()[1]);
+            else if(cls2.getMatchedURWellCrossIds()[0] != -1 && cls2.getMatchedURWellCrossIds()[1] != -1) 
+                demo.getGraphList().get(0).setTitle("cls" + cls2.id() + " size" + cls2.size() + " uIds" + cls2.getMatchedURWellCrossIds()[0] + "," + cls2.getMatchedURWellCrossIds()[1]);
             else demo.getGraphList().get(0).setTitle("cluster" + cls2.id() + " size" + cls2.size());
             for(GraphErrors gr : demo.getGraphList()){
                 grGroup.addDataSet(gr, i + nColumns);

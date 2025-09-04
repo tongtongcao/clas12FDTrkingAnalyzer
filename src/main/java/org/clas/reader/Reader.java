@@ -139,13 +139,13 @@ public class Reader {
                               trackingBank.getShort("Cross3_ID", it));
                 
                 try{
-                    track.uRWellCrossId(trackingBank.getInt("URWellCross_ID", it));
-                    track.setURWellProjection(trackingBank.getFloat("URWell_x", it),
-                                              trackingBank.getFloat("URWell_y", it),
-                                              trackingBank.getFloat("URWell_z", it),
-                                              trackingBank.getFloat("URWell_x_local", it),
-                                              trackingBank.getFloat("URWell_y_local", it),
-                                              trackingBank.getFloat("URWell_z_local", it));
+                    track.uRWellCrossIds(trackingBank.getInt("URWellCross1_ID", it), trackingBank.getInt("URWellCross2_ID", it));
+                    track.setURWellProjectionR1(trackingBank.getFloat("URWell_R1_x", it),
+                                              trackingBank.getFloat("URWell_R1_y", it),
+                                              trackingBank.getFloat("URWell_R1_z", it));
+                    track.setURWellProjectionR2(trackingBank.getFloat("URWell_R2_x", it),
+                                              trackingBank.getFloat("URWell_R2_y", it),
+                                              trackingBank.getFloat("URWell_R2_z", it));
                     
                     
                 }
@@ -295,14 +295,19 @@ public class Reader {
             clusterBank = banks.getTrackingClusterBank(type);           
         }
         
+
         Bank uRWellDCClusterBank = banks.getURWellDCClusterBank();
-        Map<Integer, Integer> map_clsId_uRWellCrossId = new HashMap();
+        Map<Integer, List<Integer>> map_clsId_uRWellCrossIds = new HashMap();
         if(uRWellDCClusterBank != null){
             event.read(uRWellDCClusterBank);            
             for(int loop = 0; loop < uRWellDCClusterBank.getRows(); loop++){
                 int clsId = uRWellDCClusterBank.getInt("id", loop);
-                int uRWellCrossId = uRWellDCClusterBank.getInt("URWell_Cross_ID", loop);
-                map_clsId_uRWellCrossId.put(clsId, uRWellCrossId);
+                int uRWellCross1Id = uRWellDCClusterBank.getInt("URWell_Cross1_ID", loop);
+                int uRWellCross2Id = uRWellDCClusterBank.getInt("URWell_Cross2_ID", loop);
+                List<Integer> uRWellCrossIds = new ArrayList();
+                uRWellCrossIds.add(uRWellCross1Id);
+                uRWellCrossIds.add(uRWellCross2Id);
+                map_clsId_uRWellCrossIds.put(clsId, uRWellCrossIds);
             }
         }
         
@@ -341,8 +346,9 @@ public class Reader {
                                clusterBank.getInt("Hit11_ID", loop),
                                clusterBank.getInt("Hit12_ID", loop));
                 
-                /*
+                
                 if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
+                    /*
                     try{
                         cls.setLYL1(clusterBank.getFloat("lYL1", loop));
                         cls.setLYL6(clusterBank.getFloat("lYL6", loop));
@@ -350,13 +356,14 @@ public class Reader {
                     }
                     catch(Exception e){
                         LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                    }                
+                    }
+                    */
 
-                    if(map_clsId_uRWellCrossId.keySet().contains(cls.id())) {
-                        cls.setMatchedURWellCrossId(map_clsId_uRWellCrossId.get(cls.id()));
+                    if(map_clsId_uRWellCrossIds.keySet().contains(cls.id())) {
+                        cls.setMatchedURWellCrossIds(map_clsId_uRWellCrossIds.get(cls.id()).get(0), map_clsId_uRWellCrossIds.get(cls.id()).get(1));
                     }
                 }
-                */
+                
                                
                 if(cls.superlayer() != 0) clusters.add(cls); // AIHB pseudo cluster is saved
             }
