@@ -46,6 +46,12 @@ public class ClusterFitLC{
         nPoints++;
     }
     
+    public void addURWells(List<URWellCross> crosses){
+        for(URWellCross crs : crosses){
+            addURWell(crs);
+        }
+    }    
+    
     public boolean lineFit(){
        return fitter.fitStatus(locX, locY, locXErr, locYErr, nPoints);
     }
