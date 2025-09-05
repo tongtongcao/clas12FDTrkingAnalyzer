@@ -188,6 +188,10 @@ public class Hit implements Comparable<Hit> {
         return sector == hit.sector() && superlayer == hit.superlayer() && layer == hit.layer() && wire == hit.wire() && TDC == hit.TDC();
     }
     
+    public boolean hitMatchedNoRequireTDC(Hit hit){ 
+        return sector == hit.sector() && superlayer == hit.superlayer() && layer == hit.layer() && wire == hit.wire();
+    }    
+    
     /**
      *
      * @param layer layer number from 1 to 6

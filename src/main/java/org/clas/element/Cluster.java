@@ -218,8 +218,7 @@ public class Cluster implements Comparable<Cluster> {
         int matchedHits = 0;
         for(Hit hitThisCluster : this.hits){
             for(Hit hitOtherCluster : otherCls.hits){
-                if(hitThisCluster.sector() == hitOtherCluster.sector() && hitThisCluster.superlayer()== hitOtherCluster.superlayer() && hitThisCluster.layer() == hitOtherCluster.layer()
-                        && hitThisCluster.wire() == hitOtherCluster.wire() && hitThisCluster.TDC() == hitOtherCluster.TDC()){
+                if(hitThisCluster.hitMatched(hitOtherCluster)){
                     matchedHits++;
                     break;
                 }
