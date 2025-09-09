@@ -37,6 +37,7 @@ public class Cluster implements Comparable<Cluster> {
     List<Hit> hits = null;
     List<Hit> normalHits = null;
     List<Hit> bgHits = null;
+    private int numHits = -1;
     private int numNormalHits = -1;
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
@@ -165,14 +166,26 @@ public class Cluster implements Comparable<Cluster> {
     
     public void setHits(List<Hit> allHits){
         hits = new ArrayList();
-        for(Hit hit: allHits){
-            if(hit.ClusterID() == this.id) hits.add(hit);
+        for(int i = 0; i < 12; i++){
+            if(hitIds[i] > 0){
+                for(Hit hit : allHits){
+                    if(hit.id() == hitIds[i]){
+                        hits.add(hit);
+                        break;
+                    }
+                }
+            }
         }
+        numHits = hits.size();
     }
     
     public List<Hit> getHits(){
         return hits;
-    }               
+    } 
+    
+    public int getNumHits(){
+        return numHits;
+    }
     
     public boolean separateNormalBgHits(){
         normalHits = new ArrayList();
@@ -213,11 +226,22 @@ public class Cluster implements Comparable<Cluster> {
         return ratioNormalHits;
     }
     
-    public int clusterMatchedHits(Cluster otherCls){
+    public boolean isFullMatchedCluster(Cluster otherCls){
+        int numMatchedHits = this.numMatchedHits(otherCls);
+        if(this.numHits == numMatchedHits && otherCls.getNumHits() == numMatchedHits) return true;
+        else return false;
+    }
+    
+    public boolean isFullMatchedClusterNoRequireTDC(Cluster otherCls){
+        int numMatchedHits = this.numMatchedHitsNoRequireTDC(otherCls);
+        return this.numHits == numMatchedHits && otherCls.getNumHits() == numMatchedHits;
+    }    
+        
+    public int numMatchedHits(Cluster otherCls){
         if(this.hits == null || otherCls.hits == null) return -999;
         int matchedHits = 0;
         for(Hit hitThisCluster : this.hits){
-            for(Hit hitOtherCluster : otherCls.hits){
+            for(Hit hitOtherCluster : otherCls.getHits()){
                 if(hitThisCluster.hitMatched(hitOtherCluster)){
                     matchedHits++;
                     break;
@@ -226,6 +250,20 @@ public class Cluster implements Comparable<Cluster> {
         }
         return matchedHits;
     }
+    
+    public int numMatchedHitsNoRequireTDC(Cluster otherCls){
+        if(this.hits == null || otherCls.hits == null) return -999;
+        int matchedHits = 0;
+        for(Hit hitThisCluster : this.hits){
+            for(Hit hitOtherCluster : otherCls.getHits()){
+                if(hitThisCluster.hitMatchedNoRequireTDC(hitOtherCluster)){
+                    matchedHits++;
+                    break;
+                }
+            }
+        }
+        return matchedHits;
+    }    
     
     public int numLayers(List<Hit> hits){
         int[] numHitsonLayers = new int[6];

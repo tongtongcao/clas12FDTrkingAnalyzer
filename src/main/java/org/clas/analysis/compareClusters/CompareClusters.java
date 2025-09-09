@@ -194,7 +194,7 @@ public class CompareClusters extends BaseAnalysis {
             List<Cluster> matchedClustersWithMostMatchedHits = new ArrayList();
             int maxMatchedHits = -1;
             for(Cluster cls2 : clusters2){
-                int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                int numMatchedHits = cls1.numMatchedHits(cls2);
                 if(numMatchedHits > 0){
                     if(numMatchedHits > maxMatchedHits) {
                         maxMatchedHits = numMatchedHits;
@@ -218,8 +218,8 @@ public class CompareClusters extends BaseAnalysis {
                         }
                     }
                     
-                    int numMatchedHitsThisClus1 = matchedCluster2.clusterMatchedHits(cls1);
-                    int numMatchedHitsThatClus1 = matchedCluster2.clusterMatchedHits(thatMatchedCluster1);
+                    int numMatchedHitsThisClus1 = matchedCluster2.numMatchedHits(cls1);
+                    int numMatchedHitsThatClus1 = matchedCluster2.numMatchedHits(thatMatchedCluster1);
                     if(numMatchedHitsThisClus1 > numMatchedHitsThatClus1){
                         map_cls1_cls2_matched.remove(thatMatchedCluster1);
                         map_cls1_cls2_matched.put(cls1, matchedCluster2);
@@ -256,8 +256,8 @@ public class CompareClusters extends BaseAnalysis {
                                 break;
                             }
                         }
-                        int numMatchedHitsThisClus1 = clsWithCloestAvgWire.clusterMatchedHits(cls1);
-                        int numMatchedHitsThatClus1 = clsWithCloestAvgWire.clusterMatchedHits(thatMatchedCluster1);
+                        int numMatchedHitsThisClus1 = clsWithCloestAvgWire.numMatchedHits(cls1);
+                        int numMatchedHitsThatClus1 = clsWithCloestAvgWire.numMatchedHits(thatMatchedCluster1);
                         if (numMatchedHitsThisClus1 > numMatchedHitsThatClus1) {
                             map_cls1_cls2_matched.remove(thatMatchedCluster1);
                             map_cls1_cls2_matched.put(cls1, clsWithCloestAvgWire);
@@ -288,7 +288,7 @@ public class CompareClusters extends BaseAnalysis {
         List<Cluster> removedClsListExtraSample1 = new ArrayList();
         for(Cluster cls1: clsListExtraSample1){
             for(Cluster cls2 : map_cls1_cls2_matched.values()){
-                if(cls1.clusterMatchedHits(cls2) >= 3){
+                if(cls1.numMatchedHits(cls2) >= 3){
                     map_cls1_cls2_matched_added.put(new Cluster(cls1), cls2);
                     removedClsListExtraSample1.add(cls1);
                 }
@@ -299,7 +299,7 @@ public class CompareClusters extends BaseAnalysis {
         List<Cluster> removedClsListExtraSample2 = new ArrayList();
         for(Cluster cls2: clsListExtraSample2){
             for(Cluster cls1 : map_cls1_cls2_matched.keySet()){
-                if(cls2.clusterMatchedHits(cls1) >= 3){
+                if(cls2.numMatchedHits(cls1) >= 3){
                     map_cls1_cls2_matched_added.put(new Cluster(cls1), cls2);
                     removedClsListExtraSample2.add(cls2);
                 }
@@ -322,7 +322,7 @@ public class CompareClusters extends BaseAnalysis {
         for(Cluster cls1 : map_cls1_cls2_matched.keySet()){
             histoGroupClusterMatching.getH1F("clusterMatching for SL" + cls1.superlayer()).fill(1);
             Cluster cls2 = map_cls1_cls2_matched.get(cls1);
-            int numMatchedHits = cls1.clusterMatchedHits(cls2);
+            int numMatchedHits = cls1.numMatchedHits(cls2);
             double ratioMatchedHits1 = (double)numMatchedHits/cls1.size();
             double ratioMatchedHits2 = (double)numMatchedHits/cls2.size();
             histoGroupMatchedHitRatioComp.getH2F("matchedHitRatioComp for SL" + cls1.superlayer()).fill(ratioMatchedHits1, ratioMatchedHits2);

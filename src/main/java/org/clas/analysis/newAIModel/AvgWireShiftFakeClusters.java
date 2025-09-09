@@ -95,7 +95,7 @@ public class AvgWireShiftFakeClusters extends BaseAnalysis {
             int maxMatchedHits = -1;
             for(Cluster cls2 : localEvent2.getClusters()){
                 if(cls2.getRatioNormalHits() >= ratioNormalHitsCut){
-                    int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                    int numMatchedHits = cls1.numMatchedHits(cls2);
                     if(numMatchedHits > 0){
                         if(numMatchedHits > maxMatchedHits) {
                             maxMatchedHits = numMatchedHits;

@@ -980,7 +980,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             int maxMatchedHits = -1;
             for(Cluster cls2 : localEvent2.getClusters()){
                 if(cls2.getRatioNormalHits() >= ratioNormalHitsCut){
-                    int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                    int numMatchedHits = cls1.numMatchedHits(cls2);
                     if(numMatchedHits > 0){
                         if(numMatchedHits > maxMatchedHits) {
                             maxMatchedHits = numMatchedHits;
@@ -1104,7 +1104,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         for(Cluster cls1 : map_cls1_cls2_matched.keySet()){            
             Cluster cls2 = map_cls1_cls2_matched.get(cls1);
             histoGroupMatchedClusters.getH1F("matchedClusters").fill(cls2.superlayer());
-            int numMatchedHits = cls1.clusterMatchedHits(cls2);
+            int numMatchedHits = cls1.numMatchedHits(cls2);
             histoGroupMatchedHitRatio.getH2F("matchedHitRatio for SL" + cls1.superlayer()).fill((double)numMatchedHits/cls1.size(), (double)numMatchedHits/cls2.size());
             
             if(cls2.getRatioNormalHits() == 1) {
@@ -1403,7 +1403,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                         
                         histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("avgWireDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).avgWire() - nosharedClustersTrk2.get(0).avgWire());
                         histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("slopeDiffNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).fitSlope() - nosharedClustersTrk2.get(0).fitSlope());
-                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).clusterMatchedHits(nosharedClustersTrk2.get(0)));                        
+                        histoGroupNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks.getH1F("numSharedHitsNoSharedClusterCompOnly1NoMatchedClusterSameSLHBTracks").fill(nosharedClusters2.get(0).numMatchedHits(nosharedClustersTrk2.get(0)));                        
                         
                         addDemoGroup(localEvent1, localEvent2, trk1.sector(), "SameSL" + nosharedClusters2.get(0).superlayer());
                     }

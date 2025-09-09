@@ -200,7 +200,7 @@ public class BgEffectsClustering extends BaseAnalysis {
             List<Cluster> matchedClustersWithMostMatchedHits = new ArrayList();
             int maxMatchedHits = -1;
             for(Cluster cls2 : localEvent2.getClusters()){
-                int numMatchedHits = cls1.clusterMatchedHits(cls2);
+                int numMatchedHits = cls1.numMatchedHits(cls2);
                 if(numMatchedHits > 0){
                     if(numMatchedHits > maxMatchedHits) {
                         maxMatchedHits = numMatchedHits;
@@ -261,7 +261,7 @@ public class BgEffectsClustering extends BaseAnalysis {
         for(Cluster cls1 : map_cls1_cls2_matched.keySet()){
             histoGroupClusterMatching.getH1F("clusterMatching for SL" + cls1.superlayer()).fill(1);
             Cluster cls2 = map_cls1_cls2_matched.get(cls1);
-            int numMatchedHits = cls1.clusterMatchedHits(cls2);
+            int numMatchedHits = cls1.numMatchedHits(cls2);
             histoGroupMatchedHitRatioMatchedClusterMatching.getH2F("matchedHitRatioMatchedClusterMatching for SL" + cls1.superlayer()).fill((double)numMatchedHits/cls1.size(), (double)numMatchedHits/cls2.size());
         }        
         for(Cluster cls1 : clsListExtraSample1){

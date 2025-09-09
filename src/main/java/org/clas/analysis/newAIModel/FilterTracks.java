@@ -1,4 +1,4 @@
-package org.clas.supports;
+package org.clas.analysis.newAIModel;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -60,10 +60,10 @@ public class FilterTracks{
         HipoWriterSorted writer = new HipoWriterSorted();
         writer.getSchemaFactory().copy(schema);
         writer.setCompressionType(2);   
-        writer.open(outputName);
-        Event event = new Event();   
+        writer.open(outputName);   
                 
         Reader localReader = new Reader(new Banks(schema));
+        Event event = new Event();
 
         ProgressPrintout progress = new ProgressPrintout();
         int counter = 0;

@@ -53,8 +53,10 @@ public class Track implements Comparable<Track> {
     private List<Cross> crosses = null;
     private List<Cluster> clusters = null;
     private List<Hit> hits = null;
-    List<Hit> normalHits = null;
-    List<Hit> bgHits = null;
+    private List<Hit> normalHits = null;
+    private List<Hit> bgHits = null;
+    private int numClusters = -1;
+    private int numHits = -1;
     private int numNormalHits = -1;
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
@@ -326,6 +328,7 @@ public class Track implements Comparable<Track> {
             if(this.clusterIds[i]<=0) this.clusterIds[i]=-1; //change 0 to -1 to allow matching of candidates to tracks
             if(this.clusterIds[i]>0)  this.trackSL++;
         }
+        numClusters = this.trackSL;
     }     
     
     public void setClusters(ArrayList<Cluster> allClusters){
@@ -353,6 +356,7 @@ public class Track implements Comparable<Track> {
                 }
             }
         }
+        numHits = hits.size();
         separateNormalBgHits();
     }
     
@@ -379,6 +383,7 @@ public class Track implements Comparable<Track> {
                 }
             }
         }
+        numHits = hits.size();
         separateNormalBgHits();
     }
         
@@ -397,6 +402,7 @@ public class Track implements Comparable<Track> {
                 }
             }
         } 
+        numHits = hits.size();
         separateNormalBgHits();
     } 
     
@@ -409,9 +415,17 @@ public class Track implements Comparable<Track> {
         return clusters;
     } 
     
+    public int getNumClusters(){
+        return numClusters;
+    }
+    
     public List<Hit> getHits(){
         return hits;
-    }    
+    }
+
+    public int getNumHits(){
+        return numHits;
+    }
     
     public int SL() {
         return trackSL;
@@ -720,44 +734,7 @@ public class Track implements Comparable<Track> {
         else
             return null;
     }
-    
-    public void show(){
-        System.out.println(this.toString());
-    }
-    
-    @Override
-    public String  toString(){
-        StringBuilder str = new StringBuilder();
-        
-        str.append(String.format("\tcharge: %4d\n", this.trackCharge));            
-        str.append(String.format("\tpx: %9.5f",   this.px()));
-        str.append(String.format("\tpy: %9.5f",   this.py()));
-        str.append(String.format("\tpz: %9.5f\n", this.pz()));
-        str.append(String.format("\tvx: %9.5f",   this.vx()));
-        str.append(String.format("\tvy: %9.5f",   this.vy()));
-        str.append(String.format("\tvz: %9.5f\n", this.vz()));
-        str.append("\t");
-        for(int i=0; i<this.clusterIds().length; i++) str.append(String.format("clus%1d:%3d\t", (i+1), this.clusterIds()[i]));
-        str.append("\n");
-        str.append(String.format("\tchi2: %7.3f",   this.chi2()));
-        str.append(String.format("\tNDF:  %4d\n",   this.NDF()));            
-        str.append(String.format("\tminWire: %4d",  this.minWire()));            
-        str.append(String.format("\tpid: %4d",      this.pid()));            
-        str.append(String.format("\tchi2pid: %.1f", this.chi2pid()));            
-        str.append(String.format("\tstatus: %4d\n", this.status()));            
-        str.append(String.format("\tmatch:  %b\t",  this.isMatched()));            
-        str.append(String.format("\tvalid:  %b\n",  this.isValid()));            
-        for(int i=0; i<this.trackTrajectory.length; i++) {
-            str.append("\t");
-            str.append(String.format("traj%1d: ", (i+1)));
-            if(this.trackTrajectory[i]!=null) str.append(this.trackTrajectory[i].toString());
-            str.append("\t");
-            str.append(String.format("edge: %.1f", this.trackEdge[i]));
-            str.append("\n");
-        }
-        return str.toString();
-    }
-        
+                      
     public boolean equals(Track o) {
         if(Constants.HITMATCH)
             return this.matchedHits(o)>0.6*this.nHits();
@@ -860,6 +837,99 @@ public class Track implements Comparable<Track> {
         double rrx = rx * Constants.COS25 - Z * Constants.SIN25;
         
         return new Point3D(rrx, ry, rrz);
+    }
+    
+    public int numMatchedClusters(Track otherTrk){
+        if(this.getClusters() == null || otherTrk.getClusters() == null) return -999;
+        int matchedClusters = 0;
+        for(Cluster thisCls : this.getClusters()){
+            for(Cluster otherCls : otherTrk.getClusters()){
+                if(thisCls.isFullMatchedCluster(otherCls)){
+                    matchedClusters++;
+                    break;
+                }
+            }
+        }        
+        return matchedClusters;
+    }
+
+    public int numMatchedClustersNoRequireTDC(Track otherTrk){
+        if(this.getClusters() == null || otherTrk.getClusters() == null) return -999;
+        int matchedClusters = 0;
+        for(Cluster thisCls : this.getClusters()){
+            for(Cluster otherCls : otherTrk.getClusters()){
+                if(thisCls.isFullMatchedClusterNoRequireTDC(otherCls)){
+                    matchedClusters++;
+                    break;
+                }
+            }
+        }        
+        return matchedClusters;
+    }    
+    
+    public int numMatchedHits(Track otherTrk){
+        if(this.hits == null || otherTrk.getHits() == null) return -999;
+        int matchedHits = 0;
+        for(Hit hitThisTrk : this.hits){
+            for(Hit hitOtherTrk : otherTrk.hits){
+                if(hitThisTrk.hitMatched(hitOtherTrk)){
+                    matchedHits++;
+                    break;
+                }
+            }
+        }
+        return matchedHits;
+    }
+                
+    public int numMatchedHitsNoRequireTDC(Track otherTrk){
+        if(this.hits == null || otherTrk.getHits() == null) return -999;
+        int matchedHits = 0;
+        for(Hit hitThisTrk : this.hits){
+            for(Hit hitOtherTrk : otherTrk.hits){
+                if(hitThisTrk.hitMatchedNoRequireTDC(hitOtherTrk)){
+                    matchedHits++;
+                    break;
+                }
+            }
+        }
+        return matchedHits;
+    }     
+    
+    public void show(){
+        System.out.println(this.toString());
+    }    
+
+    @Override
+    public String  toString(){
+        StringBuilder str = new StringBuilder();
+        
+        str.append(String.format("\tcharge: %4d\n", this.trackCharge));            
+        str.append(String.format("\tpx: %9.5f",   this.px()));
+        str.append(String.format("\tpy: %9.5f",   this.py()));
+        str.append(String.format("\tpz: %9.5f\n", this.pz()));
+        str.append(String.format("\tvx: %9.5f",   this.vx()));
+        str.append(String.format("\tvy: %9.5f",   this.vy()));
+        str.append(String.format("\tvz: %9.5f\n", this.vz()));
+        str.append("\t");
+        for(int i=0; i<this.clusterIds().length; i++) str.append(String.format("clus%1d:%3d\t", (i+1), this.clusterIds()[i]));
+        str.append("\n");
+        str.append(String.format("\tchi2: %7.3f",   this.chi2()));
+        str.append(String.format("\tNDF:  %4d\n",   this.NDF()));            
+        str.append(String.format("\tminWire: %4d",  this.minWire()));            
+        str.append(String.format("\tpid: %4d",      this.pid()));            
+        str.append(String.format("\tchi2pid: %.1f", this.chi2pid()));            
+        str.append(String.format("\tstatus: %4d\n", this.status()));            
+        str.append(String.format("\tmatch:  %b\t",  this.isMatched()));            
+        str.append(String.format("\tvalid:  %b\n",  this.isValid()));            
+        for(int i=0; i<this.trackTrajectory.length; i++) {
+            str.append("\t");
+            str.append(String.format("traj%1d: ", (i+1)));
+            if(this.trackTrajectory[i]!=null) str.append(this.trackTrajectory[i].toString());
+            str.append("\t");
+            str.append(String.format("edge: %.1f", this.trackEdge[i]));
+            str.append("\n");
+        }
+        return str.toString();
     }    
     
 
