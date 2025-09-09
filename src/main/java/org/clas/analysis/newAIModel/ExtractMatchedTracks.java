@@ -83,11 +83,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
         
     }
     
-    public void processEvent(Event event1, Event event2, Map<Track, List<Track>> map_trk1_trk2List) {  
-        //// Read banks
-        LocalEvent localEvent1 = new LocalEvent(reader1, event1, 12);
-        LocalEvent localEvent2 = new LocalEvent(reader2, event2, 11);
-        
+    public void processEvent(LocalEvent localEvent1, LocalEvent localEvent2, Map<Track, List<Track>> map_trk1_trk2List) {          
         List<Track> trackList1 = new ArrayList();    
         List<Track> trackList2 = localEvent2.getTracksHB();
 
@@ -208,6 +204,9 @@ public class ExtractMatchedTracks extends BaseAnalysis{
             writer2.getSchemaFactory().copy(schema2);
             writer2.setCompressionType(2);   
             writer2.open("sample2.hipo");
+            
+            Reader localReader1 = new Reader(new Banks(schema1));
+            Reader localReader2 = new Reader(new Banks(schema2));
 
             int counter = 0;
             Event event1 = new Event();
@@ -220,10 +219,12 @@ public class ExtractMatchedTracks extends BaseAnalysis{
 
                 reader1.nextEvent(event1);
                 reader2.nextEvent(event2);
+                                
+                LocalEvent localEvent1 = new LocalEvent(localReader1, event1, 12);
+                LocalEvent localEvent2 = new LocalEvent(localReader2, event2, 11);
                 
                 Map<Track, List<Track>> map_trk1_trk2List = new HashMap();
-
-                analysis.processEvent(event1, event2, map_trk1_trk2List);
+                analysis.processEvent(localEvent1, localEvent2, map_trk1_trk2List);
                 
                 int numTrk1 = 0;
                 int numTrk2 = 0;
@@ -273,6 +274,18 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                         newClusterBank1.putByte("size", rowCls1, (byte) cls1.size());
                         newClusterBank1.putFloat("avgWire", rowCls1, (float)cls1.avgWire()); 
                         newClusterBank1.putFloat("fitSlope", rowCls1, (float)cls1.fitSlope()); 
+                        
+                        try{
+                            for(Cluster clsOrg : localEvent1.getClusters()){
+                                if(cls1.id() == clsOrg.id()){
+                                    newClusterBank1.putFloat("lYL1", rowCls1, (float)clsOrg.getLYL1()); 
+                                    newClusterBank1.putFloat("lYL6", rowCls1, (float)clsOrg.getLYL6()); 
+                                }
+                            }
+                        }
+                        catch(Exception e){
+                            LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
+                        } 
                         
                         rowCls1++;
                     }
@@ -329,6 +342,19 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                             newClusterBank2.putFloat("fitChisqProb", rowCls2, (float)shiftAvgWire); 
                             newClusterBank2.putFloat("fitInterc", rowCls2, (float)purityCls); 
                             newClusterBank2.putFloat("fitIntercErr", rowCls2, (float)efficiencyCls); 
+                            
+                            try{
+                                for(Cluster clsOrg : localEvent2.getClusters()){
+                                    if(cls2.id() == clsOrg.id()){
+                                        newClusterBank2.putFloat("lYL1", rowCls2, (float)clsOrg.getLYL1()); 
+                                        newClusterBank2.putFloat("lYL6", rowCls2, (float)clsOrg.getLYL6()); 
+                                    }
+                                }
+                            }
+                            catch(Exception e){
+                                LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
+                            }
+                            
 
                             rowCls2++;
                         }

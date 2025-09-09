@@ -125,7 +125,7 @@ public class FilterTracks{
                     newClusterBank.putShort("Hit"+String.valueOf(r+1)+"_ID", numRow, (short)cls.hitIds()[r]);
                 }
                 
-                /*
+                
                 try{
                     for(Cluster clsOrg : localEvent.getClusters()){
                         if(cls.id() == clsOrg.id()){
@@ -136,8 +136,7 @@ public class FilterTracks{
                 }
                 catch(Exception e){
                     LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                } 
-                */
+                }                 
                 
                 numRow++;
             }

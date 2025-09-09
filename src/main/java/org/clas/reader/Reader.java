@@ -348,7 +348,7 @@ public class Reader {
                 
                 
                 if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
-                    /*
+                    
                     try{
                         cls.setLYL1(clusterBank.getFloat("lYL1", loop));
                         cls.setLYL6(clusterBank.getFloat("lYL6", loop));
@@ -356,8 +356,7 @@ public class Reader {
                     }
                     catch(Exception e){
                         LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                    }
-                    */
+                    }                    
 
                     if(map_clsId_uRWellCrossIds.keySet().contains(cls.id())) {
                         cls.setMatchedURWellCrossIds(map_clsId_uRWellCrossIds.get(cls.id()).get(0), map_clsId_uRWellCrossIds.get(cls.id()).get(1));
