@@ -54,12 +54,12 @@ public class ExtractMatchedTracks extends BaseAnalysis{
         h2_purityVsEfficiencyTrack.setTitleY("purity");
         histoGroupOverview.addDataSet(h2_purityVsEfficiencyTrack, 1); 
         
-        H2F h2_chi2OverNDFVsPurityTrack = new H2F("chi2OverNDFVsPurityTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 100);
+        H2F h2_chi2OverNDFVsPurityTrack = new H2F("chi2OverNDFVsPurityTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 40);
         h2_chi2OverNDFVsPurityTrack.setTitleX("purity");
         h2_chi2OverNDFVsPurityTrack.setTitleY("chi2/ndf");
         histoGroupOverview.addDataSet(h2_chi2OverNDFVsPurityTrack, 2);  
         
-        H2F h2_chi2OverNDFVsEfficiencyTrack = new H2F("chi2OverNDFVsEfficiencyTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 100);
+        H2F h2_chi2OverNDFVsEfficiencyTrack = new H2F("chi2OverNDFVsEfficiencyTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 40);
         h2_chi2OverNDFVsEfficiencyTrack.setTitleX("efficiency");
         h2_chi2OverNDFVsEfficiencyTrack.setTitleY("chi2/ndf");
         histoGroupOverview.addDataSet(h2_chi2OverNDFVsEfficiencyTrack, 3);         
@@ -69,13 +69,13 @@ public class ExtractMatchedTracks extends BaseAnalysis{
         h1_numMatchedClusters.setTitleY("counts");
         histoGroupOverview.addDataSet(h1_numMatchedClusters, 4);          
         
-        H2F h2_purityVsEfficiencyCluster = new H2F("purityVsEfficiencyCluster", "purity vs efficiency for clusters of matched tracks", 25, 0, 1.01, 25, 0, 1.01);
+        H2F h2_purityVsEfficiencyCluster = new H2F("purityVsEfficiencyCluster", "purity vs efficiency for clusters in matched tracks", 25, 0, 1.01, 25, 0, 1.01);
         h2_purityVsEfficiencyCluster.setTitleX("efficiency");
         h2_purityVsEfficiencyCluster.setTitleY("purity");
         histoGroupOverview.addDataSet(h2_purityVsEfficiencyCluster, 5);
         
-        H1F h1_shiftAvgWireClusters = new H1F("shiftAvgWireClusters", "shift of avgWire for non-fully matched clusters of matched tracks", 100, -5, 5);
-        h1_shiftAvgWireClusters.setTitleX("shift of avgWire for non-fully matched clusters of matched tracks");
+        H1F h1_shiftAvgWireClusters = new H1F("shiftAvgWireClusters", "shift of avgWire for non-fully matched clusters in matched tracks", 100, -5, 5);
+        h1_shiftAvgWireClusters.setTitleX("shift of avgWire for non-fully matched clusters in matched tracks");
         h1_shiftAvgWireClusters.setTitleY("counts");
         histoGroupOverview.addDataSet(h1_shiftAvgWireClusters, 6);         
           
