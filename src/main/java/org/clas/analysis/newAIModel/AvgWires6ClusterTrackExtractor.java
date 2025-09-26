@@ -37,13 +37,13 @@ public class AvgWires6ClusterTrackExtractor{
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
         parser.addOption("-o", "", "output file name prefix");
-        parser.addOption("-n", "100000", "maximum number of events to process");
+        parser.addOption("-n", "10000000", "maximum output entries");
         parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
         
         parser.parse(args);
 
         String namePrefix = parser.getOption("-o").stringValue();
-        int maxEvents = parser.getOption("-n").intValue();
+        int maxOutputEntries = parser.getOption("-n").intValue();
         int trkType = parser.getOption("-trkType").intValue();         
 
         List<String> inputList = parser.getInputList();
@@ -70,25 +70,30 @@ public class AvgWires6ClusterTrackExtractor{
                 Reader localReader = new Reader(new Banks(schema));
                 Event event = new Event();
                 while(reader.hasNext()){
+                    boolean flag = false;
+                    
                     reader.nextEvent(event);
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trk : localEvent.getTracksTB()){  
                         if(trk.isValid(true) && trk.getNumClusters() == 6){                  
                             for(Cluster cls : trk.getClusters()){                            
-                                String avgWire = String.format("%.2f", cls.avgWire()); // 2 decimal places
+                                String avgWire = String.format("%.4f", cls.avgWire()); // 2 decimal places
                                 writer.write(avgWire + (cls.superlayer() != 6 ? "," : ""));
                             } 
-                            writer.write("\n");                        
+                            writer.write("\n"); 
+                            counter++;
+                            if ((maxOutputEntries > 0 && counter >= maxOutputEntries)) {
+                                flag = true;
+                                break;
+                            }
                         }
-
                     }
-
+                    
+                    if(flag) break;
                     progress.updateStatus();
-                    counter++;
-                    if ((maxEvents > 0 && counter >= maxEvents)) {
-                        break;
-                    }
+                    
+                    
                 }
                 progress.showStatus();
                 reader.close(); 
