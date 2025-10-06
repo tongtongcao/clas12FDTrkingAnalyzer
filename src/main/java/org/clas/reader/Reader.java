@@ -302,11 +302,11 @@ public class Reader {
             event.read(uRWellDCClusterBank);            
             for(int loop = 0; loop < uRWellDCClusterBank.getRows(); loop++){
                 int clsId = uRWellDCClusterBank.getInt("id", loop);
-                int uRWellCross1Id = uRWellDCClusterBank.getInt("URWell_Cross1_ID", loop);
-                int uRWellCross2Id = uRWellDCClusterBank.getInt("URWell_Cross2_ID", loop);
+                //int uRWellCross1Id = uRWellDCClusterBank.getInt("URWell_Cross1_ID", loop);
+                //int uRWellCross2Id = uRWellDCClusterBank.getInt("URWell_Cross2_ID", loop);
                 List<Integer> uRWellCrossIds = new ArrayList();
-                uRWellCrossIds.add(uRWellCross1Id);
-                uRWellCrossIds.add(uRWellCross2Id);
+                //uRWellCrossIds.add(uRWellCross1Id);
+                //uRWellCrossIds.add(uRWellCross2Id);
                 map_clsId_uRWellCrossIds.put(clsId, uRWellCrossIds);
             }
         }

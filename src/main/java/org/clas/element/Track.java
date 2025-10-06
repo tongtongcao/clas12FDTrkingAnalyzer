@@ -121,6 +121,10 @@ public class Track implements Comparable<Track> {
     public int id() {
         return id;
     }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int index() {
         return trackIndex;
