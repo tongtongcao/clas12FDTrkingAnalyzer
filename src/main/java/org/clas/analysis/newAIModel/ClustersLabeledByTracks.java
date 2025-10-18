@@ -146,13 +146,15 @@ public class ClustersLabeledByTracks {
                                     if(flag) break;
                                 }
                                 
-                                if(trkIds.isEmpty()) sb.append(-1);
+                                if(trkIds.isEmpty()) sb.append(-1);                                
                                 else{
                                     for (int i = 0; i < trkIds.size(); i++) {
                                         sb.append(trkIds.get(i));
                                         if (i < trkIds.size() - 1) sb.append(";");
                                     }
                                 }
+                                
+                                if(trkIds.isEmpty()) continue;
                                 
                                 sectorWriters.get(sector).write(sb.toString() + "\n");
                                 clusterIdx++;
