@@ -106,20 +106,7 @@ public class ClustersLabeledByTracks {
                         int counter = sectorCounters.get(sector) + 1;
                         sectorCounters.put(sector, counter);
                         
-                        if(!map_sector_tracks.containsKey(sector)){
-                            int clusterIdx = 1;
-                            for(Cluster cls : map_sector_clusters.get(sector)){
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(counter).append(",")
-                                        .append(clusterIdx).append(",")
-                                        .append(String.format("%.4f", cls.avgWire())).append(",")
-                                        .append(cls.superlayer()).append(",")
-                                        .append(-1);
-                                sectorWriters.get(sector).write(sb.toString() + "\n");
-                                clusterIdx++;
-                            }                                                        
-                        }
-                        else{
+                        if(map_sector_tracks.containsKey(sector)){                      
                             int trkIdx = 1;
                             for(Track trk : map_sector_tracks.get(sector)){
                                 trk.setId(trkIdx);
@@ -152,9 +139,7 @@ public class ClustersLabeledByTracks {
                                         sb.append(trkIds.get(i));
                                         if (i < trkIds.size() - 1) sb.append(";");
                                     }
-                                }
-                                
-                                if(trkIds.isEmpty()) continue;
+                                }                                
                                 
                                 sectorWriters.get(sector).write(sb.toString() + "\n");
                                 clusterIdx++;
