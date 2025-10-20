@@ -102,49 +102,52 @@ public class ClustersLabeledByTracks {
                 }
                 
                 for(int sector = 1; sector <= 6; sector++){
-                    if(map_sector_clusters.containsKey(sector)){
+                    if(map_sector_clusters.containsKey(sector) && map_sector_tracks.containsKey(sector)){
                         int counter = sectorCounters.get(sector) + 1;
                         sectorCounters.put(sector, counter);
-                        
-                        if(map_sector_tracks.containsKey(sector)){                      
-                            int trkIdx = 1;
-                            for(Track trk : map_sector_tracks.get(sector)){
-                                trk.setId(trkIdx);
-                                trkIdx++;
-                            }
-                            
-                            int clusterIdx = 1;
-                            for(Cluster cls : map_sector_clusters.get(sector)){
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(counter).append(",")
-                                        .append(clusterIdx).append(",")
-                                        .append(String.format("%.4f", cls.avgWire())).append(",")
-                                        .append(cls.superlayer()).append(",");                                        
-                                List<Integer> trkIds = new ArrayList();
-                                for(Track trk : map_sector_tracks.get(sector)){
-                                    boolean flag = false;
-                                    for(Cluster clsOnTrk : trk.getClusters()){
-                                        if(cls.id() == clsOnTrk.id()){
-                                            trkIds.add(trk.id());
-                                            flag = true;
-                                            break;
-                                        }
-                                    }
-                                    if(flag) break;
-                                }
-                                
-                                if(trkIds.isEmpty()) sb.append(-1);                                
-                                else{
-                                    for (int i = 0; i < trkIds.size(); i++) {
-                                        sb.append(trkIds.get(i));
-                                        if (i < trkIds.size() - 1) sb.append(";");
-                                    }
-                                }                                
-                                
-                                sectorWriters.get(sector).write(sb.toString() + "\n");
-                                clusterIdx++;
-                            } 
+                                          
+                        int trkIdx = 1;
+                        for (Track trk : map_sector_tracks.get(sector)) {
+                            trk.setId(trkIdx);
+                            trkIdx++;
                         }
+
+                        int clusterIdx = 1;
+                        for (Cluster cls : map_sector_clusters.get(sector)) {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(counter).append(",")
+                                    .append(clusterIdx).append(",")
+                                    .append(String.format("%.4f", cls.avgWire())).append(",")
+                                    .append(cls.superlayer()).append(",");
+                            List<Integer> trkIds = new ArrayList();
+                            for (Track trk : map_sector_tracks.get(sector)) {
+                                boolean flag = false;
+                                for (Cluster clsOnTrk : trk.getClusters()) {
+                                    if (cls.id() == clsOnTrk.id()) {
+                                        trkIds.add(trk.id());
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if (flag) {
+                                    break;
+                                }
+                            }
+
+                            if (trkIds.isEmpty()) {
+                                sb.append(-1);
+                            } else {
+                                for (int i = 0; i < trkIds.size(); i++) {
+                                    sb.append(trkIds.get(i));
+                                    if (i < trkIds.size() - 1) {
+                                        sb.append(";");
+                                    }
+                                }
+                            }
+
+                            sectorWriters.get(sector).write(sb.toString() + "\n");
+                            clusterIdx++;
+                        } 
                     }
                 } 
                 
