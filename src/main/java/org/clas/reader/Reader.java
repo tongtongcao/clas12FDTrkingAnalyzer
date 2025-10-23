@@ -430,6 +430,7 @@ public class Reader {
                         hitBank.getInt("layer", loop),
                         hitBank.getInt("wire", loop),
                         hitBank.getInt("TDC", loop),
+                        hitBank.getInt("jitter", loop),
                         hitBank.getInt("clusterID", loop),
                         hitBank.getFloat("X", loop),
                         hitBank.getFloat("Z", loop),

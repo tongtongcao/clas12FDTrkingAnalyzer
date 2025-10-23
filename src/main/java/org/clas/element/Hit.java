@@ -19,6 +19,7 @@ public class Hit implements Comparable<Hit> {
     private int layer;
     private int wire;
     private int TDC;
+    private int jitter;
     private int ClusterID;
     private double x;
     private double z;
@@ -36,7 +37,7 @@ public class Hit implements Comparable<Hit> {
     private int indexTDC = -1;
     private int order = -1;
         
-    public Hit(int type, int id, int status, int sector, int superlayer, int layer, int wire, int TDC, int ClusterID, double x, double z, double trkDoca, double docaErr, int LR){
+    public Hit(int type, int id, int status, int sector, int superlayer, int layer, int wire, int TDC, int jitter, int ClusterID, double x, double z, double trkDoca, double docaErr, int LR){
         this.type = type;
         this.id = id;
         this.status = status;
@@ -45,6 +46,7 @@ public class Hit implements Comparable<Hit> {
         this.layer = layer;
         this.wire = wire;
         this.TDC = TDC;
+        this.jitter = jitter;
         this.ClusterID = ClusterID; 
         this.x = x;
         this.z = z;
@@ -83,6 +85,10 @@ public class Hit implements Comparable<Hit> {
     
     public int TDC(){
         return TDC;
+    }
+    
+    public int jitter(){
+        return jitter;
     }
     
     public int ClusterID(){
@@ -181,7 +187,7 @@ public class Hit implements Comparable<Hit> {
     }
     
     public boolean hitMatched(TDC tdc){
-        return sector == tdc.sector() && superlayer == tdc.superlayer() && layer == tdc.layer() && wire == tdc.component() && TDC == tdc.TDC();
+        return sector == tdc.sector() && superlayer == tdc.superlayer() && layer == tdc.layer() && wire == tdc.component() && TDC == tdc.TDC() - jitter;
     }
     
     public boolean hitMatched(Hit hit){ 
