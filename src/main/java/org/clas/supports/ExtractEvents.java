@@ -34,16 +34,18 @@ public class ExtractEvents{
         int maxEvents = parser.getOption("-n").intValue();
         List<Integer> eventList = new ArrayList();
         
-        if(parser.getOption("-events").stringValue().isEmpty()) {
+        String eventOption = parser.getOption("-events").stringValue().trim();
+        
+        if(eventOption.isEmpty()) {
             System.out.println("\n >>>> error: no event is specified....\n");
             System.exit(0);
         }
-        else if(parser.getOption("-events").stringValue().contains(",")){
+        else if(eventOption.contains(",")){
             String[] eventNumbers = parser.getOption("-events").stringValue().split(",");
             for(String eventNum : eventNumbers)
                 eventList.add(Integer.valueOf(eventNum));
         }
-        else if(parser.getOption("-events").stringValue().contains("-")){
+        else if(eventOption.contains("-")){
             String[] eventNumbers = parser.getOption("-events").stringValue().split("-");            
             if(eventNumbers.length != 2) {
                System.out.println("\n >>>> error: wrong assignment for sequence event list ....\n");
@@ -56,6 +58,9 @@ public class ExtractEvents{
                     eventList.add(i);
                 }
             }
+        }
+        else {
+            eventList.add(Integer.valueOf(eventOption));
         }
 
         List<String> inputList = parser.getInputList();
