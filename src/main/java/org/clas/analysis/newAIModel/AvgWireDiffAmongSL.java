@@ -56,7 +56,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         HistoGroup histoGroupAvgWireNeighboredSL = new HistoGroup("avgWireNeighboredSL", 2, 3);                        
         for (int i = 0; i < 5; i++) {
             H1F h1_avgWireNeighboredSL = new H1F("avgWireNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2),
-                    "avgWireNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2), 100, -40, 40);
+                    "avgWireNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2), 100, -60, 60);
             h1_avgWireNeighboredSL.setTitleX("Diff. of avgWire");
             h1_avgWireNeighboredSL.setTitleY("Counts");
             histoGroupAvgWireNeighboredSL.addDataSet(h1_avgWireNeighboredSL, i); 
@@ -66,12 +66,61 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         HistoGroup histoGroupAvgWireCross1SL = new HistoGroup("avgWireCross1SL", 2, 3);
         for (int i = 0; i < 4; i++) {
             H1F h1_avgWireCross1SL = new H1F("avgWireCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3),
-                    "avgWireCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3), 100, -40, 40);
+                    "avgWireCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3), 100, -60, 60);
             h1_avgWireCross1SL.setTitleX("Diff. of avgWire");
             h1_avgWireCross1SL.setTitleY("Counts");
             histoGroupAvgWireCross1SL.addDataSet(h1_avgWireCross1SL, i); 
         }        
-        histoGroupMap.put(histoGroupAvgWireCross1SL.getName(), histoGroupAvgWireCross1SL);  
+        histoGroupMap.put(histoGroupAvgWireCross1SL.getName(), histoGroupAvgWireCross1SL);
+        
+        HistoGroup histoGroupAvgWireCross2SL = new HistoGroup("avgWireCross2SL", 2, 3);
+        for (int i = 0; i < 3; i++) {
+            H1F h1_avgWireCross2SL = new H1F("avgWireCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4),
+                    "avgWireCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4), 100, -60, 60);
+            h1_avgWireCross2SL.setTitleX("Diff. of avgWire");
+            h1_avgWireCross2SL.setTitleY("Counts");
+            histoGroupAvgWireCross2SL.addDataSet(h1_avgWireCross2SL, i); 
+        }        
+        histoGroupMap.put(histoGroupAvgWireCross2SL.getName(), histoGroupAvgWireCross2SL);
+        
+        HistoGroup histoGroupAvgWireCross3SL = new HistoGroup("avgWireCross3SL", 2, 3);
+        for (int i = 0; i < 2; i++) {
+            H1F h1_avgWireCross3SL = new H1F("avgWireCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5),
+                    "avgWireCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5), 100, -60, 60);
+            h1_avgWireCross3SL.setTitleX("Diff. of avgWire");
+            h1_avgWireCross3SL.setTitleY("Counts");
+            histoGroupAvgWireCross3SL.addDataSet(h1_avgWireCross3SL, i); 
+        }        
+        histoGroupMap.put(histoGroupAvgWireCross3SL.getName(), histoGroupAvgWireCross3SL);
+        
+        HistoGroup histoGroupAvgWireCross4SL = new HistoGroup("avgWireCross4SL", 2, 3);
+        for (int i = 0; i < 1; i++) {
+            H1F h1_avgWireCross4SL = new H1F("avgWireCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6),
+                    "avgWireCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6), 100, -60, 60);
+            h1_avgWireCross4SL.setTitleX("Diff. of avgWire");
+            h1_avgWireCross4SL.setTitleY("Counts");
+            histoGroupAvgWireCross4SL.addDataSet(h1_avgWireCross4SL, i); 
+        }        
+        histoGroupMap.put(histoGroupAvgWireCross4SL.getName(), histoGroupAvgWireCross4SL); 
+        
+        HistoGroup histoGroupNumTracks = new HistoGroup("numTracks", 2, 3);
+        for (int i = 0; i < 6; i++) {
+            H1F h1_numTracks = new H1F("numTracks for sector" + Integer.toString(i + 1), "numTracks for sector" + Integer.toString(i + 1), 6, -0.5, 5.5);
+            h1_numTracks.setTitleX("# of tracks");
+            h1_numTracks.setTitleY("Counts");
+            histoGroupNumTracks.addDataSet(h1_numTracks, i);
+        }
+        histoGroupMap.put(histoGroupNumTracks.getName(), histoGroupNumTracks);
+        
+        HistoGroup histoGroupNumClusters = new HistoGroup("numClusters", 2, 3);
+        for (int i = 0; i < 6; i++) {
+            H1F h1_numClusters = new H1F("numClusters for sector" + Integer.toString(i + 1), "numClusters for sector" + Integer.toString(i + 1), 50, -0.5, 49.5);
+            h1_numClusters.setTitleX("# of clusters");
+            h1_numClusters.setTitleY("Counts");
+            histoGroupNumClusters.addDataSet(h1_numClusters, i);
+        }
+        histoGroupMap.put(histoGroupNumClusters.getName(), histoGroupNumClusters);
+        
     }
              
     public void processEvent(Event event){        
@@ -80,6 +129,12 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         
         HistoGroup histoGroupAvgWireNeighboredSL = histoGroupMap.get("avgWireNeighboredSL");
         HistoGroup histoGroupAvgWireCross1SL = histoGroupMap.get("avgWireCross1SL");
+        HistoGroup histoGroupAvgWireCross2SL = histoGroupMap.get("avgWireCross2SL");
+        HistoGroup histoGroupAvgWireCross3SL = histoGroupMap.get("avgWireCross3SL");
+        HistoGroup histoGroupAvgWireCross4SL = histoGroupMap.get("avgWireCross4SL");
+        
+        
+        
         for(Track trk : localEvent.getTracksTB()){
             if(trk.isValid() && trk.getClusters().size() == 6){
                 List<Cluster> clusters = trk.getClusters();
@@ -94,11 +149,49 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
                     Cluster cls2 = clusters.get(i+2);
                     histoGroupAvgWireCross1SL.getH1F("avgWireCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3)).fill(cls1.avgWire() - cls2.avgWire());
                 }
+                
+                for(int i = 0; i < 3; i++){
+                    Cluster cls1 = clusters.get(i);
+                    Cluster cls2 = clusters.get(i+3);
+                    histoGroupAvgWireCross2SL.getH1F("avgWireCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4)).fill(cls1.avgWire() - cls2.avgWire());
+                }
+
+                for(int i = 0; i < 2; i++){
+                    Cluster cls1 = clusters.get(i);
+                    Cluster cls2 = clusters.get(i+4);
+                    histoGroupAvgWireCross3SL.getH1F("avgWireCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5)).fill(cls1.avgWire() - cls2.avgWire());
+                }
+
+                for(int i = 0; i < 1; i++){
+                    Cluster cls1 = clusters.get(i);
+                    Cluster cls2 = clusters.get(i+5);
+                    histoGroupAvgWireCross4SL.getH1F("avgWireCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6)).fill(cls1.avgWire() - cls2.avgWire());
+                }                
             }
         }
         
+       
+        HistoGroup histoGroupNumTracks = histoGroupMap.get("numTracks");
         
+        int[] counts = new int[6];
+        for(Track trk : localEvent.getTracksTB()){            
+            if(trk.isValid()) counts[trk.sector()-1]++; 
+        }
         
+        for(int i = 0; i < 6; i++){
+            histoGroupNumTracks.getH1F("numTracks for sector" + Integer.toString(i+1)).fill(counts[i]);
+        }
+        
+        HistoGroup histoGroupNumClusters = histoGroupMap.get("numClusters");
+        
+        int[] countClusters = new int[6];
+        for(Cluster cls : localEvent.getClusters()){            
+            countClusters[cls.sector()-1]++; 
+        }
+        
+        for(int i = 0; i < 6; i++){
+            histoGroupNumClusters.getH1F("numClusters for sector" + Integer.toString(i+1)).fill(countClusters[i]);
+        }
         
     }
     
