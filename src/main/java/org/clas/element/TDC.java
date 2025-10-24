@@ -64,7 +64,7 @@ public class TDC {
     }
     
     public boolean matchHit(Hit hit){
-        return sector == hit.sector() && superlayer() == hit.superlayer() && layer() == hit.layer() && component == hit.wire() && TDC == hit.TDC();
+        return sector == hit.sector() && superlayer() == hit.superlayer() && layer() == hit.layer() && component == hit.wire() && TDC == hit.TDC() + hit.jitter();
     }
     
     public boolean matchTDC(TDC tdc){
