@@ -416,6 +416,14 @@ public class LocalEvent {
         return clusters;
     }
     
+    public List<Cluster> getClustersInSector(int sector){
+        List<Cluster> clustersInSector = new ArrayList();
+        for(Cluster cls : clusters){
+            if(cls.sector() == sector) clustersInSector.add(cls);
+        }
+        return clustersInSector;
+    }
+    
     public List<Hit> getHitsClustering(){
         return hitsClustering;
     }
