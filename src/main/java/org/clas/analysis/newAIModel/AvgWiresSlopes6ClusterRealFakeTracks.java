@@ -29,7 +29,10 @@ import org.clas.reader.LocalEvent;
  * @author Tongtong
  */
 
-public class AvgWires6ClusterRealFakeTracks{   
+public class AvgWiresSlopes6ClusterRealFakeTracks{  
+    private static final double avgWireCut = 0.35;
+    private static final double slopeCut = 0.2;
+            
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
     
     public static void main(String[] args) throws IOException {
@@ -53,7 +56,7 @@ public class AvgWires6ClusterRealFakeTracks{
             System.exit(0);
         }
         
-        String outputName = "avgWires.csv";
+        String outputName = "avgWiresSlopesLabel.csv";
         if (!namePrefix.isEmpty()) {
             outputName = namePrefix + "_" + outputName;
         }
@@ -98,6 +101,10 @@ public class AvgWires6ClusterRealFakeTracks{
                             for(Cluster cls : clustersInTrack){                            
                                 String avgWire = String.format("%.4f", cls.avgWire());
                                 writer.write(avgWire + ",");
+                            }
+                            for(Cluster cls : clustersInTrack){                            
+                                String slope = String.format("%.4f", cls.fitSlope());
+                                writer.write(slope + ",");
                             } 
                             writer.write("1\n"); 
                             counter++;
@@ -107,16 +114,24 @@ public class AvgWires6ClusterRealFakeTracks{
                             clustersNotInTrack.removeAll(clustersInTrack);
                                                        
                             for(Cluster cls : clustersNotInTrack){
-                                List<Cluster> clustersInFakeTrack = new ArrayList(); 
-                                clustersInFakeTrack.addAll(clustersInTrack);                                
-                                clustersInFakeTrack.set(cls.superlayer() - 1, cls);
+                                Cluster clsInTrack = clustersInTrack.get(cls.superlayer() - 1);
+                                if(Math.abs(cls.avgWire() - clsInTrack.avgWire()) < avgWireCut && Math.abs(cls.fitSlope()- clsInTrack.fitSlope()) < slopeCut){                                
                                 
-                                for(Cluster clsInFakeTrack : clustersInFakeTrack){                            
-                                    String avgWire = String.format("%.4f", clsInFakeTrack.avgWire()); 
-                                    writer.write(avgWire + ",");
-                                } 
-                                writer.write("0\n"); 
-                                counter++;
+                                    List<Cluster> clustersInFakeTrack = new ArrayList(); 
+                                    clustersInFakeTrack.addAll(clustersInTrack);                                
+                                    clustersInFakeTrack.set(cls.superlayer() - 1, cls);
+
+                                    for(Cluster clsInFakeTrack : clustersInFakeTrack){                            
+                                        String avgWire = String.format("%.4f", clsInFakeTrack.avgWire()); 
+                                        writer.write(avgWire + ",");
+                                    }
+                                    for(Cluster clsInFakeTrack : clustersInFakeTrack){                            
+                                        String slope = String.format("%.4f", cls.fitSlope());
+                                        writer.write(slope + ",");
+                                    }
+                                    writer.write("0\n"); 
+                                    counter++;
+                                }
                                 
                             }
                                                         
