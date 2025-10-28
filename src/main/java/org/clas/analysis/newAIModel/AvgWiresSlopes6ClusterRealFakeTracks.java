@@ -115,7 +115,7 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                                                        
                             for(Cluster cls : clustersNotInTrack){
                                 Cluster clsInTrack = clustersInTrack.get(cls.superlayer() - 1);
-                                if(Math.abs(cls.avgWire() - clsInTrack.avgWire()) < avgWireCut && Math.abs(cls.fitSlope()- clsInTrack.fitSlope()) < slopeCut){                                
+                                if(Math.abs(cls.avgWire() - clsInTrack.avgWire()) > avgWireCut || Math.abs(cls.fitSlope()- clsInTrack.fitSlope()) > slopeCut){                                
                                 
                                     List<Cluster> clustersInFakeTrack = new ArrayList(); 
                                     clustersInFakeTrack.addAll(clustersInTrack);                                
