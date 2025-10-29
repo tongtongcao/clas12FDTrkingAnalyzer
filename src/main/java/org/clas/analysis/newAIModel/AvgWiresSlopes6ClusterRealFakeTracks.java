@@ -120,7 +120,7 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                                     writer.write(avgWire + ",");
                                 }
                                 for(Cluster clsInFakeTrack : clustersInFakeTrack){                            
-                                    String slope = String.format("%.4f", cls.fitSlope());
+                                    String slope = String.format("%.4f", clsInFakeTrack.fitSlope());
                                     writer.write(slope + ",");
                                 }
                                 writer.write("0\n"); 

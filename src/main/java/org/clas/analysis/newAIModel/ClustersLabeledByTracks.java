@@ -68,7 +68,7 @@ public class ClustersLabeledByTracks {
         for (int sector = 1; sector <= 6; sector++) {
             String sectorOutputName = outputName.replace(".csv", "_sector" + sector + ".csv");
             FileWriter writer = new FileWriter(sectorOutputName);
-            writer.write("eventIdx,clusterIdx,avgWire,superlayer,trkIds\n");
+            writer.write("eventIdx,clusterIdx,avgWire,slope,superlayer,trkIds\n");
             sectorWriters.put(sector, writer);
             
             sectorCounters.put(sector, 0);
@@ -118,6 +118,7 @@ public class ClustersLabeledByTracks {
                             sb.append(counter).append(",")
                                     .append(clusterIdx).append(",")
                                     .append(String.format("%.4f", cls.avgWire())).append(",")
+                                    .append(String.format("%.4f", cls.fitSlope())).append(",")
                                     .append(cls.superlayer()).append(",");
                             List<Integer> trkIds = new ArrayList();
                             for (Track trk : map_sector_tracks.get(sector)) {
