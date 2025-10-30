@@ -123,21 +123,21 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         histoGroupMap.put(histoGroupNumClusters.getName(), histoGroupNumClusters);
         
         HistoGroup histoGroupAvgWireDiffClustersWithSharedHits= new HistoGroup("avgWireDiffWithSharedHits", 1, 1);
-        H1F h1_avgWireDiffWithSharedHits = new H1F("avgWireDiffWithSharedHits", "avgWireDiffWithSharedHits", 100, -1, 1);
+        H1F h1_avgWireDiffWithSharedHits = new H1F("avgWireDiffWithSharedHits", "avgWireDiffWithSharedHits", 100, -3, 3);
         h1_avgWireDiffWithSharedHits.setTitleX("avgWireDiff");
         h1_avgWireDiffWithSharedHits.setTitleY("Counts");
         histoGroupAvgWireDiffClustersWithSharedHits.addDataSet(h1_avgWireDiffWithSharedHits, 0);  
         histoGroupMap.put(histoGroupAvgWireDiffClustersWithSharedHits.getName(), histoGroupAvgWireDiffClustersWithSharedHits); 
         
         HistoGroup histoGroupSlopeDiffClustersWithSharedHits= new HistoGroup("slopeDiffWithSharedHits", 1, 1);
-        H1F h1_slopeDiffWithSharedHits = new H1F("slopeDiffWithSharedHits", "slopeDiffWithSharedHits", 100, -1, 1);
+        H1F h1_slopeDiffWithSharedHits = new H1F("slopeDiffWithSharedHits", "slopeDiffWithSharedHits", 100, -2, 2);
         h1_slopeDiffWithSharedHits.setTitleX("slopeDiff");
         h1_slopeDiffWithSharedHits.setTitleY("Counts");
         histoGroupSlopeDiffClustersWithSharedHits.addDataSet(h1_slopeDiffWithSharedHits, 0);  
         histoGroupMap.put(histoGroupSlopeDiffClustersWithSharedHits.getName(), histoGroupSlopeDiffClustersWithSharedHits); 
         
         HistoGroup histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits= new HistoGroup("avgWireDiffVsSlopeDiffClustersWithSharedHits", 1, 1);
-        H2F h2_avgWireDiffVsSlopeDiffWithSharedHits = new H2F("avgWireDiffVsSlopeDiffWithSharedHits", "avgWireDiffVsSlopeDiffWithSharedHits", 100, -1, 1, 100, -1, 1);
+        H2F h2_avgWireDiffVsSlopeDiffWithSharedHits = new H2F("avgWireDiffVsSlopeDiffWithSharedHits", "avgWireDiffVsSlopeDiffWithSharedHits", 100, -3, 3, 100, -2, 2);
         h2_avgWireDiffVsSlopeDiffWithSharedHits.setTitleX("avgWireDiff");
         h2_avgWireDiffVsSlopeDiffWithSharedHits.setTitleY("slopeDiff");
         histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits.addDataSet(h2_avgWireDiffVsSlopeDiffWithSharedHits, 0);  
@@ -225,7 +225,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
             Cluster cls1 = clusters.get(i);
             for(int j = i+1; j < numClusters; j++){
                 Cluster cls2 = clusters.get(j);
-                if(cls1.numMatchedHits(cls2) > 2){
+                if(cls1.numMatchedHits(cls2) > 1){
                     histoGroupAvgWireDiffClustersWithSharedHits.getH1F("avgWireDiffWithSharedHits").fill(cls1.avgWire() - cls2.avgWire());
                     histoGroupSlopeDiffClustersWithSharedHits.getH1F("slopeDiffWithSharedHits").fill(cls1.fitSlope() - cls2.fitSlope());
                     histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits.getH2F("avgWireDiffVsSlopeDiffWithSharedHits").fill(cls1.avgWire() - cls2.avgWire(), cls1.fitSlope() - cls2.fitSlope());
