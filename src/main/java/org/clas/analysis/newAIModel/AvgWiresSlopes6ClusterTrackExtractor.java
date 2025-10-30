@@ -29,7 +29,7 @@ import org.clas.reader.LocalEvent;
  * @author Tongtong
  */
 
-public class AvgWires6ClusterTrackExtractor{   
+public class AvgWiresSlopes6ClusterTrackExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
     
     public static void main(String[] args) throws IOException {
@@ -53,7 +53,7 @@ public class AvgWires6ClusterTrackExtractor{
             System.exit(0);
         }
         
-        String outputName = "avgWires.csv";
+        String outputName = "avgWiresSlopes.csv";
         if (!namePrefix.isEmpty()) {
             outputName = namePrefix + "_" + outputName;
         }
@@ -76,11 +76,33 @@ public class AvgWires6ClusterTrackExtractor{
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trk : localEvent.getTracksTB()){  
-                        if(trk.isValid(true) && trk.getNumClusters() == 6){                  
-                            for(Cluster cls : trk.getClusters()){                            
+                        if(trk.isValid(true) && trk.getNumClusters() == 6){  
+                            
+                            List<Integer> clsIdsInTrack = new ArrayList();
+                            for(Cluster clsInTrack : trk.getClusters()){
+                                clsIdsInTrack.add(clsInTrack.id());
+                            }
+                            
+                            List<Cluster> clustersInSector = localEvent.getClustersInSector(trk.sector());
+                            List<Cluster> clustersInTrack = new ArrayList();
+                            for(Cluster cls : clustersInSector){
+                                for(int clsIdInTrack : clsIdsInTrack){
+                                    if(cls.id() == clsIdInTrack) {
+                                        clustersInTrack.add(cls);
+                                        break;
+                                    }
+                                }
+                                if(clustersInTrack.size() == clsIdsInTrack.size()) break;
+                            }
+                            
+                            for(Cluster cls : clustersInTrack){                            
                                 String avgWire = String.format("%.4f", cls.avgWire()); // 2 decimal places
+                                writer.write(avgWire + ",");
+                            }
+                            for(Cluster cls : trk.getClusters()){                            
+                                String avgWire = String.format("%.4f", cls.fitSlope()); // 2 decimal places
                                 writer.write(avgWire + (cls.superlayer() != 6 ? "," : ""));
-                            } 
+                            }
                             writer.write("\n"); 
                             counter++;
                             if ((maxOutputEntries > 0 && counter >= maxOutputEntries)) {
