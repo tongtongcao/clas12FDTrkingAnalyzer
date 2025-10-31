@@ -137,7 +137,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         histoGroupMap.put(histoGroupSlopeDiffClustersWithSharedHits.getName(), histoGroupSlopeDiffClustersWithSharedHits); 
         
         HistoGroup histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits= new HistoGroup("avgWireDiffVsSlopeDiffClustersWithSharedHits", 1, 1);
-        H2F h2_avgWireDiffVsSlopeDiffWithSharedHits = new H2F("avgWireDiffVsSlopeDiffWithSharedHits", "avgWireDiffVsSlopeDiffWithSharedHits", 100, -3, 3, 100, -2, 2);
+        H2F h2_avgWireDiffVsSlopeDiffWithSharedHits = new H2F("avgWireDiffVsSlopeDiffWithSharedHits", "avgWireDiffVsSlopeDiffWithSharedHits", 100, -100, 100, 100, -4, 4);
         h2_avgWireDiffVsSlopeDiffWithSharedHits.setTitleX("avgWireDiff");
         h2_avgWireDiffVsSlopeDiffWithSharedHits.setTitleY("slopeDiff");
         histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits.addDataSet(h2_avgWireDiffVsSlopeDiffWithSharedHits, 0);  
@@ -225,7 +225,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
             Cluster cls1 = clusters.get(i);
             for(int j = i+1; j < numClusters; j++){
                 Cluster cls2 = clusters.get(j);
-                if(cls1.numMatchedHits(cls2) > 1){
+                if(cls1.sector() == cls2.sector() && cls1.superlayer() == cls2.superlayer() && cls1.numMatchedHits(cls2) > -1){
                     histoGroupAvgWireDiffClustersWithSharedHits.getH1F("avgWireDiffWithSharedHits").fill(cls1.avgWire() - cls2.avgWire());
                     histoGroupSlopeDiffClustersWithSharedHits.getH1F("slopeDiffWithSharedHits").fill(cls1.fitSlope() - cls2.fitSlope());
                     histoGroupAvgWireDiffVsSlopeDiffClustersWithSharedHits.getH2F("avgWireDiffVsSlopeDiffWithSharedHits").fill(cls1.avgWire() - cls2.avgWire(), cls1.fitSlope() - cls2.fitSlope());
