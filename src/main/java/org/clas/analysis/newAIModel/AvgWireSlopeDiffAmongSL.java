@@ -48,9 +48,9 @@ import org.clas.demo.DemoBase;
  *
  * @author Tongtong Cao
  */
-public class AvgWireDiffAmongSL extends BaseAnalysis{ 
+public class AvgWireSlopeDiffAmongSL extends BaseAnalysis{ 
     
-    public AvgWireDiffAmongSL(){}
+    public AvgWireSlopeDiffAmongSL(){}
     
     @Override
     public void createHistoGroupMap(){
@@ -103,6 +103,57 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
             histoGroupAvgWireCross4SL.addDataSet(h1_avgWireCross4SL, i); 
         }        
         histoGroupMap.put(histoGroupAvgWireCross4SL.getName(), histoGroupAvgWireCross4SL); 
+                
+        
+        HistoGroup histoGroupSlopeNeighboredSL = new HistoGroup("slopeNeighboredSL", 2, 3);                        
+        for (int i = 0; i < 5; i++) {
+            H1F h1_slopeNeighboredSL = new H1F("slopeNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2),
+                    "slopeNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2), 100, -3, 3);
+            h1_slopeNeighboredSL.setTitleX("Diff. of slope");
+            h1_slopeNeighboredSL.setTitleY("Counts");
+            histoGroupSlopeNeighboredSL.addDataSet(h1_slopeNeighboredSL, i); 
+        }        
+        histoGroupMap.put(histoGroupSlopeNeighboredSL.getName(), histoGroupSlopeNeighboredSL);  
+        
+        HistoGroup histoGroupSlopeCross1SL = new HistoGroup("slopeCross1SL", 2, 3);
+        for (int i = 0; i < 4; i++) {
+            H1F h1_slopeCross1SL = new H1F("slopeCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3),
+                    "slopeCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3), 100, -3, 3);
+            h1_slopeCross1SL.setTitleX("Diff. of slope");
+            h1_slopeCross1SL.setTitleY("Counts");
+            histoGroupSlopeCross1SL.addDataSet(h1_slopeCross1SL, i); 
+        }        
+        histoGroupMap.put(histoGroupSlopeCross1SL.getName(), histoGroupSlopeCross1SL);
+        
+        HistoGroup histoGroupSlopeCross2SL = new HistoGroup("slopeCross2SL", 2, 3);
+        for (int i = 0; i < 3; i++) {
+            H1F h1_slopeCross2SL = new H1F("slopeCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4),
+                    "slopeCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4), 100, -3, 3);
+            h1_slopeCross2SL.setTitleX("Diff. of slope");
+            h1_slopeCross2SL.setTitleY("Counts");
+            histoGroupSlopeCross2SL.addDataSet(h1_slopeCross2SL, i); 
+        }        
+        histoGroupMap.put(histoGroupSlopeCross2SL.getName(), histoGroupSlopeCross2SL);
+        
+        HistoGroup histoGroupSlopeCross3SL = new HistoGroup("slopeCross3SL", 2, 3);
+        for (int i = 0; i < 2; i++) {
+            H1F h1_slopeCross3SL = new H1F("slopeCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5),
+                    "slopeCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5), 100, -3, 3);
+            h1_slopeCross3SL.setTitleX("Diff. of slope");
+            h1_slopeCross3SL.setTitleY("Counts");
+            histoGroupSlopeCross3SL.addDataSet(h1_slopeCross3SL, i); 
+        }        
+        histoGroupMap.put(histoGroupSlopeCross3SL.getName(), histoGroupSlopeCross3SL);
+        
+        HistoGroup histoGroupSlopeCross4SL = new HistoGroup("slopeCross4SL", 2, 3);
+        for (int i = 0; i < 1; i++) {
+            H1F h1_slopeCross4SL = new H1F("slopeCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6),
+                    "slopeCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6), 100, -3, 3);
+            h1_slopeCross4SL.setTitleX("Diff. of slope");
+            h1_slopeCross4SL.setTitleY("Counts");
+            histoGroupSlopeCross4SL.addDataSet(h1_slopeCross4SL, i); 
+        }        
+        histoGroupMap.put(histoGroupSlopeCross4SL.getName(), histoGroupSlopeCross4SL); 
         
         HistoGroup histoGroupNumTracks = new HistoGroup("numTracks", 2, 3);
         for (int i = 0; i < 6; i++) {
@@ -121,7 +172,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
             histoGroupNumClusters.addDataSet(h1_numClusters, i);
         }
         histoGroupMap.put(histoGroupNumClusters.getName(), histoGroupNumClusters);
-        
+                                
         HistoGroup histoGroupAvgWireDiffClustersWithSharedHits= new HistoGroup("avgWireDiffWithSharedHits", 1, 1);
         H1F h1_avgWireDiffWithSharedHits = new H1F("avgWireDiffWithSharedHits", "avgWireDiffWithSharedHits", 100, -3, 3);
         h1_avgWireDiffWithSharedHits.setTitleX("avgWireDiff");
@@ -155,6 +206,12 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
         HistoGroup histoGroupAvgWireCross3SL = histoGroupMap.get("avgWireCross3SL");
         HistoGroup histoGroupAvgWireCross4SL = histoGroupMap.get("avgWireCross4SL");
         
+        HistoGroup histoGroupSlopeNeighboredSL = histoGroupMap.get("slopeNeighboredSL");
+        HistoGroup histoGroupSlopeCross1SL = histoGroupMap.get("slopeCross1SL");
+        HistoGroup histoGroupSlopeCross2SL = histoGroupMap.get("slopeCross2SL");
+        HistoGroup histoGroupSlopeCross3SL = histoGroupMap.get("slopeCross3SL");
+        HistoGroup histoGroupSlopeCross4SL = histoGroupMap.get("slopeCross4SL");        
+        
         
         
         for(Track trk : localEvent.getTracksTB()){
@@ -164,30 +221,35 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
                     Cluster cls1 = clusters.get(i);
                     Cluster cls2 = clusters.get(i+1);
                     histoGroupAvgWireNeighboredSL.getH1F("avgWireNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2)).fill(cls1.avgWire() - cls2.avgWire());
+                    histoGroupSlopeNeighboredSL.getH1F("slopeNeighboredSL between SL" + Integer.toString(i + 1) + Integer.toString(i + 2)).fill(cls1.fitSlope()- cls2.fitSlope());
                 }
                 
                 for(int i = 0; i < 4; i++){
                     Cluster cls1 = clusters.get(i);
                     Cluster cls2 = clusters.get(i+2);
                     histoGroupAvgWireCross1SL.getH1F("avgWireCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3)).fill(cls1.avgWire() - cls2.avgWire());
+                    histoGroupSlopeCross1SL.getH1F("slopeCross1SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 3)).fill(cls1.fitSlope() - cls2.fitSlope());
                 }
                 
                 for(int i = 0; i < 3; i++){
                     Cluster cls1 = clusters.get(i);
                     Cluster cls2 = clusters.get(i+3);
                     histoGroupAvgWireCross2SL.getH1F("avgWireCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4)).fill(cls1.avgWire() - cls2.avgWire());
+                    histoGroupSlopeCross2SL.getH1F("slopeCross2SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 4)).fill(cls1.fitSlope() - cls2.fitSlope());
                 }
 
                 for(int i = 0; i < 2; i++){
                     Cluster cls1 = clusters.get(i);
                     Cluster cls2 = clusters.get(i+4);
                     histoGroupAvgWireCross3SL.getH1F("avgWireCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5)).fill(cls1.avgWire() - cls2.avgWire());
+                    histoGroupSlopeCross3SL.getH1F("slopeCross3SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 5)).fill(cls1.fitSlope() - cls2.fitSlope());
                 }
 
                 for(int i = 0; i < 1; i++){
                     Cluster cls1 = clusters.get(i);
                     Cluster cls2 = clusters.get(i+5);
                     histoGroupAvgWireCross4SL.getH1F("avgWireCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6)).fill(cls1.avgWire() - cls2.avgWire());
+                    histoGroupSlopeCross4SL.getH1F("slopeCross4SL between SL" + Integer.toString(i + 1) + Integer.toString(i + 6)).fill(cls1.fitSlope() - cls2.fitSlope());
                 }                
             }
         }
@@ -269,7 +331,7 @@ public class AvgWireDiffAmongSL extends BaseAnalysis{
             histoName  = namePrefix + "_" + histoName;
         }
         
-        AvgWireDiffAmongSL analysis = new AvgWireDiffAmongSL();
+        AvgWireSlopeDiffAmongSL analysis = new AvgWireSlopeDiffAmongSL();
         analysis.createHistoGroupMap();
         
         if(!readHistos) {                 
