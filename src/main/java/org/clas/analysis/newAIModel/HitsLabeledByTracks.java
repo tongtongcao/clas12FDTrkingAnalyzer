@@ -55,7 +55,7 @@ public class HitsLabeledByTracks {
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
         parser.addOption("-o", "", "output file name prefix");
-        parser.addOption("-n", "10000000", "maximum output entries");
+        parser.addOption("-n", "2000000", "maximum output entries");
         parser.addOption("-trkType", "22", "tracking type: ConvTB(12), AITB(22)");
 
         parser.parse(args);
