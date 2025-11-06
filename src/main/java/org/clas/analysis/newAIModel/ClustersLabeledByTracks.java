@@ -26,9 +26,7 @@ import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
 
 /**
- * Extract average wires of clusters for 6-cluster valid TB tracks, and save
- * them into a csv file The csv file will be input as training AI model of
- * average wire estimator for a missing cluster
+ * For clusters in a sector, store their average wire and slope, and label them as track indices
  *
  * @author Tongtong
  */

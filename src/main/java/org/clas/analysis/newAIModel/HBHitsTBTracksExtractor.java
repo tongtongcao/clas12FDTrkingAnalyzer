@@ -19,17 +19,18 @@ import org.jlab.utils.benchmark.ProgressPrintout;
 import org.clas.element.RunConfig;
 import org.clas.element.Track;
 import org.clas.element.Cluster;
+import org.clas.element.Hit;
 import org.clas.reader.Reader;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
 
 /**
- * Extract average wires and slopes of clusters for 6-cluster valid TB tracks, and save them into a csv file
- * The csv file will be input as training AI model of average wire and slope estimator for a missing cluster
+ * For each valid TB track, find its corresponding HB track, and store doca and z of all hits in the HB track, and TB track parameters
+ * Samples are used to train a model for estimation of HB track state at veretx with inputs of all hits
  * @author Tongtong
  */
 
-public class AvgWiresSlopes6ClusterTrackExtractor{   
+public class HBHitsTBTracksExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
     
     public static void main(String[] args) throws IOException {
@@ -53,7 +54,7 @@ public class AvgWiresSlopes6ClusterTrackExtractor{
             System.exit(0);
         }
         
-        String outputName = "avgWiresSlopes.csv";
+        String outputName = "hitsTracks.csv";
         if (!namePrefix.isEmpty()) {
             outputName = namePrefix + "_" + outputName;
         }
@@ -75,47 +76,36 @@ public class AvgWiresSlopes6ClusterTrackExtractor{
                     reader.nextEvent(event);
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
-                    for(Track trk : localEvent.getTracksTB()){  
-                        if(trk.isValid(true) && trk.getNumClusters() == 6){  
-                            
-                            List<Integer> clsIdsInTrack = new ArrayList();
-                            for(Cluster clsInTrack : trk.getClusters()){
-                                clsIdsInTrack.add(clsInTrack.id());
-                            }
-                            
-                            List<Cluster> clustersInSector = localEvent.getClustersInSector(trk.sector());
-                            List<Cluster> clustersInTrack = new ArrayList();
-                            for(Cluster cls : clustersInSector){
-                                for(int clsIdInTrack : clsIdsInTrack){
-                                    if(cls.id() == clsIdInTrack) {
-                                        clustersInTrack.add(cls);
+                    for(Track trkTB : localEvent.getTracksTB()){  
+                        if(trkTB.isValid(true)){  
+                            for(Track trkHB : localEvent.getTracksHB()){
+                                if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters()){
+                                    int numHits = trkHB.getHits().size();
+                                    for(int i = 0; i < numHits; i++){
+                                        Hit hitHB = trkHB.getHits().get(i);
+                                        String docaz = String.format("%.4f,%.4f,%.4f", hitHB.trkDoca(), hitHB.docaErr(), hitHB.z());
+                                        if(i < numHits -1) writer.write(docaz + ",");
+                                        else writer.write(docaz);
+                                    }
+                                    writer.write("\n"); 
+                                    
+                                    String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", (float)trkTB.charge(), 
+                                            trkTB.px(), trkTB.py(), trkTB.pz(), trkTB.vx(), trkTB.vy(), trkTB.vz());
+                                    writer.write(trackParameters + "\n");
+                                    
+                                    counter++;
+                                    if ((maxOutputEntries > 0 && counter >= maxOutputEntries)) {
+                                        flag = true;
                                         break;
                                     }
-                                }
-                                if(clustersInTrack.size() == clsIdsInTrack.size()) break;
-                            }
-                            
-                            for(Cluster cls : clustersInTrack){                            
-                                String avgWire = String.format("%.4f", cls.avgWire()); // 2 decimal places
-                                writer.write(avgWire + ",");
-                            }
-                            for(Cluster cls : trk.getClusters()){                            
-                                String avgWire = String.format("%.4f", cls.fitSlope()); // 2 decimal places
-                                writer.write(avgWire + (cls.superlayer() != 6 ? "," : ""));
-                            }
-                            writer.write("\n"); 
-                            counter++;
-                            if ((maxOutputEntries > 0 && counter >= maxOutputEntries)) {
-                                flag = true;
-                                break;
+                                }                                                                            
                             }
                         }
                     }
                     
                     if(flag) break;
                     progress.updateStatus();
-                    
-                    
+                                        
                 }
                 progress.showStatus();
                 reader.close(); 

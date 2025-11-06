@@ -24,8 +24,10 @@ import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
 
 /**
- * Extract average wires of clusters for 6-cluster valid TB tracks, and save them into a csv file
- * The csv file will be input as training AI model of average wire estimator for a missing cluster
+ * Extract average wires and slopes of clusters from 6-cluster valid TB tracks, randomly abandon 1 cluster, and label such 5-cluster-combos as 1
+ * Then, for a valid TB tracks, use a random cluster in the same sector to replace the corresponding cluster at the same superlayer, label such cluster-combos as 0
+ * Save them into a csv file
+ * The csv file will be input as training AI model of cluster-combo classification
  * @author Tongtong
  */
 
