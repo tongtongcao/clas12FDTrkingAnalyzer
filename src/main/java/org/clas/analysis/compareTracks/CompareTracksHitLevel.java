@@ -89,6 +89,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         
         TrackHistoGroup histoGroupExtraTracks2 = new TrackHistoGroup("extraTracks2", 4, 2);
         histoGroupExtraTracks2.addTrackHistos(1, 0);
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraTracks2", "chi2/ndf vs ratio of normal hits for extra tracks2", 30, 0, 1.05, 30, 0, 100);
+        h2_chi2OverNDFVsNormalHitRatioExtraTracks2.setTitleX("ratio of normal hits");
+        h2_chi2OverNDFVsNormalHitRatioExtraTracks2.setTitleY("chi2/ndf");
+        histoGroupExtraTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks2, 7); 
         histoGroupMap.put(histoGroupExtraTracks2.getName(), histoGroupExtraTracks2);
         
         HistoGroup histoGroupValidCutParameterCompTracksWithSharedHits= new HistoGroup("validCutParameterCompTracksWithSharedHits", 2, 2);
@@ -137,7 +141,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         histoGroupMap.put(histoGroupExtraValidTracks1.getName(), histoGroupExtraValidTracks1);
         
         TrackHistoGroup histoGroupExtraValidTracks2 = new TrackHistoGroup("extraValidTracks2", 4, 2);
-        histoGroupExtraValidTracks2.addTrackHistos(1, 0);
+        histoGroupExtraValidTracks2.addTrackHistos(1, 0);  
         histoGroupMap.put(histoGroupExtraValidTracks2.getName(), histoGroupExtraValidTracks2);
         
         
@@ -247,7 +251,9 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraTracks2.getHistoPhi().fill(trk2.phi());
                 histoGroupExtraTracks2.getHistoVx().fill(trk2.vx());
                 histoGroupExtraTracks2.getHistoVy().fill(trk2.vy());
-                histoGroupExtraTracks2.getHistoVz().fill(trk2.vz());                
+                histoGroupExtraTracks2.getHistoVz().fill(trk2.vz()); 
+                
+                histoGroupExtraTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF());
             }
         }
         
@@ -359,7 +365,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks2.getHistoVx().fill(trk2.vx());
                 histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
-
+                
                 //if (trk2.getRatioNormalHits() > 0.9) {
                     this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "validExtra2");
                 //}

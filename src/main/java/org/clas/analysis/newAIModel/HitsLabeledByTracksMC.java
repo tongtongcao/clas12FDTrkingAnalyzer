@@ -166,7 +166,7 @@ public class HitsLabeledByTracksMC {
                     List<Hit> hitsInTracksBg = new ArrayList<>();
                     if (localEventBg != null) {
                         for(Track trkBg : localEventBg.getTracksTB()){
-                            if(trkBg.chi2()/trkBg.NDF() < 4 && trkBg.getRatioNormalHits() < 0.1){
+                            if(trkBg.chi2()/trkBg.NDF() < 8 && trkBg.getRatioNormalHits() < 0.1){
                                 hitsInTracksBg.addAll(trkBg.getHits());
                             }
                         }
