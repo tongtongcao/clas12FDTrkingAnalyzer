@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.nio.file.*;
 
 import org.jlab.utils.options.OptionParser;
 import org.jlab.jnp.hipo4.io.HipoReader;
@@ -71,11 +72,22 @@ public class HitsLabeledByTracksMC {
     private static List<String> resolveInputFiles(String pathPattern) throws IOException {
         List<String> files = new ArrayList<>();
 
-        if (pathPattern == null || pathPattern.isEmpty()) {
+        if (pathPattern == null) {
+            return files;
+        }
+        pathPattern = pathPattern.trim();
+        if (pathPattern.isEmpty()) {
             return files;
         }
 
-        java.nio.file.Path path = java.nio.file.Paths.get(pathPattern);
+        // If it's a .txt list file, read it
+        if (pathPattern.endsWith(".txt")) {
+            files.addAll(getInputListFromFile(pathPattern));
+            return files;
+        }
+
+        // Try to interpret as a path
+        Path path = Paths.get(pathPattern);
         java.io.File f = path.toFile();
 
         // Case 1: exact file path
@@ -95,19 +107,18 @@ public class HitsLabeledByTracksMC {
             return files;
         }
 
-        // Case 3: wildcard pattern (e.g. /path/*.hipo)
+        // Case 3: wildcard pattern (e.g. /path/*.hipo or /path/00*)
         if (pathPattern.contains("*") || pathPattern.contains("?")) {
-            java.nio.file.Path parent = path.getParent();
-            if (parent == null) {
-                parent = java.nio.file.Paths.get(".");
-            }
+            Path parent = path.getParent();
+            if (parent == null) parent = Paths.get(".");
             final String patternOnly = path.getFileName().toString();
-            java.nio.file.DirectoryStream<java.nio.file.Path> stream
-                    = java.nio.file.Files.newDirectoryStream(parent, patternOnly);
-            for (java.nio.file.Path p : stream) {
-                files.add(p.toAbsolutePath().toString());
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent, patternOnly)) {
+                for (Path p : stream) {
+                    files.add(p.toAbsolutePath().toString());
+                }
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Error expanding pattern " + pathPattern, e);
             }
-            stream.close();
             return files;
         }
 
@@ -144,23 +155,53 @@ public class HitsLabeledByTracksMC {
         List<String> pureFiles = new ArrayList<>();
         List<String> bgFiles = new ArrayList<>();
 
-        pureFiles.addAll(resolveInputFiles(pureFileList));
-        bgFiles.addAll(resolveInputFiles(bgFileList));
+        // If -p/-b empty, try parser.getInputList() as fallback (single-group use)
+        if ((pureFileList == null || pureFileList.isEmpty()) &&
+            (bgFileList == null || bgFileList.isEmpty())) {
+            List<String> inputs = parser.getInputList();
+            if (inputs != null && !inputs.isEmpty()) {
+                pureFiles.addAll(inputs);
+                // leave bgFiles empty -> will be warned/checked below
+            }
+        } else {
+            if (pureFileList != null && !pureFileList.isEmpty()) {
+                pureFiles.addAll(resolveInputFiles(pureFileList));
+            }
+            if (bgFileList != null && !bgFileList.isEmpty()) {
+                bgFiles.addAll(resolveInputFiles(bgFileList));
+            }
+        }
 
-        if (pureFiles.size() != bgFiles.size()) {
-            LOGGER.log(Level.WARNING, String.format(
-                "Warning: number of pure files (%d) != bg files (%d). Will process up to the smaller size.",
-                pureFiles.size(), bgFiles.size()));
+        if (pureFiles.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "No pure files found. Provide -p files or input list.");
+            System.exit(1);
+        }
+        if (bgFiles.isEmpty()) {
+            LOGGER.log(Level.WARNING, "No bg files found. Proceeding with pure files only (bg will be skipped).");
+        }
+
+        // Process up to min size if both provided
+        int nPairs = pureFiles.size();
+        if (!bgFiles.isEmpty()) {
+            nPairs = Math.min(pureFiles.size(), bgFiles.size());
+            if (pureFiles.size() != bgFiles.size()) {
+                LOGGER.log(Level.WARNING, String.format(
+                    "Warning: number of pure files (%d) != bg files (%d). Will process %d pairs.",
+                    pureFiles.size(), bgFiles.size(), nPairs));
+            }
+        } else {
+            // If no bgFiles, process pureFiles alone (read from pureFiles but bg not available)
+            LOGGER.log(Level.INFO, "Processing " + pureFiles.size() + " pure files (no bg files).");
         }
 
         String outputName = "hits.csv";
-        if (!namePrefix.isEmpty()) {
+        if (namePrefix != null && !namePrefix.isEmpty()) {
             outputName = namePrefix + "_" + outputName;
         }
         
         // Prepare FileWriters for all 6 sectors
         Map<Integer, FileWriter> sectorWriters = new HashMap<>();
-        Map<Integer, Integer> sectorCounters = new HashMap();
+        Map<Integer, Integer> sectorCounters = new HashMap<>();
         for (int sector = 1; sector <= 6; sector++) {
             String sectorOutputName = outputName.replace(".csv", "_sector" + sector + ".csv");
             FileWriter writer = new FileWriter(sectorOutputName);
@@ -171,98 +212,127 @@ public class HitsLabeledByTracksMC {
         ProgressPrintout progress = new ProgressPrintout();
         
         
-        for (int iFile = 0; iFile < pureFiles.size(); iFile++) {
+        for (int iFile = 0; iFile < nPairs; iFile++) {
             String filePure = pureFiles.get(iFile);   
-            String fileBg = bgFiles.get(iFile);
+            String fileBg = bgFiles.isEmpty() ? null : bgFiles.get(iFile);
             
-            HipoReader readerPure = new HipoReader();
-            readerPure.open(filePure);
-            SchemaFactory schemaPure = readerPure.getSchemaFactory();
-            Reader localReaderPure = new Reader(new Banks(schemaPure));
+            LOGGER.info("Processing pair " + (iFile+1) + ": pure=" + filePure + " bg=" + fileBg);
             
-            HipoReader readerBg = new HipoReader();
-            readerBg.open(fileBg);
-            SchemaFactory schemaBg = readerBg.getSchemaFactory();
-            Reader localReaderBg = new Reader(new Banks(schemaBg));
-            
-            Event eventPure = new Event();
-            Event eventBg = new Event();
-            while (readerPure.hasNext() && readerBg.hasNext()) {                
-                readerPure.nextEvent(eventPure);
-                readerBg.nextEvent(eventBg);
-                LocalEvent localEventPure = new LocalEvent(localReaderPure, eventPure, trkType);
-                LocalEvent localEventBg = new LocalEvent(localReaderBg, eventBg, trkType);                
+            HipoReader readerPure = null;
+            HipoReader readerBg = null;
+            try {
+                readerPure = new HipoReader();
+                readerPure.open(filePure);
+                SchemaFactory schemaPure = readerPure.getSchemaFactory();
+                Reader localReaderPure = new Reader(new Banks(schemaPure));
                 
-                // Hits on HB tracks from pure sample
-                List<Hit> hitsInTracksPure = new ArrayList();                
-                for(Track trkPure : localEventPure.getTracksHB()){
-                    hitsInTracksPure.addAll(trkPure.getHits());
+                if (fileBg != null) {
+                    readerBg = new HipoReader();
+                    readerBg.open(fileBg);
                 }
-                // Hits on TB tracks with most noise hits from bg sample
-                List<Hit> hitsInTracksBg = new ArrayList();
-                for(Track trkBg : localEventBg.getTracksTB()){
-                    if(trkBg.chi2()/trkBg.NDF() < 4 && trkBg.getRatioNormalHits() < 0.1){
-                        hitsInTracksBg.addAll(trkBg.getHits());
-                    }
-                }
-                // All hits on tracks
-                List<Hit> hitsInTracks = new ArrayList();
-                hitsInTracks.addAll(hitsInTracksPure);
-                hitsInTracks.addAll(hitsInTracksBg);
-                                
-                int[][][] tdcs = new int[6][NLAYERS][NWIRES];
-                int[][][] tdcsInTracks = new int[6][NLAYERS][NWIRES];                                
-                for(TDC tdc : localEventBg.getTDCs()){
-                    int sector = tdc.sector();
-                    int superlayer = tdc.superlayer();
-                    int layer = tdc.layer();
-                    int wire = tdc.component();                            
-                    tdcs[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
-                    
-                    for(Hit hitInTracks : hitsInTracks){
-                        if(tdc.matchHit(hitInTracks)){
-                            tdcsInTracks[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
-                            break;
-                        }
-                    }
-                } 
+                SchemaFactory schemaBg = readerBg != null ? readerBg.getSchemaFactory() : null;
+                Reader localReaderBg = schemaBg != null ? new Reader(new Banks(schemaBg)) : null;
                 
-                for(int sector = 1; sector <= 6; sector++){
-                    if(hasHits(tdcsInTracks[sector-1])){
-                        int counter = sectorCounters.get(sector) + 1;
-                        sectorCounters.put(sector, counter);
-                                          
-                        // DC::tdc
-                        for (int l = 0; l < NLAYERS; l++) {
-                            for (int w = 0; w < NWIRES; w++) {
-                                sectorWriters.get(sector).write(tdcs[sector-1][l][w] + (w < NWIRES - 1 ? "," : ""));
-                            }
-                            sectorWriters.get(sector).write("\n");
-                        }
-                        sectorWriters.get(sector).write("\n");
+                Event eventPure = new Event();
+                Event eventBg = new Event();
+                while ((readerPure.hasNext()) && (readerBg == null || readerBg.hasNext())) {                
+                    readerPure.nextEvent(eventPure);
+                    if (readerBg != null) readerBg.nextEvent(eventBg);
 
-                        // Hits on tracks
-                        for (int l = 0; l < NLAYERS; l++) {
-                            for (int w = 0; w < NWIRES; w++) {
-                                sectorWriters.get(sector).write(tdcsInTracks[sector-1][l][w] + (w < NWIRES - 1 ? "," : ""));
+                    LocalEvent localEventPure = new LocalEvent(localReaderPure, eventPure, trkType);
+                    LocalEvent localEventBg = readerBg != null ? new LocalEvent(localReaderBg, eventBg, trkType) : null;                
+                
+                    // Hits on HB tracks from pure sample
+                    List<Hit> hitsInTracksPure = new ArrayList<>();                
+                    for(Track trkPure : localEventPure.getTracksHB()){
+                        hitsInTracksPure.addAll(trkPure.getHits());
+                    }
+                    // Hits on TB tracks with most noise hits from bg sample (if available)
+                    List<Hit> hitsInTracksBg = new ArrayList<>();
+                    if (localEventBg != null) {
+                        for(Track trkBg : localEventBg.getTracksTB()){
+                            if(trkBg.chi2()/trkBg.NDF() < 4 && trkBg.getRatioNormalHits() < 0.1){
+                                hitsInTracksBg.addAll(trkBg.getHits());
+                            }
+                        }
+                    }
+                    // All hits on tracks
+                    List<Hit> hitsInTracks = new ArrayList<>();
+                    hitsInTracks.addAll(hitsInTracksPure);
+                    hitsInTracks.addAll(hitsInTracksBg);
+                                    
+                    int[][][] tdcs = new int[6][NLAYERS][NWIRES];
+                    int[][][] tdcsInTracks = new int[6][NLAYERS][NWIRES];                                
+                    // If bg reader present use its TDCs; otherwise use pure reader's TDCs
+                    Iterable<TDC> tdcIterable = (localEventBg != null) ? localEventBg.getTDCs() : localEventPure.getTDCs();
+                    for(TDC tdc : tdcIterable){
+                        int sector = tdc.sector();
+                        int superlayer = tdc.superlayer();
+                        int layer = tdc.layer();
+                        int wire = tdc.component();                            
+                        tdcs[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
+                        
+                        for(Hit hitInTracks : hitsInTracks){
+                            if(tdc.matchHit(hitInTracks)){
+                                tdcsInTracks[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
+                                break;
+                            }
+                        }
+                    } 
+                    
+                    for(int sector = 1; sector <= 6; sector++){
+                        if(hasHits(tdcsInTracks[sector-1])){
+                            int counter = sectorCounters.get(sector) + 1;
+                            sectorCounters.put(sector, counter);
+                                              
+                            // DC::tdc
+                            for (int l = 0; l < NLAYERS; l++) {
+                                for (int w = 0; w < NWIRES; w++) {
+                                    sectorWriters.get(sector).write(tdcs[sector-1][l][w] + (w < NWIRES - 1 ? "," : ""));
+                                }
+                                sectorWriters.get(sector).write("\n");
                             }
                             sectorWriters.get(sector).write("\n");
+
+                            // Hits on tracks
+                            for (int l = 0; l < NLAYERS; l++) {
+                                for (int w = 0; w < NWIRES; w++) {
+                                    sectorWriters.get(sector).write(tdcsInTracks[sector-1][l][w] + (w < NWIRES - 1 ? "," : ""));
+                                }
+                                sectorWriters.get(sector).write("\n");
+                            }
+                            sectorWriters.get(sector).write("\n\n");
                         }
-                        sectorWriters.get(sector).write("\n\n");
-                    }
-                } 
+                    } 
+                    
+                    // Break if any sector reached maxOutputEntries
+                    if (maxOutputEntries > 0 && sectorCounters.values().stream().anyMatch(v -> v >= maxOutputEntries)) break;
+                    progress.updateStatus();
+                } // end while events
                 
-                if ((maxOutputEntries > 0 && sectorCounters.containsValue(maxOutputEntries))) break;
-                progress.updateStatus();
-            }    
-            
-            readerPure.close();
-            readerBg.close();
-        }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error processing files: " + filePure + " / " + fileBg, e);
+            } finally {
+                try {
+                    if (readerPure != null) readerPure.close();
+                } catch (Exception e) {
+                    LOGGER.log(Level.FINE, "Error closing readerPure", e);
+                }
+                try {
+                    if (readerBg != null) readerBg.close();
+                } catch (Exception e) {
+                    LOGGER.log(Level.FINE, "Error closing readerBg", e);
+                }
+            }
+        } // end for files
         
         for (FileWriter writer : sectorWriters.values()) {
-            writer.flush();
-            writer.close();
+            try {
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Error closing writer", e);
+            }
         }
                 
     }            
