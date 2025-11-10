@@ -62,9 +62,9 @@ public class HitsLabeledByTracksMC {
         parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
         
         // Optional single file mode
-        parser.addOption("-p", "", "single pure file");
-        parser.addOption("-b", "", "single bg file or bg folder");
-        parser.setRequiresInputList(true); // for multiple pure files mode
+        parser.addOption("-p", "", "single pure file or pure file folder");
+        parser.addOption("-b", "", "single bg file");
+        parser.setRequiresInputList(true); // for multiple bg files mode
 
         parser.parse(args);
 
@@ -75,23 +75,23 @@ public class HitsLabeledByTracksMC {
         List<String> pureFiles;
         List<String> bgFiles;
 
-        if (!parser.getOption("-p").stringValue().isEmpty()) {
+        if (!parser.getOption("-b").stringValue().isEmpty()) {
             // -p/-b single file mode
             pureFiles = Arrays.asList(parser.getOption("-p").stringValue());
             bgFiles   = Arrays.asList(parser.getOption("-b").stringValue());
         } else {
             // Multiple pure files + background folder mode
-            pureFiles = parser.getInputList();
-            String bgFolderStr = parser.getOption("-b").stringValue();
-            File bgFolder = new File(bgFolderStr);
+            bgFiles = parser.getInputList();
+            String pureFolderStr = parser.getOption("-p").stringValue();
+            File pureFolder = new File(pureFolderStr);
 
-            bgFiles = new ArrayList<>();
-            for (String purePath : pureFiles) {
-                File pureFile = new File(purePath);
-                File bgFile = new File(bgFolder, pureFile.getName());
-                if (!bgFile.exists())
-                    throw new IllegalArgumentException("Background file not found: " + bgFile.getName());
-                bgFiles.add(bgFile.getAbsolutePath());
+            pureFiles = new ArrayList<>();
+            for (String bgPath : bgFiles) {
+                File bgFile = new File(bgPath);
+                File pureFile = new File(pureFolder, bgFile.getName());
+                if (!pureFile.exists())
+                    throw new IllegalArgumentException("pure file not found: " + pureFile.getName());
+                pureFiles.add(pureFile.getAbsolutePath());
             }
         }
 
