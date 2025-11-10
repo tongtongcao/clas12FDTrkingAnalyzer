@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -52,66 +53,18 @@ public class HitsLabeledByTracksMC {
         return false;
     }
     
-    private static List<String> getInputListFromFile(String listFile) throws IOException {
-        List<String> files = new ArrayList<>();
-        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(listFile))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (!line.isEmpty() && !line.startsWith("#")) {
-                    files.add(line);
-                }
-            }
-        }
-        return files;
-    }
-    
-    /**
-     * Resolve input path: can be a .hipo file, multiple files separated by
-     * commas or spaces, a directory, or a wildcard pattern like /path/*.hipo.
-     */
-    private static List<String> resolveInputFiles(String pathPattern) throws IOException {
-        List<String> files = new ArrayList<>();
-        if (pathPattern == null || pathPattern.isEmpty()) return files;
-
-        Path path = Paths.get(pathPattern);
-        File f = path.toFile();
-
-        // single file
-        if (f.exists() && f.isFile()) { files.add(f.getAbsolutePath()); return files; }
-
-        // directory
-        if (f.exists() && f.isDirectory()) {
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.hipo")) {
-                for (Path p : stream) files.add(p.toAbsolutePath().toString());
-            }
-            return files;
-        }
-
-        // wildcard
-        if (pathPattern.contains("*")) {
-            Path parent = path.getParent();
-            if (parent == null) parent = Paths.get(".");
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent, path.getFileName().toString())) {
-                for (Path p : stream) files.add(p.toAbsolutePath().toString());
-            }
-            return files;
-        }
-
-        return files;
-    }
-
-
-
     public static void main(String[] args) throws IOException {
         OptionParser parser = new OptionParser("extractEvents");
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
         parser.addOption("-o", "", "output file name prefix");
         parser.addOption("-n", "1000000", "maximum output entries");
-        parser.addOption("-p", "", "input file list 1 (pure samples)");
-        parser.addOption("-b", "", "input file list 2 (bg samples)");
         parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
+        
+        // Optional single file mode
+        parser.addOption("-p", "", "single pure file");
+        parser.addOption("-b", "", "single bg file or bg folder");
+        parser.setRequiresInputList(true); // for multiple pure files mode
 
         parser.parse(args);
 
@@ -119,35 +72,27 @@ public class HitsLabeledByTracksMC {
         int maxOutputEntries = parser.getOption("-n").intValue();
         int trkType = parser.getOption("-trkType").intValue(); 
         
-        String pureFileList   = parser.getOption("-p").stringValue();
-        String bgFileList = parser.getOption("-b").stringValue();
-        
-        List<String> pureFiles = new ArrayList<>();
-        List<String> bgFiles = new ArrayList<>();
+        List<String> pureFiles;
+        List<String> bgFiles;
 
-        // If -p/-b empty, try parser.getInputList() as fallback (single-group use)
-        if ((pureFileList == null || pureFileList.isEmpty()) &&
-            (bgFileList == null || bgFileList.isEmpty())) {
-            List<String> inputs = parser.getInputList();
-            if (inputs != null && !inputs.isEmpty()) {
-                pureFiles.addAll(inputs);
-                // leave bgFiles empty -> will be warned/checked below
-            }
+        if (!parser.getOption("-p").stringValue().isEmpty()) {
+            // -p/-b single file mode
+            pureFiles = Arrays.asList(parser.getOption("-p").stringValue());
+            bgFiles   = Arrays.asList(parser.getOption("-b").stringValue());
         } else {
-            if (pureFileList != null && !pureFileList.isEmpty()) {
-                pureFiles.addAll(resolveInputFiles(pureFileList));
-            }
-            if (bgFileList != null && !bgFileList.isEmpty()) {
-                bgFiles.addAll(resolveInputFiles(bgFileList));
-            }
-        }
+            // Multiple pure files + background folder mode
+            pureFiles = parser.getInputList();
+            String bgFolderStr = parser.getOption("-b").stringValue();
+            File bgFolder = new File(bgFolderStr);
 
-        if (pureFiles.isEmpty()) {
-            LOGGER.log(Level.SEVERE, "No pure files found. Provide -p files or input list.");
-            System.exit(1);
-        }
-        if (bgFiles.isEmpty()) {
-            LOGGER.log(Level.WARNING, "No bg files found. Proceeding with pure files only (bg will be skipped).");
+            bgFiles = new ArrayList<>();
+            for (String purePath : pureFiles) {
+                File pureFile = new File(purePath);
+                File bgFile = new File(bgFolder, pureFile.getName());
+                if (!bgFile.exists())
+                    throw new IllegalArgumentException("Background file not found: " + bgFile.getName());
+                bgFiles.add(bgFile.getAbsolutePath());
+            }
         }
 
         // Process up to min size if both provided
