@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.nio.file.*;
+import java.io.File;  
 
 import org.jlab.utils.options.OptionParser;
 import org.jlab.jnp.hipo4.io.HipoReader;
@@ -71,66 +72,35 @@ public class HitsLabeledByTracksMC {
      */
     private static List<String> resolveInputFiles(String pathPattern) throws IOException {
         List<String> files = new ArrayList<>();
+        if (pathPattern == null || pathPattern.isEmpty()) return files;
 
-        if (pathPattern == null) {
-            return files;
-        }
-        pathPattern = pathPattern.trim();
-        if (pathPattern.isEmpty()) {
-            return files;
-        }
-
-        // If it's a .txt list file, read it
-        if (pathPattern.endsWith(".txt")) {
-            files.addAll(getInputListFromFile(pathPattern));
-            return files;
-        }
-
-        // Try to interpret as a path
         Path path = Paths.get(pathPattern);
-        java.io.File f = path.toFile();
+        File f = path.toFile();
 
-        // Case 1: exact file path
-        if (f.exists() && f.isFile()) {
-            files.add(f.getAbsolutePath());
-            return files;
-        }
+        // single file
+        if (f.exists() && f.isFile()) { files.add(f.getAbsolutePath()); return files; }
 
-        // Case 2: directory -> add all .hipo files
+        // directory
         if (f.exists() && f.isDirectory()) {
-            java.io.File[] hipoFiles = f.listFiles((dir, name) -> name.endsWith(".hipo"));
-            if (hipoFiles != null) {
-                for (java.io.File hf : hipoFiles) {
-                    files.add(hf.getAbsolutePath());
-                }
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.hipo")) {
+                for (Path p : stream) files.add(p.toAbsolutePath().toString());
             }
             return files;
         }
 
-        // Case 3: wildcard pattern (e.g. /path/*.hipo or /path/00*)
-        if (pathPattern.contains("*") || pathPattern.contains("?")) {
+        // wildcard
+        if (pathPattern.contains("*")) {
             Path parent = path.getParent();
             if (parent == null) parent = Paths.get(".");
-            final String patternOnly = path.getFileName().toString();
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent, patternOnly)) {
-                for (Path p : stream) {
-                    files.add(p.toAbsolutePath().toString());
-                }
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Error expanding pattern " + pathPattern, e);
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent, path.getFileName().toString())) {
+                for (Path p : stream) files.add(p.toAbsolutePath().toString());
             }
             return files;
-        }
-
-        // Case 4: multiple files separated by commas or spaces
-        for (String token : pathPattern.split("[,\\s]+")) {
-            if (!token.isEmpty()) {
-                files.add(token);
-            }
         }
 
         return files;
     }
+
 
 
     public static void main(String[] args) throws IOException {
