@@ -36,5 +36,16 @@ public class CommonFunctions {
 
         return new Point3D(X, Y, Z);
     }
+    
+    public static double[] toSpherical(Point3D p) {
+        double x = p.x();
+        double y = p.y();
+        double z = p.z();
 
+        double r = Math.sqrt(x * x + y * y + z * z);
+        double theta = Math.atan2(y, x);           // azimuthal angle
+        double phi = Math.acos(z / r);             // polar angle
+
+        return new double[]{r, theta, phi};
+    }
 }
