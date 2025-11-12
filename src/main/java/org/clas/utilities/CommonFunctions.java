@@ -43,8 +43,8 @@ public class CommonFunctions {
         double z = p.z();
 
         double r = Math.sqrt(x * x + y * y + z * z);
-        double theta = Math.atan2(y, x);           // azimuthal angle
-        double phi = Math.acos(z / r);             // polar angle
+        double theta = Math.acos(z / r);    
+        double phi = Math.atan2(y, x);                 
 
         return new double[]{r, theta, phi};
     }
