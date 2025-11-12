@@ -23,6 +23,7 @@ import org.clas.element.Hit;
 import org.clas.reader.Reader;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
+import org.clas.utilities.Constants;
 
 /**
  * For each valid TB track, find its corresponding HB track, and store doca and z of all hits in the HB track, and TB track parameters
@@ -32,8 +33,10 @@ import org.clas.reader.LocalEvent;
 
 public class HBHitsTBTracksExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
-    
+       
     public static void main(String[] args) throws IOException {
+        Constants.initGeometry();
+        
         OptionParser parser = new OptionParser("extractEvents");
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
@@ -83,7 +86,12 @@ public class HBHitsTBTracksExtractor{
                                     int numHits = trkHB.getHits().size();
                                     for(int i = 0; i < numHits; i++){
                                         Hit hitHB = trkHB.getHits().get(i);
-                                        String docaz = String.format("%.4f,%.4f,%.4f", hitHB.trkDoca(), hitHB.docaErr(), hitHB.z());
+                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), hitHB.docaErr(), 
+                                                Constants.xo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                Constants.yo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                Constants.xe[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                Constants.ye[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                hitHB.z());
                                         if(i < numHits -1) writer.write(docaz + ",");
                                         else writer.write(docaz);
                                     }

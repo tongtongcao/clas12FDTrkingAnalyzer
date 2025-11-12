@@ -1,5 +1,6 @@
 package org.clas.utilities;
 
+import java.io.*;
 import org.jlab.detector.base.DetectorType;
 
 /**
@@ -78,4 +79,74 @@ public class Constants {
     public static double YDCSL1L1W1LC = 1.732051;
     
     public static int URWELLRegions = 12;
+    
+    // -----------------------------------
+    // DC geometry arrays
+    // -----------------------------------
+    public static final int N_SECTORS = 6;
+    public static final int N_SUPERLAYERS = 6;
+    public static final int N_LAYERS = 6;
+    public static final int N_WIRES = 112;
+
+    public static double[][][][] xo = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] yo = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] xe = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] ye = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] z  = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    
+    
+    // flag if DC geomery is loaded
+    private static boolean geometryLoaded = false;
+
+    /**
+     * load geometry if it has not been loaded
+     */
+    public static void initGeometry() {
+        if (geometryLoaded) {
+            System.out.println("[Constants] Geometry already loaded.");
+            return;
+        }
+        try {
+            InputStream dc_geometry = Constants.class.getResourceAsStream("/org/clas/utilities/dc_geometry.txt");
+            if (dc_geometry == null) {
+                System.err.println("[Constants] Error: Cannot find dc_geometry.txt in resources folder!");
+                System.exit(1);
+            }
+            loadGeometry(dc_geometry);
+            geometryLoaded = true;
+        } catch (IOException e) {
+            System.err.println("[Constants] Error loading geometry: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+    
+
+    /**
+     * Load DC geometry from a CSV-like text file (sector,superlayer,layer,wire,xo,yo,xe,ye,z)
+     */
+    public static void loadGeometry(InputStream geoStream) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(geoStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                
+                String[] parts = line.split(",");
+                if (parts.length < 9) continue;
+
+                int sector = Integer.parseInt(parts[0]) - 1;
+                int superlayer = Integer.parseInt(parts[1]) - 1;
+                int layer = Integer.parseInt(parts[2]) - 1;
+                int wire = Integer.parseInt(parts[3]) - 1;
+
+                xo[sector][superlayer][layer][wire] = Double.parseDouble(parts[4]);
+                yo[sector][superlayer][layer][wire] = Double.parseDouble(parts[5]);
+                xe[sector][superlayer][layer][wire] = Double.parseDouble(parts[6]);
+                ye[sector][superlayer][layer][wire] = Double.parseDouble(parts[7]);
+                z [sector][superlayer][layer][wire] = Double.parseDouble(parts[8]);
+            }
+        }
+        System.out.println("[Constants] DC geometry loaded successfully.");
+    }
 }
