@@ -1,5 +1,6 @@
 package org.clas.utilities;
 
+import java.io.*;
 import org.jlab.detector.base.DetectorType;
 
 /**
