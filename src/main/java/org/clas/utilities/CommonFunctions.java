@@ -2,8 +2,6 @@ package org.clas.utilities;
 
 import org.jlab.geom.prim.Point3D;
 
-import org.clas.utilities.Constants;
-
 /**
  *
  * @author Tongtong
@@ -24,7 +22,7 @@ public class CommonFunctions {
         return new Point3D(rrx, ry, rrz);
     }
     
-    public Point3D getCoordsInGlobal(double rrx, double ry, double rrz, int sector) {
+    public static Point3D getCoordsInGlobal(double rrx, double ry, double rrz, int sector) {
         double cosSector = Constants.COSSECTOR60[sector - 1];
         double sinSector= Constants.SINSECTOR60[sector - 1];
         double cosTilt = Constants.COS25;
