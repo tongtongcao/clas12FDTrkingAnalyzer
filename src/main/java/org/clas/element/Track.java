@@ -37,6 +37,9 @@ public class Track implements Comparable<Track> {
     private int uRWellCrossIds[] = new int[2];
     private int   trackSL = 0;
     
+    private Point3D preC1Pos;
+    private Point3D preC1Dir;
+    
     // from particle bank
     private int    trackStatus  = 0;
     private double trackChi2pid = 0;
@@ -470,6 +473,19 @@ public class Track implements Comparable<Track> {
     
     public int pid() {
         return this.trackPid;
+    }
+    
+    public void preC1(double x, double y, double z, double ux, double uy, double uz){
+        preC1Pos = new Point3D(x, y, z);
+        preC1Dir = new Point3D(ux, uy, uz);
+    }
+    
+    public Point3D getPreC1Pos(){
+        return preC1Pos;
+    }
+    
+    public Point3D getPreC1Dir(){
+        return preC1Dir;
     }
     
     public void cross(double x, double y, double z, int region) {

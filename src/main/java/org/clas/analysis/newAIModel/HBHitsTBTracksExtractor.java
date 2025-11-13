@@ -24,6 +24,8 @@ import org.clas.reader.Reader;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
 import org.clas.utilities.Constants;
+import org.clas.utilities.CommonFunctions;
+import org.jlab.geom.prim.Point3D;
 
 /**
  * For each valid TB track, find its corresponding HB track, and store doca and z of all hits in the HB track, and TB track parameters
@@ -82,7 +84,7 @@ public class HBHitsTBTracksExtractor{
                     for(Track trkTB : localEvent.getTracksTB()){  
                         if(trkTB.isValid(true)){  
                             for(Track trkHB : localEvent.getTracksHB()){
-                                if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters()){
+                                if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters() && Math.abs(trkHB.getNumHits() - trkTB.getNumHits()) <= 3){
                                     int numHits = trkHB.getHits().size();
                                     for(int i = 0; i < numHits; i++){
                                         Hit hitHB = trkHB.getHits().get(i);
@@ -97,8 +99,12 @@ public class HBHitsTBTracksExtractor{
                                     }
                                     writer.write("\n"); 
                                     
-                                    String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", (float)trkTB.charge(), 
-                                            trkTB.px(), trkTB.py(), trkTB.pz(), trkTB.vx(), trkTB.vy(), trkTB.vz());
+                                    Point3D preC1Pos = trkTB.getPreC1Pos();
+                                    Point3D preC1Dir = trkTB.getPreC1Dir();                                    
+                                    double[] preC1DirSpherical = CommonFunctions.toSpherical(preC1Dir); 
+                                    
+                                    String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", (float)trkTB.charge(), 
+                                            trkTB.p()*preC1Dir.x(), trkTB.p()*preC1Dir.y(), trkTB.p()*preC1Dir.z(), preC1Pos.x(), preC1Pos.y());
                                     writer.write(trackParameters + "\n");
                                     
                                     counter++;
