@@ -88,7 +88,9 @@ public class Banks {
             this.mcTrueBank        = new Bank(schema.getSchema("MC::True"));
                 
         // DC banks
-        if(schema.hasSchema("DC::tdc"))
+        if(schema.hasSchema("DC::tot"))
+            this.dcTDCBank        = new Bank(schema.getSchema("DC::tot"));
+        else if(schema.hasSchema("DC::tdc"))
             this.dcTDCBank        = new Bank(schema.getSchema("DC::tdc"));
         if(schema.hasSchema("HitBasedTrkg::Hits"))
             this.dcHitBank        = new Bank(schema.getSchema("HitBasedTrkg::Hits"));
