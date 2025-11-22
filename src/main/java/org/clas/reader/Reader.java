@@ -503,8 +503,28 @@ public class Reader {
     }  
     
     public ArrayList<TDC> readTDCs(Event event) {
-        Bank dcTDCBank = banks.getDCTDCBank();
         ArrayList<TDC> tdcs = new ArrayList();
+        
+        Bank dcTOTBank = banks.getDCTOTBank();
+        if(dcTOTBank != null){
+            event.read(dcTOTBank);
+            
+            for(int loop = 0; loop < dcTOTBank.getRows(); loop++){
+                TDC tdc = new TDC(
+                        dcTOTBank.getInt("sector", loop),
+                        dcTOTBank.getInt("layer", loop),
+                        dcTOTBank.getInt("component", loop),
+                        dcTOTBank.getInt("order", loop),
+                        dcTOTBank.getInt("TDC", loop)
+                );
+                
+                tdcs.add(tdc);
+            }
+        }
+        
+        if(tdcs.size() > 0) return tdcs;
+        
+        Bank dcTDCBank = banks.getDCTDCBank();
         if(dcTDCBank != null){
             event.read(dcTDCBank);
             

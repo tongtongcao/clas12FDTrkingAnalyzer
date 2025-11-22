@@ -21,6 +21,7 @@ public class Banks {
     
     // DC banks
     private Bank dcTDCBank;
+    private Bank dcTOTBank;
     private Bank dcHitBank;
     private Bank dcClusterBank;  
     
@@ -89,8 +90,8 @@ public class Banks {
                 
         // DC banks
         if(schema.hasSchema("DC::tot"))
-            this.dcTDCBank        = new Bank(schema.getSchema("DC::tot"));
-        else if(schema.hasSchema("DC::tdc"))
+            this.dcTOTBank        = new Bank(schema.getSchema("DC::tot"));
+        if(schema.hasSchema("DC::tdc"))
             this.dcTDCBank        = new Bank(schema.getSchema("DC::tdc"));
         if(schema.hasSchema("HitBasedTrkg::Hits"))
             this.dcHitBank        = new Bank(schema.getSchema("HitBasedTrkg::Hits"));
@@ -238,6 +239,10 @@ public class Banks {
     
     public Bank getDCTDCBank() {
 	return dcTDCBank;
+    }
+    
+    public Bank getDCTOTBank() {
+	return dcTOTBank;
     }
     
     public Bank getDCHitBank() {
