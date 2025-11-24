@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.JFrame;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.DataVector;
@@ -1755,7 +1760,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         return sharedClusterMap;
     }
 
-    public void postEventProcess() {                         
+    public void postEventProcess(String effFileName, boolean saveEffStats) {                         
         H1F h1_allNormalClusters = new H1F("allNormalClusters", "normal clusters", 6, 0.5, 6.5);
         h1_allNormalClusters.setTitleX("SL");
         h1_allNormalClusters.setTitleY("Counts");
@@ -1843,6 +1848,21 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         System.out.println(String.format("error      " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
                 ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6]));
 
+        if(saveEffStats){
+            try (PrintWriter out = new PrintWriter(new FileWriter(effFileName))) {      
+                out.println(String.format(
+                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
+                    ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6]
+                ));
+                out.println(String.format(
+                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
+                    ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6]
+                ));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         
     }
     
@@ -1858,6 +1878,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         parser.addOption("-n", "-1", "maximum number of events to process");
         parser.addOption("-plot", "1", "display histograms (0/1)");
         parser.addOption("-demo", "1", "display case demo (0/1)");
+        parser.addOption("-stat", "0", "save statistics for efficiency evolution (0/1)");
         parser.addOption("-mDemo", "1000", "maxium for number of demonstrated cases");
         parser.addOption("-trkType"      ,"22",   "tracking type: 12 (ConvTB) or 22 (AITB)");
         parser.addOption("-mc", "1", "if mc (0/1)");
@@ -1874,6 +1895,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         int maxEvents = parser.getOption("-n").intValue();
         boolean displayPlots = (parser.getOption("-plot").intValue() != 0);
         boolean displayDemos = (parser.getOption("-demo").intValue() != 0);
+        boolean saveEffStats = (parser.getOption("-stat").intValue() != 0);
         int maxDemoCases = parser.getOption("-mDemo").intValue();
         boolean readHistos = (parser.getOption("-histo").intValue() != 0);
         int trkType = parser.getOption("-trkType").intValue();
@@ -1895,8 +1917,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         }
 
         String histoName = "histo.hipo";
+        String effFileName = "eff.txt";
         if (!namePrefix.isEmpty()) {
             histoName = namePrefix + "_" + histoName;
+            effFileName = namePrefix + "_" + effFileName;
         }
         
         StudyBgEffectsOnValidTracks analysis = new StudyBgEffectsOnValidTracks();
@@ -1940,7 +1964,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             reader1.close();
             reader2.close();
             analysis.saveHistos(histoName);
-            analysis.postEventProcess();
+            analysis.postEventProcess(effFileName, saveEffStats);
         } else {
             analysis.readHistos(inputList.get(0));
         }

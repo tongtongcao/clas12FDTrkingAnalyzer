@@ -317,19 +317,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                         newClusterBank1.putByte("superlayer", rowCls1, (byte) cls1.superlayer());                
                         newClusterBank1.putByte("size", rowCls1, (byte) cls1.size());
                         newClusterBank1.putFloat("avgWire", rowCls1, (float)cls1.avgWire()); 
-                        newClusterBank1.putFloat("fitSlope", rowCls1, (float)cls1.fitSlope()); 
-                        
-                        try{
-                            for(Cluster clsOrg : localEvent1.getClusters()){
-                                if(cls1.id() == clsOrg.id()){
-                                    newClusterBank1.putFloat("lYL1", rowCls1, (float)clsOrg.getLYL1()); 
-                                    newClusterBank1.putFloat("lYL6", rowCls1, (float)clsOrg.getLYL6()); 
-                                }
-                            }
-                        }
-                        catch(Exception e){
-                            LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                        } 
+                        newClusterBank1.putFloat("fitSlope", rowCls1, (float)cls1.fitSlope());                         
                         
                         rowCls1++;
                     }
@@ -386,20 +374,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                             newClusterBank2.putFloat("fitChisqProb", rowCls2, (float)shiftAvgWire); 
                             newClusterBank2.putFloat("fitInterc", rowCls2, (float)purityCls); 
                             newClusterBank2.putFloat("fitIntercErr", rowCls2, (float)efficiencyCls); 
-                            
-                            try{
-                                for(Cluster clsOrg : localEvent2.getClusters()){
-                                    if(cls2.id() == clsOrg.id()){
-                                        newClusterBank2.putFloat("lYL1", rowCls2, (float)clsOrg.getLYL1()); 
-                                        newClusterBank2.putFloat("lYL6", rowCls2, (float)clsOrg.getLYL6()); 
-                                    }
-                                }
-                            }
-                            catch(Exception e){
-                                LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                            }
-                            
-
+                                                        
                             rowCls2++;
                         }
                     }
