@@ -352,26 +352,7 @@ public class Reader {
                                clusterBank.getInt("Hit9_ID", loop),
                                clusterBank.getInt("Hit10_ID", loop),
                                clusterBank.getInt("Hit11_ID", loop),
-                               clusterBank.getInt("Hit12_ID", loop));
-                
-                
-                if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
-                    /*
-                    try{
-                        cls.setLYL1(clusterBank.getFloat("lYL1", loop));
-                        cls.setLYL6(clusterBank.getFloat("lYL6", loop));
-
-                    }
-                    catch(Exception e){
-                        LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                    }                    
-
-                    if(map_clsId_uRWellCrossIds.keySet().contains(cls.id())) {
-                        cls.setMatchedURWellCrossIds(map_clsId_uRWellCrossIds.get(cls.id()).get(0), map_clsId_uRWellCrossIds.get(cls.id()).get(1));
-                    }
-*/
-                }
-                
+                               clusterBank.getInt("Hit12_ID", loop));                                
                                
                 if(cls.superlayer() != 0) clusters.add(cls); // AIHB pseudo cluster is saved
             }
