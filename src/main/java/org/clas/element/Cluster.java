@@ -49,9 +49,6 @@ public class Cluster implements Comparable<Cluster> {
     private double avgResidual;
     private double avgAbsResidual;   
     
-    private double lYL1;
-    private double lYL6;
-    
     public Cluster(Cluster cls){
         this.copy(cls);
     }
@@ -400,25 +397,7 @@ public class Cluster implements Comparable<Cluster> {
             if(hit.calcLocY() < minLy) minLy = hit.calcLocY();
         }
         return minLy;
-    }
-    
-    public void setLYL1(double lYL1){
-        this.lYL1 = lYL1;
-    }
-    
-    public double getLYL1(){
-        return lYL1;
-    }
-    
-    public void setLYL6(double lYL6){
-        this.lYL6 = lYL6;
-    }
-    
-    public double getLYL6(){
-        return lYL6;
-    }
-    
-    
+    }        
            
     public final void copy(Cluster cls) {
         this.type = cls.type();
