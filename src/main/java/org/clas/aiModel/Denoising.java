@@ -18,25 +18,27 @@ import ai.djl.translate.TranslateException;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+/**
+ * Application of denoising model
+ */
 public class Denoising {
 
-    private final ZooModel<float[][], float[][]> model;
-    private final Predictor<float[][], float[][]> predictor;
+    private final ZooModel<float[][][], float[][][]> model;
+    private final Predictor<float[][][], float[][][]> predictor;
 
-    /** Constructor: load model + create translator */
     public Denoising(String modelFile)
             throws IOException, ModelNotFoundException, MalformedModelException {
 
-        // 单线程模式
+        // PyTorch single thread
         System.setProperty("ai.djl.pytorch.num_interop_threads", "1");
         System.setProperty("ai.djl.pytorch.num_threads", "1");
         System.setProperty("ai.djl.pytorch.graph_optimizer", "false");
 
-        Translator<float[][], float[][]> translator = buildTranslator();
+        Translator<float[][][], float[][][]> translator = buildBatchTranslator();
 
-        Criteria<float[][], float[][]> criteria =
+        Criteria<float[][][], float[][][]> criteria =
                 Criteria.builder()
-                        .setTypes(float[][].class, float[][].class)
+                        .setTypes(float[][][].class, float[][][].class)
                         .optModelPath(Paths.get(modelFile))
                         .optEngine("PyTorch")
                         .optTranslator(translator)
@@ -47,55 +49,76 @@ public class Denoising {
         predictor = model.newPredictor();
     }
 
-    /** Predict wrapper */
-    public float[][] predict(float[][] input) throws TranslateException {
-        return predictor.predict(input);
+    /** batch predict: input[6][36][112] */
+    public float[][][] predict(float[][][] batchInput) throws TranslateException {
+        return predictor.predict(batchInput);
     }
 
-    /** Manually close resources */
     public void close() {
         predictor.close();
         model.close();
     }
 
-    /** Build the translator used by this autoencoder */
-    private Translator<float[][], float[][]> buildTranslator() {
-        return new Translator<float[][], float[][]>() {
-            @Override
-            public NDList processInput(TranslatorContext ctx, float[][] input) {
-                NDManager manager = ctx.getNDManager();
-                int height = input.length;
-                int width = input[0].length;
+    /** Same translator as DCDenoiseEngine.getBatchTranslator() */
+    private Translator<float[][][], float[][][]> buildBatchTranslator() {
+        return new Translator<float[][][], float[][][]>() {
 
-                float[] flat = new float[height * width];
-                for (int i = 0; i < height; i++) {
-                    System.arraycopy(input[i], 0, flat, i * width, width);
+            @Override
+            public NDList processInput(TranslatorContext ctx, float[][][] input) {
+                NDManager manager = ctx.getNDManager();
+                int batch = input.length;
+                int height = input[0].length;
+                int width = input[0][0].length;
+
+                float[] flat = new float[batch * height * width];
+                int pos = 0;
+
+                for (int b = 0; b < batch; b++) {
+                    for (int h = 0; h < height; h++) {
+                        System.arraycopy(input[b][h], 0, flat, pos, width);
+                        pos += width;
+                    }
                 }
 
-                NDArray x = manager.create(flat, new Shape(height, width));
-                x = x.expandDims(0).expandDims(0); // [1,1,H,W]
+                NDArray x = manager.create(flat, new Shape(batch, 1, height, width));
                 return new NDList(x);
             }
 
             @Override
-            public float[][] processOutput(TranslatorContext ctx, NDList list) {
-                NDArray result = list.get(0).squeeze(); // remove [1,1]
+            public float[][][] processOutput(TranslatorContext ctx, NDList list) {
+                NDArray result = list.get(0);
+
+                long[] s = result.getShape().getShape();
+
+                int batch = (int) s[0];
+                int height, width;
+
+                if (s.length == 4 && s[1] == 1) {
+                    height = (int) s[2];
+                    width = (int) s[3];
+                    result = result.squeeze(1);
+                } else {
+                    throw new IllegalStateException(
+                            "Unexpected output shape: " + java.util.Arrays.toString(s));
+                }
 
                 float[] flat = result.toFloatArray();
-                long[] s = result.getShape().getShape();
-                int h = (int) s[0];
-                int w = (int) s[1];
+                float[][][] out = new float[batch][height][width];
 
-                float[][] out = new float[h][w];
-                for (int i = 0; i < h; i++) {
-                    System.arraycopy(flat, i * w, out[i], 0, w);
+                int pos = 0;
+                for (int b = 0; b < batch; b++) {
+                    for (int h = 0; h < height; h++) {
+                        System.arraycopy(flat, pos, out[b][h], 0, width);
+                        pos += width;
+                    }
                 }
+
                 return out;
             }
 
             @Override
             public Batchifier getBatchifier() {
-                return null; // no batching
+                return null;  // already batched
             }
         };
     }
