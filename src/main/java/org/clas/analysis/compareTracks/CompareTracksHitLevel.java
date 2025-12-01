@@ -145,6 +145,30 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         histoGroupMap.put(histoGroupExtraValidTracks2.getName(), histoGroupExtraValidTracks2);
         
         
+        // Ratio of normal hits for tracks
+        HistoGroup histoGroupRatioNormalHitsTracks = new HistoGroup("ratioNormalHitsTracks", 2, 2);
+        H1F h1_ratioNormalHitsTracks1 = new H1F("ratioNormalHitsTracks1", "ratio of norma hits for tracks in sp1", 101, 0, 1.01);
+        h1_ratioNormalHitsTracks1.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsTracks1.setTitleY("Counts");
+        h1_ratioNormalHitsTracks1.setLineColor(1);
+        histoGroupRatioNormalHitsTracks.addDataSet(h1_ratioNormalHitsTracks1, 0);
+        H1F h1_ratioNormalHitsTracks2 = new H1F("ratioNormalHitsTracks2", "ratio of norma hits for tracks in sp2", 101, 0, 1.01);
+        h1_ratioNormalHitsTracks2.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsTracks2.setTitleY("Counts");
+        h1_ratioNormalHitsTracks2.setLineColor(1);
+        histoGroupRatioNormalHitsTracks.addDataSet(h1_ratioNormalHitsTracks2, 1);     
+        H1F h1_ratioNormalHitsValidTracks1 = new H1F("ratioNormalHitsValidTracks1", "ratio of norma hits for valid tracks in sp1", 101, 0, 1.01);
+        h1_ratioNormalHitsValidTracks1.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsValidTracks1.setTitleY("Counts");
+        h1_ratioNormalHitsValidTracks1.setLineColor(1);
+        histoGroupRatioNormalHitsTracks.addDataSet(h1_ratioNormalHitsValidTracks1, 2);
+        H1F h1_ratioNormalHitsValidTracks2 = new H1F("ratioNormalHitsValidTracks2", "ratio of norma hits for valid tracks in sp2", 101, 0, 1.01);
+        h1_ratioNormalHitsValidTracks2.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsValidTracks2.setTitleY("Counts");
+        h1_ratioNormalHitsValidTracks2.setLineColor(1);
+        histoGroupRatioNormalHitsTracks.addDataSet(h1_ratioNormalHitsValidTracks2, 3);  
+        histoGroupMap.put(histoGroupRatioNormalHitsTracks.getName(), histoGroupRatioNormalHitsTracks);
+        
     }
 
     public void processEvent(Event event1, Event event2, int trkType) {
@@ -258,21 +282,26 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         }
         
         ////// Valid Tracks
+        HistoGroup histoGroupRatioNormalHitsTracks = histoGroupMap.get("ratioNormalHitsTracks");        
         List<Track> validTrackListSp1 = new ArrayList();
         for (Track trk1 : trackList1) {
+            histoGroupRatioNormalHitsTracks.getH1F("ratioNormalHitsTracks1").fill(trk1.getRatioNormalHits());
             tracksSp1++;
             if(trk1.isValid()) {
                 validTracksSp1++;
                 validTrackListSp1.add(trk1);
+                histoGroupRatioNormalHitsTracks.getH1F("ratioNormalHitsValidTracks1").fill(trk1.getRatioNormalHits());
             }
         }
         
         List<Track> validTrackListSp2 = new ArrayList();
         for (Track trk2 : trackList2) {
+            histoGroupRatioNormalHitsTracks.getH1F("ratioNormalHitsTracks2").fill(trk2.getRatioNormalHits());
             tracksSp2++;
             if(trk2.isValid()) {
                 validTracksSp2++;
                 validTrackListSp2.add(trk2);
+                histoGroupRatioNormalHitsTracks.getH1F("ratioNormalHitsValidTracks2").fill(trk2.getRatioNormalHits());
             }
         }
                         
@@ -352,9 +381,9 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraValidTracks1.getHistoVz().fill(trk1.vz());
 
-                //if (trk1.getRatioNormalHits() > 0.9){
-                    this.addDemoGroup(localEvent1, localEvent2, trk1.sector(), "validExtra1");
-                //}
+                if (trk1.getRatioNormalHits() > 0.9){
+                    this.addDemoGroup(localEvent1, localEvent2, trk1.sector(), "SP1");
+                }
                 
             }
             for (Track trk2 : trkList_validExtraSample2) {
@@ -366,9 +395,9 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
                 
-                //if (trk2.getRatioNormalHits() > 0.9) {
-                    this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "validExtra2");
-                //}
+                if (trk2.getRatioNormalHits() > 0.9) {
+                    this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "SP2");
+                }
 
             }
         } else {
@@ -381,7 +410,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraValidTracks1.getHistoVz().fill(trk1.vz());
 
-                this.addDemoGroup(localEvent1, localEvent2, trk1.sector());
+                this.addDemoGroup(localEvent1, localEvent2, trk1.sector(), "SP1");
 
             }
             for (Track trk2 : trkList_validExtraSample2) {
@@ -393,7 +422,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
 
-                this.addDemoGroup(localEvent1, localEvent2, trk2.sector());
+                this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "SP2");
             }
         }
     }

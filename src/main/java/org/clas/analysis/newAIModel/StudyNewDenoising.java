@@ -32,7 +32,7 @@ import org.jlab.utils.options.OptionParser;
 
 public class StudyNewDenoising extends BaseAnalysis{
     Denoising net;
-    private double threshold = 0.053;
+    private double threshold = 0.03;
     
     public StudyNewDenoising(){}
     
