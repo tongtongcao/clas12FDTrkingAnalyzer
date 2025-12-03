@@ -36,7 +36,8 @@ public class Track implements Comparable<Track> {
     private int[] crossIds = new int[6];    
     private int uRWellCrossIds[] = new int[2];
     private int   trackSL = 0;
-    
+    private int missingSL = -1;
+        
     private Point3D preC1Pos;
     private Point3D preC1Dir;
     
@@ -143,6 +144,10 @@ public class Track implements Comparable<Track> {
     
     public void type(int m) {
         this.trackType=m;
+    }
+    
+    public int getMissingSL(){
+        return missingSL;
     }
     
     public void setP(double mom) {
@@ -332,7 +337,10 @@ public class Track implements Comparable<Track> {
         this.clusterIds[4] = i5;
         this.clusterIds[5] = i6;
         for(int i=0; i<6; i++) {
-            if(this.clusterIds[i]<=0) this.clusterIds[i]=-1; //change 0 to -1 to allow matching of candidates to tracks
+            if(this.clusterIds[i]<=0) {
+                this.clusterIds[i]=-1;
+                this.missingSL = i+1;
+            } //change 0 to -1 to allow matching of candidates to tracks
             if(this.clusterIds[i]>0)  this.trackSL++;
         }
         numClusters = this.trackSL;

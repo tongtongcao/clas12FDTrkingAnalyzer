@@ -29,9 +29,9 @@ public class Denoising {
     public Denoising(String modelFile)
             throws IOException, ModelNotFoundException, MalformedModelException {
 
-        // PyTorch single thread
-        System.setProperty("ai.djl.pytorch.num_interop_threads", "1");
-        System.setProperty("ai.djl.pytorch.num_threads", "1");
+        // PyTorch thread
+        //System.setProperty("ai.djl.pytorch.num_interop_threads", "1");
+        //System.setProperty("ai.djl.pytorch.num_threads", "1");
         System.setProperty("ai.djl.pytorch.graph_optimizer", "false");
 
         Translator<float[][][], float[][][]> translator = buildBatchTranslator();
@@ -59,7 +59,6 @@ public class Denoising {
         model.close();
     }
 
-    /** Same translator as DCDenoiseEngine.getBatchTranslator() */
     private Translator<float[][][], float[][][]> buildBatchTranslator() {
         return new Translator<float[][][], float[][][]>() {
 
@@ -118,7 +117,7 @@ public class Denoising {
 
             @Override
             public Batchifier getBatchifier() {
-                return null;  // already batched
+                return null;
             }
         };
     }
