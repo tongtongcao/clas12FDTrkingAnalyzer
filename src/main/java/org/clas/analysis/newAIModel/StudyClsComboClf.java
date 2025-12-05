@@ -38,7 +38,7 @@ public class StudyClsComboClf extends BaseAnalysis{
     
     public void init() throws Exception{
         String modelPath6Cls;
-        try (InputStream in = StudyNewDenoising.class.getResourceAsStream("/org/clas/aiModel/mlp_16h_2l_6cls.pt")) {
+        try (InputStream in = StudyNewDenoising.class.getResourceAsStream("/org/clas/aiModel/mlp_64h_4l_6cls.pt")) {
 
             if (in == null) {
                 throw new RuntimeException("Model file not found in resources!");
