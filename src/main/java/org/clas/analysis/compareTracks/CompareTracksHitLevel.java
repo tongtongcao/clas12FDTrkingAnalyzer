@@ -85,6 +85,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         
         TrackHistoGroup histoGroupExtraTracks1 = new TrackHistoGroup("extraTracks1", 4, 2);
         histoGroupExtraTracks1.addTrackHistos(1, 0);
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraTracks1", "chi2/ndf vs ratio of normal hits for extra tracks1", 30, 0, 1.05, 30, 0, 100);
+        h2_chi2OverNDFVsNormalHitRatioExtraTracks1.setTitleX("ratio of normal hits");
+        h2_chi2OverNDFVsNormalHitRatioExtraTracks1.setTitleY("chi2/ndf");
+        histoGroupExtraTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks1, 7); 
         histoGroupMap.put(histoGroupExtraTracks1.getName(), histoGroupExtraTracks1);
         
         TrackHistoGroup histoGroupExtraTracks2 = new TrackHistoGroup("extraTracks2", 4, 2);
@@ -138,10 +142,18 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         
         TrackHistoGroup histoGroupExtraValidTracks1 = new TrackHistoGroup("extraValidTracks1", 4, 2);
         histoGroupExtraValidTracks1.addTrackHistos(1, 0);
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1", "chi2/ndf vs ratio of normal hits for extra valid tracks1", 30, 0, 1.05, 30, 0, 100);
+        h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleX("ratio of normal hits");
+        h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleY("chi2/ndf");
+        histoGroupExtraValidTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1, 7);         
         histoGroupMap.put(histoGroupExtraValidTracks1.getName(), histoGroupExtraValidTracks1);
         
         TrackHistoGroup histoGroupExtraValidTracks2 = new TrackHistoGroup("extraValidTracks2", 4, 2);
-        histoGroupExtraValidTracks2.addTrackHistos(1, 0);  
+        histoGroupExtraValidTracks2.addTrackHistos(1, 0);
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2", "chi2/ndf vs ratio of normal hits for extra valid tracks2", 30, 0, 1.05, 30, 0, 100);
+        h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleX("ratio of normal hits");
+        h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleY("chi2/ndf");
+        histoGroupExtraValidTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2, 7); 
         histoGroupMap.put(histoGroupExtraValidTracks2.getName(), histoGroupExtraValidTracks2);
         
         
@@ -257,6 +269,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraTracks1.getHistoVx().fill(trk1.vx());
                 histoGroupExtraTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraTracks1.getHistoVz().fill(trk1.vz());
+                
+                if (Constants.MC) histoGroupExtraTracks1.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks1").fill(trk1.getRatioNormalHits(), trk1.chi2() / trk1.NDF());
             }
         }
         
@@ -277,7 +291,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraTracks2.getHistoVz().fill(trk2.vz()); 
                 
-                histoGroupExtraTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF());
+                if (Constants.MC) histoGroupExtraTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF());
             }
         }
         
@@ -380,6 +394,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks1.getHistoVx().fill(trk1.vx());
                 histoGroupExtraValidTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraValidTracks1.getHistoVz().fill(trk1.vz());
+                
+                histoGroupExtraValidTracks1.getH2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1").fill(trk1.getRatioNormalHits(), trk1.chi2() / trk1.NDF());
 
                 if (trk1.getRatioNormalHits() > 0.9){
                     this.addDemoGroup(localEvent1, localEvent2, trk1.sector(), "SP1");
@@ -394,6 +410,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraValidTracks2.getHistoVx().fill(trk2.vx());
                 histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
+                
+                histoGroupExtraValidTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF());
                 
                 if (trk2.getRatioNormalHits() > 0.9) {
                     this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "SP2");
