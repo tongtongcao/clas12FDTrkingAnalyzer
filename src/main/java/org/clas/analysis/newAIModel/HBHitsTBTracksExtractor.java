@@ -35,6 +35,7 @@ import org.jlab.geom.prim.Point3D;
 
 public class HBHitsTBTracksExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
+    private static final double CHI2OVERNDFCUT = 10;
        
     public static void main(String[] args) throws IOException {
         Constants.initGeometry();
@@ -82,13 +83,13 @@ public class HBHitsTBTracksExtractor{
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trkTB : localEvent.getTracksTB()){  
-                        if(trkTB.isValid(true)){  
+                        if(trkTB.chi2()/trkTB.NDF() < CHI2OVERNDFCUT){  
                             for(Track trkHB : localEvent.getTracksHB()){
                                 if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters() && Math.abs(trkHB.getNumHits() - trkTB.getNumHits()) <= 3){
                                     int numHits = trkHB.getHits().size();
                                     for(int i = 0; i < numHits; i++){
                                         Hit hitHB = trkHB.getHits().get(i);
-                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), hitHB.docaErr(), 
+                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), 
                                                 Constants.xo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 Constants.yo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 Constants.xe[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
@@ -103,8 +104,8 @@ public class HBHitsTBTracksExtractor{
                                     Point3D preC1Dir = trkTB.getPreC1Dir();                                    
                                     double[] preC1DirSpherical = CommonFunctions.toSpherical(preC1Dir); 
                                     
-                                    String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", (float)trkTB.charge(), 
-                                            trkTB.p()*preC1Dir.x(), trkTB.p()*preC1Dir.y(), trkTB.p()*preC1Dir.z(), preC1Pos.x(), preC1Pos.y());
+                                    String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", 
+                                             preC1Pos.x(), preC1Pos.y(), preC1Dir.x()/preC1Dir.z(), preC1Dir.y()/preC1Dir.z(), (float)trkTB.charge()/trkTB.p());
                                     writer.write(trackParameters + "\n");
                                     
                                     counter++;
