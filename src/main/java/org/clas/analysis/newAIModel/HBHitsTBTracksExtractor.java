@@ -35,7 +35,6 @@ import org.jlab.geom.prim.Point3D;
 
 public class HBHitsTBTracksExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
-    private static final double CHI2OVERNDFCUT = 8;
        
     public static void main(String[] args) throws IOException {
         Constants.initGeometry();
@@ -83,7 +82,7 @@ public class HBHitsTBTracksExtractor{
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trkTB : localEvent.getTracksTB()){  
-                        if(trkTB.chi2()/trkTB.NDF() < CHI2OVERNDFCUT){  
+                        if(trkTB.isValid(true)){  
                             for(Track trkHB : localEvent.getTracksHB()){
                                 if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters() && Math.abs(trkHB.getNumHits() - trkTB.getNumHits()) <= 3){
                                     int numHits = trkHB.getHits().size();
