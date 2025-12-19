@@ -88,10 +88,9 @@ public class Constants {
     public static final int N_LAYERS = 6;
     public static final int N_WIRES = 112;
 
-    public static double[][][][] xo = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
-    public static double[][][][] yo = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
-    public static double[][][][] xe = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
-    public static double[][][][] ye = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] xm = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] xr = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
+    public static double[][][][] yr = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
     public static double[][][][] z  = new double[N_SECTORS][N_SUPERLAYERS][N_LAYERS][N_WIRES];
     
     
@@ -123,7 +122,7 @@ public class Constants {
     
 
     /**
-     * Load DC geometry from a CSV-like text file (sector,superlayer,layer,wire,xo,yo,xe,ye,z)
+     * Load DC geometry from a CSV-like text file (sector,superlayer,layer,wire,xm,xR,yR,z)
      */
     public static void loadGeometry(InputStream geoStream) throws IOException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(geoStream))) {
@@ -133,18 +132,17 @@ public class Constants {
                 if (line.isEmpty() || line.startsWith("#")) continue;
                 
                 String[] parts = line.split(",");
-                if (parts.length < 9) continue;
+                if (parts.length < 8) continue;
 
                 int sector = Integer.parseInt(parts[0]) - 1;
                 int superlayer = Integer.parseInt(parts[1]) - 1;
                 int layer = Integer.parseInt(parts[2]) - 1;
                 int wire = Integer.parseInt(parts[3]) - 1;
 
-                xo[sector][superlayer][layer][wire] = Double.parseDouble(parts[4]);
-                yo[sector][superlayer][layer][wire] = Double.parseDouble(parts[5]);
-                xe[sector][superlayer][layer][wire] = Double.parseDouble(parts[6]);
-                ye[sector][superlayer][layer][wire] = Double.parseDouble(parts[7]);
-                z [sector][superlayer][layer][wire] = Double.parseDouble(parts[8]);
+                xm[sector][superlayer][layer][wire] = Double.parseDouble(parts[4]);
+                xr[sector][superlayer][layer][wire] = Double.parseDouble(parts[5]);
+                yr[sector][superlayer][layer][wire] = Double.parseDouble(parts[6]);
+                z [sector][superlayer][layer][wire] = Double.parseDouble(parts[7]);
             }
         }
         System.out.println("[Constants] DC geometry loaded successfully.");

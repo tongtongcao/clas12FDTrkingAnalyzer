@@ -35,7 +35,7 @@ import org.jlab.geom.prim.Point3D;
 
 public class HBHitsTBTracksExtractor{   
     private static final Logger LOGGER = Logger.getLogger(Reader.class.getName()); 
-    private static final double CHI2OVERNDFCUT = 10;
+    private static final double CHI2OVERNDFCUT = 8;
        
     public static void main(String[] args) throws IOException {
         Constants.initGeometry();
@@ -44,7 +44,7 @@ public class HBHitsTBTracksExtractor{
         parser.setRequiresInputList(false);
         // valid options for event-base analysis
         parser.addOption("-o", "", "output file name prefix");
-        parser.addOption("-n", "10000000", "maximum output entries");
+        parser.addOption("-n", "1000000", "maximum output entries");
         parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
         
         parser.parse(args);
@@ -89,11 +89,10 @@ public class HBHitsTBTracksExtractor{
                                     int numHits = trkHB.getHits().size();
                                     for(int i = 0; i < numHits; i++){
                                         Hit hitHB = trkHB.getHits().get(i);
-                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), 
-                                                Constants.xo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
-                                                Constants.yo[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
-                                                Constants.xe[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
-                                                Constants.ye[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), 
+                                                Constants.xm[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                Constants.xr[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
+                                                Constants.yr[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 hitHB.z());
                                         if(i < numHits -1) writer.write(docaz + ",");
                                         else writer.write(docaz);
