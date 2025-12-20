@@ -44,7 +44,7 @@ public class HBHitsTBTracksExtractor{
         // valid options for event-base analysis
         parser.addOption("-o", "", "output file name prefix");
         parser.addOption("-n", "1000000", "maximum output entries");
-        parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
+        parser.addOption("-trkType"    ,"22",   "tracking type: ConvTB(12), AITB(22)");
         
         parser.parse(args);
 
