@@ -23,6 +23,7 @@ import org.clas.graph.HistoGroup;
 import org.clas.physicsEvent.BasePhysicsEvent;
 import org.clas.physicsEvent.EventForLumiScan;
 import org.clas.analysis.BaseAnalysis;
+import org.clas.graph.TrackHistoGroup;
 import org.clas.reader.Banks;
 
 /**
@@ -71,6 +72,10 @@ public class CompareHBTBTracks extends BaseAnalysis{
         histoGroupKinematicsComp.addDataSet(h1_p_noMatchedHB, 5);
         
         histoGroupMap.put(histoGroupKinematicsComp.getName(), histoGroupKinematicsComp);
+        
+        TrackHistoGroup histoGroupDiff = new TrackHistoGroup("diff", 3, 2);
+        histoGroupDiff.addTrackDiffHistos(1, -1);
+        histoGroupMap.put(histoGroupDiff.getName(), histoGroupDiff);
   
     }
              
@@ -79,6 +84,7 @@ public class CompareHBTBTracks extends BaseAnalysis{
         List<Track> tracksTB = reader.readTracks(event, trkType);
         
         HistoGroup histoGroupKinematicsComp = histoGroupMap.get("kinematicsComp");
+        TrackHistoGroup histoGroupDiff = (TrackHistoGroup) histoGroupMap.get("diff");
         boolean flag = false;
         for(Track trkHB : tracksHB){
            for(Track trkTB : tracksTB){ 
@@ -88,6 +94,17 @@ public class CompareHBTBTracks extends BaseAnalysis{
                    histoGroupKinematicsComp.getH2F("z_comp").fill(trkHB.vz(), trkTB.vz());
                    histoGroupKinematicsComp.getH2F("p_comp").fill(trkHB.p(), trkTB.p());
                    flag = true;
+                   
+                   if(trkTB.isValid()){
+                        histoGroupDiff.getHistoChi2overndfDiff().fill(trkTB.chi2()/trkTB.NDF() - trkHB.chi2()/trkHB.NDF());
+                        histoGroupDiff.getHistoPDiff().fill(trkTB.p() - trkHB.p());
+                        histoGroupDiff.getHistoThetaDiff().fill(trkTB.theta() - trkHB.theta());
+                        histoGroupDiff.getHistoPhiDiff().fill(trkTB.phi() - trkHB.phi());
+                        histoGroupDiff.getHistoVxDiff().fill(trkTB.vx() - trkHB.vx());
+                        histoGroupDiff.getHistoVyDiff().fill(trkTB.vy() - trkHB.vy());
+                        histoGroupDiff.getHistoVzDiff().fill(trkTB.vz() - trkHB.vz());
+                   }                   
+                   
                    break;
                }
            }
@@ -97,8 +114,7 @@ public class CompareHBTBTracks extends BaseAnalysis{
                histoGroupKinematicsComp.getH1F("p_noMatchedHB").fill(trkHB.p());
            }
      
-        }
-               
+        }           
         
     }
                         
