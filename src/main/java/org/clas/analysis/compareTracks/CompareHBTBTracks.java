@@ -25,6 +25,8 @@ import org.clas.physicsEvent.EventForLumiScan;
 import org.clas.analysis.BaseAnalysis;
 import org.clas.graph.TrackHistoGroup;
 import org.clas.reader.Banks;
+import org.clas.utilities.CommonFunctions;
+import org.jlab.geom.prim.Point3D;
 
 /**
  *
@@ -73,10 +75,14 @@ public class CompareHBTBTracks extends BaseAnalysis{
         
         histoGroupMap.put(histoGroupKinematicsComp.getName(), histoGroupKinematicsComp);
         
-        TrackHistoGroup histoGroupDiff = new TrackHistoGroup("diff", 3, 2);
-        histoGroupDiff.addTrackDiffHistos(1, -1);
+        TrackHistoGroup histoGroupDiff = new TrackHistoGroup("diff", 4, 2);
+        histoGroupDiff.addTrackDiffHistos(1, 0);
         histoGroupMap.put(histoGroupDiff.getName(), histoGroupDiff);
   
+        TrackHistoGroup histoGroupDiffLocal = new TrackHistoGroup("diffLocal", 3, 2);
+        histoGroupDiffLocal.addTrackDiffHistos(1, -1);
+        histoGroupMap.put(histoGroupDiffLocal.getName(), histoGroupDiffLocal);
+        
     }
              
     public void processEvent(Event event, int trkType){        
@@ -85,6 +91,7 @@ public class CompareHBTBTracks extends BaseAnalysis{
         
         HistoGroup histoGroupKinematicsComp = histoGroupMap.get("kinematicsComp");
         TrackHistoGroup histoGroupDiff = (TrackHistoGroup) histoGroupMap.get("diff");
+        TrackHistoGroup histoGroupDiffLocal = (TrackHistoGroup) histoGroupMap.get("diffLocal");
         boolean flag = false;
         for(Track trkHB : tracksHB){
            for(Track trkTB : tracksTB){ 
@@ -103,6 +110,21 @@ public class CompareHBTBTracks extends BaseAnalysis{
                         histoGroupDiff.getHistoVxDiff().fill(trkTB.vx() - trkHB.vx());
                         histoGroupDiff.getHistoVyDiff().fill(trkTB.vy() - trkHB.vy());
                         histoGroupDiff.getHistoVzDiff().fill(trkTB.vz() - trkHB.vz());
+                        
+                        Point3D momLocalTB = CommonFunctions.getCoordsInLocal(trkTB.px(), trkTB.py(), trkTB.pz(), trkTB.sector());
+                        Point3D vtxLocalTB = CommonFunctions.getCoordsInLocal(trkTB.vx(), trkTB.vy(), trkTB.vz(), trkTB.sector());            
+                        Point3D momLocalHB = CommonFunctions.getCoordsInLocal(trkHB.px(), trkHB.py(), trkHB.pz(), trkHB.sector());
+                        Point3D vtxLocalHB = CommonFunctions.getCoordsInLocal(trkHB.vx(), trkHB.vy(), trkHB.vz(), trkHB.sector());
+
+                        double[] momLocalTBSpherical = CommonFunctions.toSpherical(momLocalTB);
+                        double[] momLocalHBSpherical = CommonFunctions.toSpherical(momLocalHB);
+
+                        histoGroupDiffLocal.getHistoPDiff().fill(momLocalTBSpherical[0] - momLocalHBSpherical[0]);
+                        histoGroupDiffLocal.getHistoThetaDiff().fill(momLocalTBSpherical[1] - momLocalHBSpherical[1]);
+                        histoGroupDiffLocal.getHistoPhiDiff().fill(momLocalTBSpherical[2] - momLocalHBSpherical[2]);
+                        histoGroupDiffLocal.getHistoVxDiff().fill(vtxLocalTB.x() - vtxLocalHB.x());
+                        histoGroupDiffLocal.getHistoVyDiff().fill(vtxLocalTB.y() - vtxLocalHB.y());
+                        histoGroupDiffLocal.getHistoVzDiff().fill(vtxLocalTB.z() - vtxLocalHB.z());                                                
                    }                   
                    
                    break;

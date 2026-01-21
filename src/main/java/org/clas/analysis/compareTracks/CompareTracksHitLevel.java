@@ -35,6 +35,8 @@ import org.clas.analysis.BaseAnalysis;
 import org.clas.element.MCParticle;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
+import org.jlab.geom.prim.Point3D;
+import org.clas.utilities.CommonFunctions;
 
 /**
  *
@@ -82,6 +84,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         TrackHistoGroup histoGroupDiffTracksWithSharedHits = new TrackHistoGroup("diffTracksWithSharedHits", 4, 2);
         histoGroupDiffTracksWithSharedHits.addTrackDiffHistos(1, 0);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHits.getName(), histoGroupDiffTracksWithSharedHits);
+        
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsLocal = new TrackHistoGroup("diffTracksWithSharedHitsLocal", 3, 2);
+        histoGroupDiffTracksWithSharedHitsLocal.addTrackDiffHistos(1, -1);
+        histoGroupMap.put(histoGroupDiffTracksWithSharedHitsLocal.getName(), histoGroupDiffTracksWithSharedHitsLocal);
         
         TrackHistoGroup histoGroupExtraTracks1 = new TrackHistoGroup("extraTracks1", 4, 2);
         histoGroupExtraTracks1.addTrackHistos(1, 0);
@@ -139,6 +145,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = new TrackHistoGroup("diffTracksWithSharedHitsValidTracks", 4, 2);
         histoGroupDiffTracksWithSharedHitsValidTracks.addTrackDiffHistos(1, 0);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHitsValidTracks.getName(), histoGroupDiffTracksWithSharedHitsValidTracks);
+        
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracksLocal = new TrackHistoGroup("diffTracksWithSharedHitsValidTracksLocal", 3, 2);
+        histoGroupDiffTracksWithSharedHitsValidTracksLocal.addTrackDiffHistos(1, -1);
+        histoGroupMap.put(histoGroupDiffTracksWithSharedHitsValidTracksLocal.getName(), histoGroupDiffTracksWithSharedHitsValidTracksLocal);
         
         TrackHistoGroup histoGroupExtraValidTracks1 = new TrackHistoGroup("extraValidTracks1", 4, 2);
         histoGroupExtraValidTracks1.addTrackHistos(1, 0);
@@ -224,6 +234,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         
         HistoGroup histoGroupMatchingOverview = histoGroupMap.get("matchingOverview");
         TrackHistoGroup histoGroupDiffTracksWithSharedHits = (TrackHistoGroup) histoGroupMap.get("diffTracksWithSharedHits");
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsLocal = (TrackHistoGroup) histoGroupMap.get("diffTracksWithSharedHitsLocal");
         HistoGroup histoGroupValidCutParameterCompTracksWithSharedHits = histoGroupMap.get("validCutParameterCompTracksWithSharedHits");
         for (Track trk1 : map_track1_track2.keySet()) {
             Track trk2 = map_track1_track2.get(trk1);
@@ -235,7 +246,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             
             if(trk1.getRatioNormalHits() > 0.85 && trk2.getRatioNormalHits() > 0.85){
                 goodTracks++;
-            }
+            }            
 
             histoGroupDiffTracksWithSharedHits.getHistoChi2overndfDiff().fill(trk1.chi2()/trk1.NDF() - trk2.chi2()/trk2.NDF());
             histoGroupDiffTracksWithSharedHits.getHistoPDiff().fill(trk1.p() - trk2.p());
@@ -249,6 +260,21 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             histoGroupValidCutParameterCompTracksWithSharedHits.getH2F("zCompTracksWithSharedHits").fill(trk1.vz(), trk2.vz());
             histoGroupValidCutParameterCompTracksWithSharedHits.getH2F("pCompTracksWithSharedHits").fill(trk1.p(), trk2.p());
             histoGroupValidCutParameterCompTracksWithSharedHits.getH2F("chi2pidCompTracksWithSharedHits").fill(trk1.chi2pid(), trk2.chi2pid());
+            
+            Point3D momLocalTrk1 = CommonFunctions.getCoordsInLocal(trk1.px(), trk1.py(), trk1.pz(), trk1.sector());
+            Point3D vtxLocalTrk1 = CommonFunctions.getCoordsInLocal(trk1.vx(), trk1.vy(), trk1.vz(), trk1.sector());            
+            Point3D momLocalTrk2 = CommonFunctions.getCoordsInLocal(trk2.px(), trk2.py(), trk2.pz(), trk2.sector());
+            Point3D vtxLocalTrk2 = CommonFunctions.getCoordsInLocal(trk2.vx(), trk2.vy(), trk2.vz(), trk2.sector());
+            
+            double[] momLocalTrk1Spherical = CommonFunctions.toSpherical(momLocalTrk1);
+            double[] momLocalTrk2Spherical = CommonFunctions.toSpherical(momLocalTrk2);
+            
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoPDiff().fill(momLocalTrk1Spherical[0] - momLocalTrk2Spherical[0]);
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoThetaDiff().fill(momLocalTrk1Spherical[1] - momLocalTrk2Spherical[1]);
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoPhiDiff().fill(momLocalTrk1Spherical[2] - momLocalTrk2Spherical[2]);
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoVxDiff().fill(vtxLocalTrk1.x() - vtxLocalTrk2.x());
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoVyDiff().fill(vtxLocalTrk1.y() - vtxLocalTrk2.y());
+            histoGroupDiffTracksWithSharedHitsLocal.getHistoVzDiff().fill(vtxLocalTrk1.z() - vtxLocalTrk2.z());
         }
 
         TrackHistoGroup histoGroupExtraTracks1 = (TrackHistoGroup) histoGroupMap.get("extraTracks1");
@@ -345,7 +371,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         matchedValidTracks += map_validTrack1_validTrack2.keySet().size();
 
         HistoGroup histoGroupMatchingOverviewValidTracks = histoGroupMap.get("matchingOverviewValidTracks");
-        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = (TrackHistoGroup) histoGroupMap.get("diffTracksWithSharedHitsValidTracks");        
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = (TrackHistoGroup) histoGroupMap.get("diffTracksWithSharedHitsValidTracks");    
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracksLocal = (TrackHistoGroup) histoGroupMap.get("diffTracksWithSharedHitsValidTracksLocal");    
         for (Track trk1 : map_validTrack1_validTrack2.keySet()) {
             Track trk2 = map_validTrack1_validTrack2.get(trk1);
             int numMatchedHits = trk1.matchedHits(trk2);
@@ -361,6 +388,21 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoVxDiff().fill(trk1.vx() - trk2.vx());
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoVyDiff().fill(trk1.vy() - trk2.vy());
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoVzDiff().fill(trk1.vz() - trk2.vz());
+            
+            Point3D momLocalTrk1 = CommonFunctions.getCoordsInLocal(trk1.px(), trk1.py(), trk1.pz(), trk1.sector());
+            Point3D vtxLocalTrk1 = CommonFunctions.getCoordsInLocal(trk1.vx(), trk1.vy(), trk1.vz(), trk1.sector());            
+            Point3D momLocalTrk2 = CommonFunctions.getCoordsInLocal(trk2.px(), trk2.py(), trk2.pz(), trk2.sector());
+            Point3D vtxLocalTrk2 = CommonFunctions.getCoordsInLocal(trk2.vx(), trk2.vy(), trk2.vz(), trk2.sector());
+            
+            double[] momLocalTrk1Spherical = CommonFunctions.toSpherical(momLocalTrk1);
+            double[] momLocalTrk2Spherical = CommonFunctions.toSpherical(momLocalTrk2);
+            
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoPDiff().fill(momLocalTrk1Spherical[0] - momLocalTrk2Spherical[0]);
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoThetaDiff().fill(momLocalTrk1Spherical[1] - momLocalTrk2Spherical[1]);
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoPhiDiff().fill(momLocalTrk1Spherical[2] - momLocalTrk2Spherical[2]);
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoVxDiff().fill(vtxLocalTrk1.x() - vtxLocalTrk2.x());
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoVyDiff().fill(vtxLocalTrk1.y() - vtxLocalTrk2.y());
+            histoGroupDiffTracksWithSharedHitsValidTracksLocal.getHistoVzDiff().fill(vtxLocalTrk1.z() - vtxLocalTrk2.z());            
         }
 
         List<Track> trkList_validExtraSample1 = new ArrayList();

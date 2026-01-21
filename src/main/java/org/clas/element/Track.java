@@ -10,6 +10,7 @@ import org.jlab.detector.base.DetectorType;
 import org.jlab.geom.prim.Point3D;
 
 import org.clas.utilities.Constants;
+import org.clas.utilities.CommonFunctions;
 
 /**
  *
@@ -823,7 +824,7 @@ public class Track implements Comparable<Track> {
     
     public void setURWellProjectionR1(double xGlobal, double yGlobal, double zGlobal){
         uRWellProjectionGlobalR1 = new Point3D(xGlobal, yGlobal, zGlobal);
-        uRWellProjectionLocalR1 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR1 = CommonFunctions.getCoordsInLocal(xGlobal, yGlobal, zGlobal, trackSector);
     }
     
     public Point3D getURWellProjectionGlobalR1(){
@@ -836,7 +837,7 @@ public class Track implements Comparable<Track> {
     
     public void setURWellProjectionR2(double xGlobal, double yGlobal, double zGlobal){
         uRWellProjectionGlobalR2 = new Point3D(xGlobal, yGlobal, zGlobal);
-        uRWellProjectionLocalR2 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR2 = CommonFunctions.getCoordsInLocal(xGlobal, yGlobal, zGlobal, trackSector);
     }
     
     public Point3D getURWellProjectionGlobalR2(){
@@ -846,27 +847,7 @@ public class Track implements Comparable<Track> {
     public Point3D getURWellProjectionLocalR2(){
         return uRWellProjectionLocalR2;
     }    
-    
-
-    /**
-     *
-     * @param X
-     * @param Y
-     * @param Z
-     * @return rotated coords from tilted sector coordinate system to the lab
-     * frame
-     */
-    public Point3D getCoordsInLocal(double X, double Y, double Z) {
-                        
-        double rx = X * Constants.COSSECTOR60[this.sector() - 1] + Y * Constants.SINSECTOR60[this.sector() - 1];
-        double ry = -X * Constants.SINSECTOR60[this.sector() - 1] + Y * Constants.COSSECTOR60[this.sector() - 1];
         
-        double rrz = rx * Constants.SIN25 + Z * Constants.COS25;
-        double rrx = rx * Constants.COS25 - Z * Constants.SIN25;
-        
-        return new Point3D(rrx, ry, rrz);
-    }
-    
     public int numMatchedClusters(Track otherTrk){
         if(this.getClusters() == null || otherTrk.getClusters() == null) return -999;
         int matchedClusters = 0;

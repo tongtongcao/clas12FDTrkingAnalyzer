@@ -1,6 +1,7 @@
 package org.clas.utilities;
 
 import org.jlab.geom.prim.Point3D;
+import org.clas.utilities.CommonFunctions;
 
 /**
  *
