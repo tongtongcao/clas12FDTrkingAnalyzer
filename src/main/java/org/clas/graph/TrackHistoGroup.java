@@ -57,32 +57,51 @@ public class TrackHistoGroup extends HistoGroup{
         addTrackHistos("", color, startOrder);      
     }
     
-    public void addTrackHistos(String postflix, int color, int startOrder){        
-        H1F h1_chi2overndf= new H1F("chi2overndf"+postflix, "#Chi^2/ndf", 100, 0, 100);
+    public void addTrackHistos(int color, int startOrder, boolean isValid){ 
+        addTrackHistos("", color, startOrder, isValid);      
+    }    
+    
+    public void addTrackHistos(String postflix, int color, int startOrder){
+        addTrackHistos(postflix, color, startOrder, false);
+    }
+    
+    public void addTrackHistos(String postflix, int color, int startOrder, boolean isValid){ 
+        double ranges[][] = {{0, 100}, {0, 12}, {0, Math.PI*50./180.}, {-Math.PI, Math.PI}, {-50, 50}, {-50, 50}, {-50, 50}};
+        if(isValid){
+            ranges[0][1] = 50;
+            ranges[4][0] = -10;
+            ranges[4][1] = 10;
+            ranges[5][0] = -10;
+            ranges[5][1] = 10;
+            ranges[6][0] = -15;
+            ranges[6][1] = 5;            
+        }
+        
+        H1F h1_chi2overndf= new H1F("chi2overndf"+postflix, "#Chi^2/ndf", 100, ranges[0][0], ranges[0][1]);
         h1_chi2overndf.setTitleX("#Chi^2/ndf");
         h1_chi2overndf.setTitleY("Counts");
         h1_chi2overndf.setLineColor(color);                
-        H1F h1_p = new H1F("p"+postflix, "p", 100, 0, 12);
+        H1F h1_p = new H1F("p"+postflix, "p", 100, ranges[1][0], ranges[1][1]);
         h1_p.setTitleX("p (GeV/c)");
         h1_p.setTitleY("Counts");
         h1_p.setLineColor(color);
-        H1F h1_theta = new H1F("theta"+postflix, "#theta", 100, 0, 1);
+        H1F h1_theta = new H1F("theta"+postflix, "#theta", 100, ranges[2][0], ranges[2][1]);
         h1_theta.setTitleX("#theta (rad)");
         h1_theta.setTitleY("Counts");
         h1_theta.setLineColor(color);
-        H1F h1_phi = new H1F("phi"+postflix, "#phi", 100, -Math.PI, Math.PI);
+        H1F h1_phi = new H1F("phi"+postflix, "#phi", 100, ranges[3][0], ranges[3][1]);
         h1_phi.setTitleX("#phi (rad)");
         h1_phi.setTitleY("Counts");
         h1_phi.setLineColor(color);
-        H1F h1_vx = new H1F("vx"+postflix, "vx", 100, -50, 50);
+        H1F h1_vx = new H1F("vx"+postflix, "vx", 100, ranges[4][0], ranges[4][1]);
         h1_vx.setTitleX("vx (cm)");
         h1_vx.setTitleY("Counts");
         h1_vx.setLineColor(color);        
-        H1F h1_vy = new H1F("vy"+postflix, "vy", 100, -50, 50);
+        H1F h1_vy = new H1F("vy"+postflix, "vy", 100, ranges[5][0], ranges[5][1]);
         h1_vy.setTitleX("vy (cm)");
         h1_vy.setTitleY("Counts");
         h1_vy.setLineColor(color);                
-        H1F h1_vz = new H1F("vz"+postflix, "vz", 100, -50, 50);
+        H1F h1_vz = new H1F("vz"+postflix, "vz", 100, ranges[6][0], ranges[6][1]);
         h1_vz.setTitleX("vz (cm)");
         h1_vz.setTitleY("Counts");
         h1_vz.setLineColor(color);   
