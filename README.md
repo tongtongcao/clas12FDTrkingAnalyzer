@@ -1,9 +1,9 @@
 The package builds a platform for analysis of forward tracking.
 
-Installation: mvn clean install
+Installation: mvn clean install (Java 21 as default)
 
 Plenty of tools have been developed base on the platform.
-Commands for the tools are in bin folder.
+Commands for the tools are in the bin folder.
 
 An example for usage of a tool:
 
