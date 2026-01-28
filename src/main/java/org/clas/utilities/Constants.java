@@ -67,9 +67,14 @@ public class Constants {
     public static final int AIHB = 21;
     public static final int AITB = 22;
     
-    // Order for normal hits
+    // Orders for normal hits
     public static final int[] NORMALHITORDERS = {0, 20, 40, 50, 60};
-    public static final int[] FilterdHITORDERS = {0, 10, 40, 70};
+    
+    // Acceptable orders after decoding
+    public static final int[] DECODINGHITORDERS = {0, 10};
+    
+    // Acceptable orders after denoising
+    public static final int[] DENOISINGHITORDERS = {0, 10, 40, 70};
     
     // CalCulate uRWell crosses in LC
     public static double URWELLZTSC[] = {226.0464, 227.3464}; // cm

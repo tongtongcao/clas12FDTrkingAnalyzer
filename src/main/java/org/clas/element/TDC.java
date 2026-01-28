@@ -82,8 +82,15 @@ public class TDC {
         return false;
     }
     
+    public boolean isRemainedAfterDecoding(){
+        for(int accptedOrder : Constants.DECODINGHITORDERS){
+            if(order == accptedOrder) return true;
+        }
+        return false;
+    }    
+    
     public boolean isRemainedAfterAIDenoising(){
-        for(int accptedOrder : Constants.FilterdHITORDERS){
+        for(int accptedOrder : Constants.DENOISINGHITORDERS){
             if(order == accptedOrder) return true;
         }
         return false;

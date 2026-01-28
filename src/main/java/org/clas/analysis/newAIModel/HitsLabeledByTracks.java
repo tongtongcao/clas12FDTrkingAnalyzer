@@ -107,7 +107,7 @@ public class HitsLabeledByTracks {
                     int superlayer = tdc.superlayer();
                     int layer = tdc.layer();
                     int wire = tdc.component();                            
-                    tdcs[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
+                    if(tdc.isRemainedAfterDecoding()) tdcs[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
                 }
                 for(Hit hit : localEvent.getHitsTB()){
                     int sector = hit.sector();
