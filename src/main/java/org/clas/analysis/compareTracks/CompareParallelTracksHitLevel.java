@@ -153,29 +153,44 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         
         TrackHistoGroup histoGroupExtraValidTracks1 = new TrackHistoGroup("extraValidTracks1", 4, 3);
         histoGroupExtraValidTracks1.addTrackHistos(1, 0, true);
-        H2F h2_thetaVsPExtraValidTracks1 = new H2F("thetaVsPExtraValidTracks1", "#theta vs p for extra valid tracks2", 100, 0, 12, 100, 0, Math.PI*50./180.);
+        H2F h2_thetaVsPExtraValidTracks1 = new H2F("thetaVsPExtraValidTracks1", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
         h2_thetaVsPExtraValidTracks1.setTitleX("p (GeV/c)");
         h2_thetaVsPExtraValidTracks1.setTitleY("#theta (rad)");
-        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPExtraValidTracks1, 7);         
-        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1", "chi2/ndf vs ratio of normal hits for extra valid tracks1", 30, 0, 1.05, 30, 0, 100);
+        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPExtraValidTracks1, 7);     
+        H2F h2_phiVsPExtraValidTracks1 = new H2F("phiVsPExtraValidTracks1", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
+        h2_phiVsPExtraValidTracks1.setTitleX("p (GeV/c)");
+        h2_phiVsPExtraValidTracks1.setTitleY("#phi (rad)");
+        histoGroupExtraValidTracks1.addDataSet(h2_phiVsPExtraValidTracks1, 8);          
+        H2F h2_thetaVsPhiExtraValidTracks1 = new H2F("thetaVsPhiExtraValidTracks1", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPhiExtraValidTracks1.setTitleX("#phi (rad)");
+        h2_thetaVsPhiExtraValidTracks1.setTitleY("#theta (rad)");
+        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPhiExtraValidTracks1, 9);         
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1", "chi2/ndf vs ratio of normal hits", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleY("chi2/ndf");
-        histoGroupExtraValidTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1, 8);         
+        histoGroupExtraValidTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1, 10);         
         histoGroupMap.put(histoGroupExtraValidTracks1.getName(), histoGroupExtraValidTracks1);
         
         TrackHistoGroup histoGroupExtraValidTracks2 = new TrackHistoGroup("extraValidTracks2", 4, 3);
-        H2F h2_thetaVsPExtraValidTracks2 = new H2F("thetaVsPExtraValidTracks2", "#theta vs p for extra valid tracks2", 100, 0, 12, 100, 0, Math.PI*50./180.);
+        histoGroupExtraValidTracks2.addTrackHistos(1, 0, true);
+        H2F h2_thetaVsPExtraValidTracks2 = new H2F("thetaVsPExtraValidTracks2", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
         h2_thetaVsPExtraValidTracks2.setTitleX("p (GeV/c)");
         h2_thetaVsPExtraValidTracks2.setTitleY("#theta (rad)");
         histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPExtraValidTracks2, 7); 
-        histoGroupExtraValidTracks2.addTrackHistos(1, 0, true);
-        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2", "chi2/ndf vs ratio of normal hits for extra valid tracks2", 30, 0, 1.05, 30, 0, 100);
+        H2F h2_phiVsPExtraValidTracks2 = new H2F("phiVsPExtraValidTracks2", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
+        h2_phiVsPExtraValidTracks2.setTitleX("p (GeV/c)");
+        h2_phiVsPExtraValidTracks2.setTitleY("#phi (rad)");
+        histoGroupExtraValidTracks2.addDataSet(h2_phiVsPExtraValidTracks2, 8);          
+        H2F h2_thetaVsPhiExtraValidTracks2 = new H2F("thetaVsPhiExtraValidTracks2", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPhiExtraValidTracks2.setTitleX("#phi (rad)");
+        h2_thetaVsPhiExtraValidTracks2.setTitleY("#theta (rad)");
+        histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPhiExtraValidTracks2, 9); 
+        H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2", "chi2/ndf vs ratio of normal hits", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleY("chi2/ndf");
-        histoGroupExtraValidTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2, 8);                 
+        histoGroupExtraValidTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2, 10);                 
         histoGroupMap.put(histoGroupExtraValidTracks2.getName(), histoGroupExtraValidTracks2);
-        
-        
+                
         // Ratio of normal hits for tracks
         HistoGroup histoGroupRatioNormalHitsTracks = new HistoGroup("ratioNormalHitsTracks", 2, 2);
         H1F h1_ratioNormalHitsTracks1 = new H1F("ratioNormalHitsTracks1", "ratio of norma hits for tracks in sp1", 101, 0, 1.01);
@@ -438,6 +453,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
             histoGroupExtraValidTracks1.getHistoVy().fill(trk1.vy());
             histoGroupExtraValidTracks1.getHistoVz().fill(trk1.vz());
             histoGroupExtraValidTracks1.getH2F("thetaVsPExtraValidTracks1").fill(trk1.p(), trk1.theta()); 
+            histoGroupExtraValidTracks1.getH2F("phiVsPExtraValidTracks1").fill(trk1.p(), trk1.phi());
+            histoGroupExtraValidTracks1.getH2F("thetaVsPhiExtraValidTracks1").fill(trk1.phi(), trk1.theta());
 
             if (Constants.MC) {
                histoGroupExtraValidTracks1.getH2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1").fill(trk1.getRatioNormalHits(), trk1.chi2() / trk1.NDF()); 
@@ -457,7 +474,9 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
             histoGroupExtraValidTracks2.getHistoVx().fill(trk2.vx());
             histoGroupExtraValidTracks2.getHistoVy().fill(trk2.vy());
             histoGroupExtraValidTracks2.getHistoVz().fill(trk2.vz());
-            histoGroupExtraValidTracks2.getH2F("thetaVsPExtraValidTracks2").fill(trk2.p(), trk2.theta());    
+            histoGroupExtraValidTracks2.getH2F("thetaVsPExtraValidTracks2").fill(trk2.p(), trk2.theta());  
+            histoGroupExtraValidTracks2.getH2F("phiVsPExtraValidTracks2").fill(trk2.p(), trk2.phi());
+            histoGroupExtraValidTracks2.getH2F("thetaVsPhiExtraValidTracks2").fill(trk2.phi(), trk2.theta());            
 
             if (Constants.MC) {
                histoGroupExtraValidTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF()); 

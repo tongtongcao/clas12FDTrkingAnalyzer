@@ -303,19 +303,20 @@ public class Reader {
             clusterBank = banks.getTrackingClusterBank(type);           
         }
         
-
-        Bank uRWellDCClusterBank = banks.getURWellDCClusterBank();
         Map<Integer, List<Integer>> map_clsId_uRWellCrossIds = new HashMap();
-        if(uRWellDCClusterBank != null){
-            event.read(uRWellDCClusterBank);            
-            for(int loop = 0; loop < uRWellDCClusterBank.getRows(); loop++){
-                int clsId = uRWellDCClusterBank.getInt("id", loop);
-                int uRWellCross1Id = uRWellDCClusterBank.getInt("URWell_Cross1_ID", loop);
-                int uRWellCross2Id = uRWellDCClusterBank.getInt("URWell_Cross2_ID", loop);
-                List<Integer> uRWellCrossIds = new ArrayList();
-                uRWellCrossIds.add(uRWellCross1Id);
-                uRWellCrossIds.add(uRWellCross2Id);
-                map_clsId_uRWellCrossIds.put(clsId, uRWellCrossIds);
+        if(Constants.URWELL){
+            Bank uRWellDCClusterBank = banks.getURWellDCClusterBank();
+            if(uRWellDCClusterBank != null){
+                event.read(uRWellDCClusterBank);            
+                for(int loop = 0; loop < uRWellDCClusterBank.getRows(); loop++){
+                    int clsId = uRWellDCClusterBank.getInt("id", loop);
+                    int uRWellCross1Id = uRWellDCClusterBank.getInt("URWell_Cross1_ID", loop);
+                    int uRWellCross2Id = uRWellDCClusterBank.getInt("URWell_Cross2_ID", loop);
+                    List<Integer> uRWellCrossIds = new ArrayList();
+                    uRWellCrossIds.add(uRWellCross1Id);
+                    uRWellCrossIds.add(uRWellCross2Id);
+                    map_clsId_uRWellCrossIds.put(clsId, uRWellCrossIds);
+                }
             }
         }
         
@@ -354,7 +355,7 @@ public class Reader {
                                clusterBank.getInt("Hit11_ID", loop),
                                clusterBank.getInt("Hit12_ID", loop));                
                 
-                if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
+                if(Constants.URWELL && type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
                     if(map_clsId_uRWellCrossIds.keySet().contains(cls.id())) {
                         cls.setMatchedURWellCrossIds(map_clsId_uRWellCrossIds.get(cls.id()).get(0), map_clsId_uRWellCrossIds.get(cls.id()).get(1));
                     }
