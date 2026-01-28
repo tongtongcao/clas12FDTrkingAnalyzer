@@ -14,6 +14,10 @@ public class TDC {
     private int component;
     private int order;
     private int TDC;    
+    
+    private int originLayer;
+    private double probability;
+    private int newOrder;
         
     public TDC(int sector, int layer, int component, int order, int TDC){
         this.sector = sector;
@@ -21,6 +25,8 @@ public class TDC {
         this.component = component;
         this.order = order;  
         this.TDC = TDC;
+        this.originLayer = layer;
+        this.newOrder = order;
     }
     
     public int sector(){
@@ -47,7 +53,27 @@ public class TDC {
     
     public int TDC(){
        return TDC;
-    } 
+    }
+    
+    public int originLayer(){
+        return originLayer;
+    }
+    
+    public void setProbability(double probability){
+        this.probability = probability;
+    }
+    
+    public double getProbability(){
+        return probability;
+    }
+    
+    public void setNewOrder(int newOrder){
+        this.newOrder = newOrder;
+    }
+    
+    public int getNewOrder(){
+        return newOrder;
+    }
     
     public boolean isNormalHit(){
         for(int accptedOrder : Constants.NORMALHITORDERS){

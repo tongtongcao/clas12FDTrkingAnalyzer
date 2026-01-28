@@ -120,6 +120,14 @@ public class Reader {
                 track.sector(trackingBank.getByte("sector", it));
                 track.NDF(trackingBank.getShort("ndf", it));
                 track.chi2(trackingBank.getFloat("chi2", it));
+                
+                track.preC1(trackingBank.getFloat("c1_x", it),
+                        trackingBank.getFloat("c1_y", it),
+                        trackingBank.getFloat("c1_z", it),
+                        trackingBank.getFloat("c1_ux", it),
+                        trackingBank.getFloat("c1_uy", it),
+                        trackingBank.getFloat("c1_uz", it));
+                
                 for(int i=0; i<2; i++) {
                     track.cross(trackingBank.getFloat("c" + (i*2+1) + "_x", it),
                                 trackingBank.getFloat("c" + (i*2+1) + "_y", it),

@@ -10,6 +10,7 @@ import org.clas.fit.ClusterFitLC;
 import org.clas.fit.LineFitter;
 import org.clas.utilities.Constants;
 import org.jlab.geom.prim.Point3D;
+import org.clas.utilities.CommonFunctions;
 /**
  *
  * @author Tongtong
@@ -186,10 +187,7 @@ public class Cross implements Comparable<Cross> {
      * frame
      */
     public Point3D getCoordsInLab(double X, double Y, double Z) {
-        Point3D PointInSec = this.getCoordsInSector(X, Y, Z);
-        double rx = PointInSec.x() * Constants.COSSECTOR60[this.sector() - 1] - PointInSec.y() * Constants.SINSECTOR60[this.sector() - 1];
-        double ry = PointInSec.x() * Constants.SINSECTOR60[this.sector() - 1] + PointInSec.y() * Constants.COSSECTOR60[this.sector() - 1];
-        return new Point3D(rx, ry, PointInSec.z());
+        return CommonFunctions.getCoordsInGlobal(X, Y, Z, sector);
     }    
                   
     

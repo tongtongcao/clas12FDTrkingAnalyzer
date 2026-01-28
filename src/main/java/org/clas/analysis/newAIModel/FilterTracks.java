@@ -123,21 +123,7 @@ public class FilterTracks{
                 
                 for(int r = 0; r < 12; r++) {
                     newClusterBank.putShort("Hit"+String.valueOf(r+1)+"_ID", numRow, (short)cls.hitIds()[r]);
-                }
-                
-                /*
-                try{
-                    for(Cluster clsOrg : localEvent.getClusters()){
-                        if(cls.id() == clsOrg.id()){
-                            newClusterBank.putFloat("lYL1", numRow, (float)clsOrg.getLYL1()); 
-                            newClusterBank.putFloat("lYL6", numRow, (float)clsOrg.getLYL6()); 
-                        }
-                    }
-                }
-                catch(Exception e){
-                    LOGGER.log(Level.FINER, "no items lYL1 & lYL6 in cluster bank!");
-                } 
-                */
+                }                                
                 
                 numRow++;
             }

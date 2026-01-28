@@ -10,6 +10,7 @@ import org.jlab.detector.base.DetectorType;
 import org.jlab.geom.prim.Point3D;
 
 import org.clas.utilities.Constants;
+import org.clas.utilities.CommonFunctions;
 
 /**
  *
@@ -36,6 +37,10 @@ public class Track implements Comparable<Track> {
     private int[] crossIds = new int[6];    
     private int uRWellCrossIds[] = new int[2];
     private int   trackSL = 0;
+    private int missingSL = -1;
+        
+    private Point3D preC1Pos;
+    private Point3D preC1Dir;
     
     // from particle bank
     private int    trackStatus  = 0;
@@ -121,6 +126,10 @@ public class Track implements Comparable<Track> {
     public int id() {
         return id;
     }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int index() {
         return trackIndex;
@@ -136,6 +145,10 @@ public class Track implements Comparable<Track> {
     
     public void type(int m) {
         this.trackType=m;
+    }
+    
+    public int getMissingSL(){
+        return missingSL;
     }
     
     public void setP(double mom) {
@@ -325,7 +338,10 @@ public class Track implements Comparable<Track> {
         this.clusterIds[4] = i5;
         this.clusterIds[5] = i6;
         for(int i=0; i<6; i++) {
-            if(this.clusterIds[i]<=0) this.clusterIds[i]=-1; //change 0 to -1 to allow matching of candidates to tracks
+            if(this.clusterIds[i]<=0) {
+                this.clusterIds[i]=-1;
+                this.missingSL = i+1;
+            } //change 0 to -1 to allow matching of candidates to tracks
             if(this.clusterIds[i]>0)  this.trackSL++;
         }
         numClusters = this.trackSL;
@@ -466,6 +482,19 @@ public class Track implements Comparable<Track> {
     
     public int pid() {
         return this.trackPid;
+    }
+    
+    public void preC1(double x, double y, double z, double ux, double uy, double uz){
+        preC1Pos = new Point3D(x, y, z);
+        preC1Dir = new Point3D(ux, uy, uz);
+    }
+    
+    public Point3D getPreC1Pos(){
+        return preC1Pos;
+    }
+    
+    public Point3D getPreC1Dir(){
+        return preC1Dir;
     }
     
     public void cross(double x, double y, double z, int region) {
@@ -795,7 +824,7 @@ public class Track implements Comparable<Track> {
     
     public void setURWellProjectionR1(double xGlobal, double yGlobal, double zGlobal){
         uRWellProjectionGlobalR1 = new Point3D(xGlobal, yGlobal, zGlobal);
-        uRWellProjectionLocalR1 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR1 = CommonFunctions.getCoordsInLocal(xGlobal, yGlobal, zGlobal, trackSector);
     }
     
     public Point3D getURWellProjectionGlobalR1(){
@@ -808,7 +837,7 @@ public class Track implements Comparable<Track> {
     
     public void setURWellProjectionR2(double xGlobal, double yGlobal, double zGlobal){
         uRWellProjectionGlobalR2 = new Point3D(xGlobal, yGlobal, zGlobal);
-        uRWellProjectionLocalR2 = getCoordsInLocal(xGlobal, yGlobal, zGlobal);
+        uRWellProjectionLocalR2 = CommonFunctions.getCoordsInLocal(xGlobal, yGlobal, zGlobal, trackSector);
     }
     
     public Point3D getURWellProjectionGlobalR2(){
@@ -818,27 +847,7 @@ public class Track implements Comparable<Track> {
     public Point3D getURWellProjectionLocalR2(){
         return uRWellProjectionLocalR2;
     }    
-    
-
-    /**
-     *
-     * @param X
-     * @param Y
-     * @param Z
-     * @return rotated coords from tilted sector coordinate system to the lab
-     * frame
-     */
-    public Point3D getCoordsInLocal(double X, double Y, double Z) {
-                        
-        double rx = X * Constants.COSSECTOR60[this.sector() - 1] + Y * Constants.SINSECTOR60[this.sector() - 1];
-        double ry = -X * Constants.SINSECTOR60[this.sector() - 1] + Y * Constants.COSSECTOR60[this.sector() - 1];
         
-        double rrz = rx * Constants.SIN25 + Z * Constants.COS25;
-        double rrx = rx * Constants.COS25 - Z * Constants.SIN25;
-        
-        return new Point3D(rrx, ry, rrz);
-    }
-    
     public int numMatchedClusters(Track otherTrk){
         if(this.getClusters() == null || otherTrk.getClusters() == null) return -999;
         int matchedClusters = 0;

@@ -42,52 +42,72 @@ public class ExtractMatchedTracks extends BaseAnalysis{
 
     @Override
     public void createHistoGroupMap() {
-        HistoGroup histoGroupOverview= new HistoGroup("overview", 4, 2);
-        
+        HistoGroup histoGroupOverview= new HistoGroup("overview", 4, 2);        
         H1F h1_numMatchedTracks = new H1F("numMatchedTracks", "# of matched tracks", 10, 0.5, 10.5);
         h1_numMatchedTracks.setTitleX("# of matched tracks");
         h1_numMatchedTracks.setTitleY("counts");
-        histoGroupOverview.addDataSet(h1_numMatchedTracks, 0);   
-        
+        histoGroupOverview.addDataSet(h1_numMatchedTracks, 0);           
         H2F h2_purityVsEfficiencyTrack = new H2F("purityVsEfficiencyTrack", "purity vs efficiency for matched tracks", 50, 0, 1.01, 50, 0, 1.01);
         h2_purityVsEfficiencyTrack.setTitleX("efficiency");
         h2_purityVsEfficiencyTrack.setTitleY("purity");
-        histoGroupOverview.addDataSet(h2_purityVsEfficiencyTrack, 1); 
-        
-        H2F h2_chi2OverNDFVsPurityTrack = new H2F("chi2OverNDFVsPurityTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 100);
+        histoGroupOverview.addDataSet(h2_purityVsEfficiencyTrack, 1);         
+        H2F h2_chi2OverNDFVsPurityTrack = new H2F("chi2OverNDFVsPurityTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 40);
         h2_chi2OverNDFVsPurityTrack.setTitleX("purity");
         h2_chi2OverNDFVsPurityTrack.setTitleY("chi2/ndf");
-        histoGroupOverview.addDataSet(h2_chi2OverNDFVsPurityTrack, 2);  
-        
-        H2F h2_chi2OverNDFVsEfficiencyTrack = new H2F("chi2OverNDFVsEfficiencyTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 100);
+        histoGroupOverview.addDataSet(h2_chi2OverNDFVsPurityTrack, 2);          
+        H2F h2_chi2OverNDFVsEfficiencyTrack = new H2F("chi2OverNDFVsEfficiencyTrack", "chi2/ndf vs purity for matched tracks", 100, 0, 1.01, 100, 0, 40);
         h2_chi2OverNDFVsEfficiencyTrack.setTitleX("efficiency");
         h2_chi2OverNDFVsEfficiencyTrack.setTitleY("chi2/ndf");
-        histoGroupOverview.addDataSet(h2_chi2OverNDFVsEfficiencyTrack, 3);         
-        
+        histoGroupOverview.addDataSet(h2_chi2OverNDFVsEfficiencyTrack, 3);                 
         H1F h1_numMatchedClusters = new H1F("numMatchedClusters", "# of matched clusters for matched tracks", 7, -0.5, 6.5);
         h1_numMatchedClusters.setTitleX("# of fully matched clusters for matched tracks");
         h1_numMatchedClusters.setTitleY("counts");
-        histoGroupOverview.addDataSet(h1_numMatchedClusters, 4);          
-        
-        H2F h2_purityVsEfficiencyCluster = new H2F("purityVsEfficiencyCluster", "purity vs efficiency for clusters of matched tracks", 25, 0, 1.01, 25, 0, 1.01);
+        histoGroupOverview.addDataSet(h1_numMatchedClusters, 4);                  
+        H2F h2_purityVsEfficiencyCluster = new H2F("purityVsEfficiencyCluster", "purity vs efficiency for clusters in matched tracks", 25, 0, 1.01, 25, 0, 1.01);
         h2_purityVsEfficiencyCluster.setTitleX("efficiency");
         h2_purityVsEfficiencyCluster.setTitleY("purity");
-        histoGroupOverview.addDataSet(h2_purityVsEfficiencyCluster, 5);
-        
-        H1F h1_shiftAvgWireClusters = new H1F("shiftAvgWireClusters", "shift of avgWire for non-fully matched clusters of matched tracks", 100, -5, 5);
-        h1_shiftAvgWireClusters.setTitleX("shift of avgWire for non-fully matched clusters of matched tracks");
+        histoGroupOverview.addDataSet(h2_purityVsEfficiencyCluster, 5);        
+        H1F h1_shiftAvgWireClusters = new H1F("shiftAvgWireClusters", "shift of avgWire for non-fully matched clusters in matched tracks", 100, -5, 5);
+        h1_shiftAvgWireClusters.setTitleX("shift of avgWire for non-fully matched clusters in matched tracks");
         h1_shiftAvgWireClusters.setTitleY("counts");
-        histoGroupOverview.addDataSet(h1_shiftAvgWireClusters, 6);         
-          
+        histoGroupOverview.addDataSet(h1_shiftAvgWireClusters, 6);                   
         histoGroupMap.put(histoGroupOverview.getName(), histoGroupOverview); 
+        
+        HistoGroup histoGroup2MatchedTracks= new HistoGroup("2MatchedTracks", 4, 2); 
+        H1F h1_chi2OverNDFDiff = new H1F("chi2OverNDFDiff", "chi2/ndf diff", 100, -60, 60);
+        h1_chi2OverNDFDiff.setTitleX("chi2/ndf diff");
+        h1_chi2OverNDFDiff.setTitleY("counts");
+        histoGroup2MatchedTracks.addDataSet(h1_chi2OverNDFDiff, 0);          
+        H1F h1_purityDiff = new H1F("purityDiff", "purity diff", 100, -0.5, 0.5);
+        h1_purityDiff.setTitleX("purity diff");
+        h1_purityDiff.setTitleY("counts");
+        histoGroup2MatchedTracks.addDataSet(h1_purityDiff, 1);  
+        H1F h1_efficiencyDiff = new H1F("efficiencyDiff", "efficiency diff", 100, -0.5, 0.5);
+        h1_efficiencyDiff.setTitleX("efficiency diff");
+        h1_efficiencyDiff.setTitleY("counts");
+        histoGroup2MatchedTracks.addDataSet(h1_efficiencyDiff, 2);  
+        
+        H2F h2_chi2OverNDFDiffVsPurityDiff = new H2F("chi2OverNDFDiffVsPurityDiff", "chi2/ndf diff vs purity diff", 100, -0.5, 0.5, 100, -60, 60);
+        h2_chi2OverNDFDiffVsPurityDiff.setTitleX("purity diff");
+        h2_chi2OverNDFDiffVsPurityDiff.setTitleY("chi2/ndf diff");
+        histoGroup2MatchedTracks.addDataSet(h2_chi2OverNDFDiffVsPurityDiff, 4); 
+        
+        H2F h2_chi2OverNDFDiffVsEfficiencyDiff = new H2F("chi2OverNDFDiffVsEfficiencyDiff", "chi2/ndf diff vs efficiency diff", 100, -0.5, 0.5, 100, -60, 60);
+        h2_chi2OverNDFDiffVsEfficiencyDiff.setTitleX("efficiency diff");
+        h2_chi2OverNDFDiffVsEfficiencyDiff.setTitleY("chi2/ndf diff");
+        histoGroup2MatchedTracks.addDataSet(h2_chi2OverNDFDiffVsEfficiencyDiff, 5); 
+
+        H2F h2_purityDiffVsEfficiencyDiff = new H2F("purityDiffVsEfficiencyDiff", "purity diff vs efficiency diff", 100, -0.5, 0.5, 100, -0.5, 0.5);
+        h2_purityDiffVsEfficiencyDiff.setTitleX("efficiency diff");
+        h2_purityDiffVsEfficiencyDiff.setTitleY("purity diff");
+        histoGroup2MatchedTracks.addDataSet(h2_purityDiffVsEfficiencyDiff, 6);         
+
+        histoGroupMap.put(histoGroup2MatchedTracks.getName(), histoGroup2MatchedTracks);         
+        
         
     }
     
-    public void processEvent(Event event1, Event event2, Map<Track, List<Track>> map_trk1_trk2List) {  
-        //// Read banks
-        LocalEvent localEvent1 = new LocalEvent(reader1, event1, 12);
-        LocalEvent localEvent2 = new LocalEvent(reader2, event2, 11);
-        
+    public void processEvent(LocalEvent localEvent1, LocalEvent localEvent2, Map<Track, List<Track>> map_trk1_trk2List) {          
         List<Track> trackList1 = new ArrayList();    
         List<Track> trackList2 = localEvent2.getTracksHB();
 
@@ -130,6 +150,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
         }
         
         HistoGroup histoGroupOverview = histoGroupMap.get("overview");
+        HistoGroup histoGroup2MatchedTracks = histoGroupMap.get("2MatchedTracks");
         for(Track trk1 : map_trk1_trk2List.keySet()){
             List<Track> trk2List = map_trk1_trk2List.get(trk1);
             histoGroupOverview.getH1F("numMatchedTracks").fill(trk2List.size());
@@ -152,6 +173,25 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                         }
                     }
                 }
+            }
+            
+            if(trk2List.size() == 2){
+                Track trkA = trk2List.get(0);
+                Track trkB = trk2List.get(1);
+                double chi2OverNDFA = trkA.chi2()/trkA.NDF();
+                double chi2OverNDFB = trkB.chi2()/trkB.NDF();
+                double purityA = trkA.numMatchedHitsNoRequireTDC(trk1)/(double)trkA.getHits().size();
+                double purityB = trkB.numMatchedHitsNoRequireTDC(trk1)/(double)trkB.getHits().size();
+                double efficiencyA = trkA.numMatchedHitsNoRequireTDC(trk1)/(double)trk1.getHits().size();
+                double efficiencyB = trkB.numMatchedHitsNoRequireTDC(trk1)/(double)trk1.getHits().size();
+                
+                histoGroup2MatchedTracks.getH1F("chi2OverNDFDiff").fill(chi2OverNDFA - chi2OverNDFB);
+                histoGroup2MatchedTracks.getH1F("purityDiff").fill(purityA - purityB);
+                histoGroup2MatchedTracks.getH1F("efficiencyDiff").fill(efficiencyA - efficiencyB);
+                
+                histoGroup2MatchedTracks.getH2F("chi2OverNDFDiffVsPurityDiff").fill(purityA - purityB, chi2OverNDFA - chi2OverNDFB);
+                histoGroup2MatchedTracks.getH2F("chi2OverNDFDiffVsEfficiencyDiff").fill(efficiencyA - efficiencyB, chi2OverNDFA - chi2OverNDFB);
+                histoGroup2MatchedTracks.getH2F("purityDiffVsEfficiencyDiff").fill(efficiencyA - efficiencyB, purityA - purityB);
             }
         }   
     }
@@ -208,6 +248,9 @@ public class ExtractMatchedTracks extends BaseAnalysis{
             writer2.getSchemaFactory().copy(schema2);
             writer2.setCompressionType(2);   
             writer2.open("sample2.hipo");
+            
+            Reader localReader1 = new Reader(new Banks(schema1));
+            Reader localReader2 = new Reader(new Banks(schema2));
 
             int counter = 0;
             Event event1 = new Event();
@@ -220,10 +263,12 @@ public class ExtractMatchedTracks extends BaseAnalysis{
 
                 reader1.nextEvent(event1);
                 reader2.nextEvent(event2);
+                                
+                LocalEvent localEvent1 = new LocalEvent(localReader1, event1, 12);
+                LocalEvent localEvent2 = new LocalEvent(localReader2, event2, 11);
                 
                 Map<Track, List<Track>> map_trk1_trk2List = new HashMap();
-
-                analysis.processEvent(event1, event2, map_trk1_trk2List);
+                analysis.processEvent(localEvent1, localEvent2, map_trk1_trk2List);
                 
                 int numTrk1 = 0;
                 int numTrk2 = 0;
@@ -272,7 +317,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                         newClusterBank1.putByte("superlayer", rowCls1, (byte) cls1.superlayer());                
                         newClusterBank1.putByte("size", rowCls1, (byte) cls1.size());
                         newClusterBank1.putFloat("avgWire", rowCls1, (float)cls1.avgWire()); 
-                        newClusterBank1.putFloat("fitSlope", rowCls1, (float)cls1.fitSlope()); 
+                        newClusterBank1.putFloat("fitSlope", rowCls1, (float)cls1.fitSlope());                         
                         
                         rowCls1++;
                     }
@@ -329,7 +374,7 @@ public class ExtractMatchedTracks extends BaseAnalysis{
                             newClusterBank2.putFloat("fitChisqProb", rowCls2, (float)shiftAvgWire); 
                             newClusterBank2.putFloat("fitInterc", rowCls2, (float)purityCls); 
                             newClusterBank2.putFloat("fitIntercErr", rowCls2, (float)efficiencyCls); 
-
+                                                        
                             rowCls2++;
                         }
                     }

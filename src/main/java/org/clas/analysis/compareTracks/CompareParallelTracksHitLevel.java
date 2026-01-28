@@ -42,7 +42,7 @@ import org.clas.utilities.CommonFunctions;
  *
  * @author Tongtong Cao
  */
-public class CompareTracksHitLevel extends BaseAnalysis {
+public class CompareParallelTracksHitLevel extends BaseAnalysis {
     private static double RATIONORMALHITSCUT = 0.85; // Only for MC
     
     private static int goodTracks = 0;    
@@ -56,10 +56,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
     private static int extraValidTracksSp2 = 0;
     private static int matchedValidTracks = 0;
 
-    public CompareTracksHitLevel() {
+    public CompareParallelTracksHitLevel() {
     }
 
-    public CompareTracksHitLevel(Banks banks) {
+    public CompareParallelTracksHitLevel(Banks banks) {
         super(banks);
     }
 
@@ -202,20 +202,13 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         
     }
 
-    public void processEvent(Event event1, Event event2, int trkType) {
+    public void processEvent(Event event) {
         //// Read banks
-        LocalEvent localEvent1 = new LocalEvent(reader, event1, trkType, Constants.URWELL);
-        LocalEvent localEvent2 = new LocalEvent(reader, event2, trkType, Constants.URWELL);
+        LocalEvent localEvent1 = new LocalEvent(reader, event, 12, Constants.URWELL);
+        LocalEvent localEvent2 = new LocalEvent(reader, event, 22, Constants.URWELL);
         
-        List<Track> trackList1 = new ArrayList();    
-        List<Track> trackList2 = new ArrayList();    
-        if(trkType == Constants.CONVHB || trkType == Constants.AIHB){
-            trackList1 = localEvent1.getTracksHB();
-            trackList2 = localEvent2.getTracksHB();
-        } else{
-            trackList1 = localEvent1.getTracksTB();
-            trackList2 = localEvent2.getTracksTB();
-        }
+        List<Track> trackList1 = localEvent1.getTracksTB();  
+        List<Track> trackList2 = localEvent2.getTracksTB();   
         
         //// All tracks
         Map<Track, Track> map_track1_track2 = new HashMap();
@@ -474,7 +467,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                }
             }
             else this.addDemoGroup(localEvent1, localEvent2, trk2.sector(), "SP2");
-        }
+        }        
     }
 
     public static void main(String[] args) {
@@ -486,7 +479,6 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         parser.addOption("-plot", "1", "display histograms (0/1)");
         parser.addOption("-demo", "1", "display case demo (0/1)");
         parser.addOption("-mDemo", "1000", "maxium for number of demonstrated cases");
-        parser.addOption("-trkType", "22", "tracking type: ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22)");
         parser.addOption("-mc", "0", "if mc (0/1)");
         parser.addOption("-uRWell", "0", "if uRWell is included (0/1)");
 
@@ -501,7 +493,6 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         boolean displayDemos = (parser.getOption("-demo").intValue() != 0);
         int maxDemoCases = parser.getOption("-mDemo").intValue();
         boolean readHistos = (parser.getOption("-histo").intValue() != 0);
-        int trkType = parser.getOption("-trkType").intValue();
         boolean mc = (parser.getOption("-mc").intValue() != 0);
         boolean uRWell = (parser.getOption("-uRWell").intValue() != 0);
         Constants.MC = mc;
@@ -523,53 +514,52 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             histoName = namePrefix + "_" + histoName;
         }
 
-        CompareTracksHitLevel analysis = new CompareTracksHitLevel();
+        CompareParallelTracksHitLevel analysis = new CompareParallelTracksHitLevel();
         analysis.createHistoGroupMap();
         if (!readHistos) {
-            HipoReader reader1 = new HipoReader();
-            reader1.open(inputList.get(0));
-            HipoReader reader2 = new HipoReader();
-            reader2.open(inputList.get(1));
-
-            SchemaFactory schema = reader1.getSchemaFactory();
-            analysis.initReader(new Banks(schema));
-
             int counter = 0;
-            Event event1 = new Event();
-            Event event2 = new Event();
+            for(String input : inputList){
+                HipoReader reader = new HipoReader();
+                reader.open(input);
 
-            ProgressPrintout progress = new ProgressPrintout();
-            while (reader1.hasNext() && reader2.hasNext()) {
+                SchemaFactory schema = reader.getSchemaFactory();
+                analysis.initReader(new Banks(schema));
+                
+                Event event = new Event();
 
-                counter++;
+                ProgressPrintout progress = new ProgressPrintout();
+                while (reader.hasNext()) {
 
-                reader1.nextEvent(event1);
-                reader2.nextEvent(event2);
+                    counter++;
 
-                analysis.processEvent(event1, event2, trkType);
+                    reader.nextEvent(event);
 
-                progress.updateStatus();
-                if (maxEvents > 0) {
-                    if (counter >= maxEvents) {
-                        break;
+                    analysis.processEvent(event);
+
+                    progress.updateStatus();
+                    
+                    if (maxEvents > 0) {
+                        if (counter >= maxEvents) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            progress.showStatus();
-            reader1.close();
-            reader2.close();
+                progress.showStatus();
+                reader.close();
+            }
+                        
             analysis.saveHistos(histoName);
-            System.out.println("Tracks in sample1: " + Integer.toString(CompareTracksHitLevel.tracksSp1));
-            System.out.println("Tracks in sample2: " + Integer.toString(CompareTracksHitLevel.tracksSp2));
-            System.out.println("Good tracks: " + Integer.toString(CompareTracksHitLevel.goodTracks));
-            System.out.println("Valid tracks in sample1: " + Integer.toString(CompareTracksHitLevel.validTracksSp1));
-            System.out.println("Valid tracks in sample2: " + Integer.toString(CompareTracksHitLevel.validTracksSp2));
-            System.out.println("Extra tracks in sample1: " + Integer.toString(CompareTracksHitLevel.extraTracksSp1));
-            System.out.println("Extra tracks in sample2: " + Integer.toString(CompareTracksHitLevel.extraTracksSp2));                                    
-            System.out.println("Matched valid tracks         : " + Integer.toString(CompareTracksHitLevel.matchedValidTracks));
-            System.out.println("Extra valid tracks in sample1: " + Integer.toString(CompareTracksHitLevel.extraValidTracksSp1));
-            System.out.println("Extra valid tracks in sample2: " + Integer.toString(CompareTracksHitLevel.extraValidTracksSp2));
+            System.out.println("Tracks in sample1: " + Integer.toString(CompareParallelTracksHitLevel.tracksSp1));
+            System.out.println("Tracks in sample2: " + Integer.toString(CompareParallelTracksHitLevel.tracksSp2));
+            System.out.println("Good tracks: " + Integer.toString(CompareParallelTracksHitLevel.goodTracks));
+            System.out.println("Valid tracks in sample1: " + Integer.toString(CompareParallelTracksHitLevel.validTracksSp1));
+            System.out.println("Valid tracks in sample2: " + Integer.toString(CompareParallelTracksHitLevel.validTracksSp2));
+            System.out.println("Extra tracks in sample1: " + Integer.toString(CompareParallelTracksHitLevel.extraTracksSp1));
+            System.out.println("Extra tracks in sample2: " + Integer.toString(CompareParallelTracksHitLevel.extraTracksSp2));                                    
+            System.out.println("Matched valid tracks         : " + Integer.toString(CompareParallelTracksHitLevel.matchedValidTracks));
+            System.out.println("Extra valid tracks in sample1: " + Integer.toString(CompareParallelTracksHitLevel.extraValidTracksSp1));
+            System.out.println("Extra valid tracks in sample2: " + Integer.toString(CompareParallelTracksHitLevel.extraValidTracksSp2));
         } else {
             analysis.readHistos(inputList.get(0));
         }
