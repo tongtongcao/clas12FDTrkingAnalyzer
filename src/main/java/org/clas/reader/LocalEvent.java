@@ -398,7 +398,15 @@ public class LocalEvent {
         
     public List<URWellCross> getURWellCrosses(){
         return uRWellCrosses;
-    }  
+    }
+    
+    public List<URWellCross> getURWellCrossesInSector(int sector){
+        List<URWellCross> urCrossesInSector = new ArrayList();
+        for(URWellCross urCrs : uRWellCrosses){
+            if(urCrs.sector() == sector) urCrossesInSector.add(urCrs);
+        }
+        return urCrossesInSector;
+    }    
     
     public List<URWellCross> getURWellCrossesNoCuts(){
         return uRWellCrossesNoCuts;

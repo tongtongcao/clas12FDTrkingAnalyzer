@@ -63,6 +63,8 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
 
         ProgressPrintout progress = new ProgressPrintout();
         int counter = 0;
+        int counterReal = 0;
+        int counterFake = 0;
         try(FileWriter writer = new FileWriter(outputName)){
             for(String input : inputList){
                 HipoReader reader = new HipoReader();
@@ -105,7 +107,8 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                                 String slope = String.format("%.4f", cls.fitSlope());
                                 writer.write(slope + ",");
                             } 
-                            writer.write("1\n"); 
+                            writer.write("1\n");
+                            counterReal++;
                             counter++;
                             
                             List<Cluster> clustersNotInTrack = new ArrayList();
@@ -126,6 +129,7 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                                     writer.write(slope + ",");
                                 }
                                 writer.write("0\n"); 
+                                counterFake++;
                                 counter++;
                             }
                                                         
@@ -145,5 +149,8 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                 reader.close(); 
             }
         }
+        
+        System.out.println("# of real combos: " + counterReal);
+        System.out.println("# of fake combos: " + counterFake);
     }
 }

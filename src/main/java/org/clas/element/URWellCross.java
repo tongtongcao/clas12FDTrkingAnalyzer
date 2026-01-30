@@ -1,5 +1,8 @@
 package org.clas.element;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.jlab.geom.prim.Point3D;
 
 import org.clas.utilities.Constants;
@@ -148,6 +151,22 @@ public class URWellCross implements Comparable<URWellCross> {
     
     public Point3D pointLocal(){
         return pointLocal;
+    }
+    
+    public URWellCross getClosetURWellCross(List<URWellCross> crosses){
+        URWellCross urCrsMinDist = null;
+        double minDist = 9999;
+        for(URWellCross thatCrs : crosses){
+            if(this.region() == thatCrs.region()){
+                double dist = this.pointLocal.distance(thatCrs.pointLocal);
+                if(dist < minDist) {
+                    minDist = dist;
+                    urCrsMinDist = thatCrs;
+                }
+            }
+        }
+        
+        return urCrsMinDist;
     }
     
     public boolean isMatchedCross(URWellCross o){

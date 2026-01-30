@@ -1,0 +1,6 @@
+#!/bin/sh
+
+SCRIPT_DIR=`dirname $0`
+
+java -Dsun.java2d.pmoffscreen=false -Xmx2048m -Xms1024m -cp "$SCRIPT_DIR/../target/clas12FDTrkingAnalyzer-1.0-jar-with-dependencies.jar" org.clas.analysis.newAIModel.RealFakeCombo1URCrs4DCClsRealFake $*
+
