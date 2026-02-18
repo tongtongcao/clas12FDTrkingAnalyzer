@@ -1,5 +1,9 @@
 package org.clas.analysis.studyBgEffects;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -1907,15 +1911,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         Constants.MAXDEMOCASES = maxDemoCases;
         
         List<String> inputList = parser.getInputList();
-        if (inputList.isEmpty() == true) {
-            parser.printUsage();
-            inputList.add("/Users/caot/research/clas12/data/mc/uRWELL/upgradeTrackingWithuRWELL/rga-sidis-uRWell-2R_denoise/0nA/reconBg/0000.hipo");
-            inputList.add("/Users/caot/research/clas12/data/mc/uRWELL/upgradeTrackingWithuRWELL/rga-sidis-uRWell-2R_denoise/50nA/reconBg/0000.hipo");
-            maxEvents = 1000;
-            //System.out.println("\n >>>> error: no input file is specified....\n");
-            //System.exit(0);
-        }
-
+        
         String histoName = "histo.hipo";
         String effFileName = "eff.txt";
         if (!namePrefix.isEmpty()) {
@@ -1925,48 +1921,111 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         
         StudyBgEffectsOnValidTracks analysis = new StudyBgEffectsOnValidTracks();
         analysis.setRatioNormalHitsCut(ratioNormalHitsCut);
-        analysis.createHistoGroupMap();
+        analysis.createHistoGroupMap();        
         
-
         if (!readHistos) {
-            HipoReader reader1 = new HipoReader();
-            reader1.open(inputList.get(0));
-            HipoReader reader2 = new HipoReader();
-            reader2.open(inputList.get(1));
+            File input1 = new File(inputList.get(0));
+            File input2 = new File(inputList.get(1));
 
-            SchemaFactory schema1 = reader1.getSchemaFactory();
-            SchemaFactory schema2 = reader2.getSchemaFactory();
-            analysis.initReader(new Banks(schema1), new Banks(schema2));
+            List<File> fileList1 = new ArrayList<>();
+            List<File> fileList2 = new ArrayList<>();
 
-            int counter = 0;
-            Event event1 = new Event();
-            Event event2 = new Event();
+            if (input1.isFile() && input2.isFile()) {
 
-            ProgressPrintout progress = new ProgressPrintout();
-            while (reader1.hasNext() && reader2.hasNext()) {
+                fileList1.add(input1);
+                fileList2.add(input2);
+            } else if (input1.isDirectory() && input2.isDirectory()) {
 
-                counter++;
+                File[] files1 = input1.listFiles((dir, name) -> name.endsWith(".hipo"));
+                File[] files2 = input2.listFiles((dir, name) -> name.endsWith(".hipo"));
 
-                reader1.nextEvent(event1);
-                reader2.nextEvent(event2);
+                Arrays.sort(files1, Comparator.comparing(File::getName));
+                Arrays.sort(files2, Comparator.comparing(File::getName));
 
-                analysis.processEvent(event1, event2, trkType);
-
-                progress.updateStatus();
-                if (maxEvents > 0) {
-                    if (counter >= maxEvents) {
-                        break;
-                    }
+                if (files1.length != files2.length) {
+                    System.err.println("Error: folders contain different number of files.");
+                    System.exit(1);
                 }
+
+                for (int i = 0; i < files1.length; i++) {
+
+                    if (!files1[i].getName().equals(files2[i].getName())) {
+                        System.err.println("File name mismatch: "
+                                + files1[i].getName() + " vs "
+                                + files2[i].getName());
+                        System.exit(1);
+                    }
+
+                    fileList1.add(files1[i]);
+                    fileList2.add(files2[i]);
+                }
+
+            } else {
+                System.err.println("Error: inputs must be both files or both directories.");
+                System.exit(1);
             }
 
-            progress.showStatus();
-            reader1.close();
-            reader2.close();
+            int nFiles = Math.min(fileList1.size(), fileList2.size());
+            if (fileList1.size() != fileList2.size()) {
+                System.out.println("Warning: folder sizes differ. "
+                + "Using first " + nFiles + " matched pairs.");
+            }
+                
+            int counter = 0;
+            for (int i = 0; i < nFiles; i++) {
+                String name1 = fileList1.get(i).getName();
+                String name2 = fileList2.get(i).getName();
+
+                if (!name1.equals(name2)) {
+                    System.out.println("Warning: file name mismatch at index " + i
+                        + " : " + name1 + " vs " + name2);
+                }
+
+                File f1 = fileList1.get(i);
+                File f2 = fileList2.get(i);
+
+                System.out.println("Processing: " + f1.getAbsolutePath());
+                
+                HipoReader reader1 = new HipoReader();
+                reader1.open(f1.getAbsolutePath());
+                HipoReader reader2 = new HipoReader();
+                reader2.open(f2.getAbsolutePath());
+
+                SchemaFactory schema1 = reader1.getSchemaFactory();
+                SchemaFactory schema2 = reader2.getSchemaFactory();
+                analysis.initReader(new Banks(schema1), new Banks(schema2));
+
+                Event event1 = new Event();
+                Event event2 = new Event();
+
+                ProgressPrintout progress = new ProgressPrintout();
+                while (reader1.hasNext() && reader2.hasNext()) {
+
+                    counter++;
+
+                    reader1.nextEvent(event1);
+                    reader2.nextEvent(event2);
+
+                    analysis.processEvent(event1, event2, trkType);
+
+                    progress.updateStatus();
+                    if (maxEvents > 0) {
+                        if (counter >= maxEvents) {
+                            break;
+                        }
+                    }
+                }
+
+                progress.showStatus();
+                reader1.close();
+                reader2.close();
+            }
+            
             analysis.saveHistos(histoName);
-            analysis.postEventProcess(effFileName, saveEffStats);
+            analysis.postEventProcess(effFileName, saveEffStats);            
         } else {
             analysis.readHistos(inputList.get(0));
+            analysis.postEventProcess(effFileName, saveEffStats);
         }
 
         if (displayPlots) {
