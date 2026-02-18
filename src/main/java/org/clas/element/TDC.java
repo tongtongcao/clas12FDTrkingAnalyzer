@@ -83,10 +83,16 @@ public class TDC {
     }
     
     public boolean isRemainedAfterDecoding(){
-        for(int accptedOrder : Constants.DECODINGHITORDERS){
-            if(order == accptedOrder) return true;
+        boolean flagRejection = false;
+        for(int rejectedOrder : Constants.DECODINGREJECTEDHITORDERS){
+            if(order == rejectedOrder) {
+                flagRejection = true;
+                break;
+            }
         }
-        return false;
+        
+        if(flagRejection) return false;
+        else return true;
     }    
     
     public boolean isRemainedAfterAIDenoising(){

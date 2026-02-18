@@ -70,8 +70,8 @@ public class Constants {
     // Orders for normal hits
     public static final int[] NORMALHITORDERS = {0, 20, 40, 50, 60};
     
-    // Acceptable orders after decoding
-    public static final int[] DECODINGHITORDERS = {0, 10};
+    // Order for rejected hits when decoding
+    public static final int[] DECODINGREJECTEDHITORDERS = {20, 30, 100};
     
     // Acceptable orders after denoising
     public static final int[] DENOISINGHITORDERS = {0, 10, 40, 70};
