@@ -99,14 +99,14 @@ public class Banks {
             this.dcClusterBank    = new Bank(schema.getSchema("HitBasedTrkg::Clusters"));     
         
         // uRWell banks
-        if(schema.hasSchema("URWELL::adc"))
-            this.uRWellADCBank    = new Bank(schema.getSchema("URWELL::adc"));        
-        if(schema.hasSchema("URWELL::hits"))
-            this.uRWellHitBank    = new Bank(schema.getSchema("URWELL::hits"));
-        if(schema.hasSchema("URWELL::clusters"))
-            this.uRWellClusterBank= new Bank(schema.getSchema("URWELL::clusters"));
-        if(schema.hasSchema("URWELL::crosses"))
-            this.uRWellCrossBank  = new Bank(schema.getSchema("URWELL::crosses"));  
+        if(schema.hasSchema("URWT::adc"))
+            this.uRWellADCBank    = new Bank(schema.getSchema("URWT::adc"));        
+        if(schema.hasSchema("URWT::hits"))
+            this.uRWellHitBank    = new Bank(schema.getSchema("URWT::hits"));
+        if(schema.hasSchema("URWT::clusters"))
+            this.uRWellClusterBank= new Bank(schema.getSchema("URWT::clusters"));
+        if(schema.hasSchema("URWT::crosses"))
+            this.uRWellCrossBank  = new Bank(schema.getSchema("URWT::crosses"));  
         
         // uRWell-DC bank
         if(schema.hasSchema("HitBasedTrkg::URWellDCClusters"))

@@ -58,7 +58,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNormalHits.setTitleX("energy");
         h1_energyNormalHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_energyNormalHits, 1); 
-        H1F h1_timeNormalHits = new H1F("timeNormalHits", "time for normal hits", 100, 500, 1000);
+        H1F h1_timeNormalHits = new H1F("timeNormalHits", "time for normal hits", 100, 0, 300);
         h1_timeNormalHits.setTitleX("time");
         h1_timeNormalHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_timeNormalHits, 2); 
@@ -66,7 +66,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h2_energyVsStripNormalHits.setTitleX("strip");
         h2_energyVsStripNormalHits.setTitleY("energy");
         histoGroupHits.addDataSet(h2_energyVsStripNormalHits, 3);
-        H2F h2_timeVsStripNormalHits = new H2F("timeVsStripNormalHits", "time vs strip for normal hits", 100, 0, 2000, 100, 500, 1000);
+        H2F h2_timeVsStripNormalHits = new H2F("timeVsStripNormalHits", "time vs strip for normal hits", 100, 0, 2000, 100, 0, 300);
         h2_timeVsStripNormalHits.setTitleX("strip");
         h2_timeVsStripNormalHits.setTitleY("time");
         histoGroupHits.addDataSet(h2_timeVsStripNormalHits, 4);         
@@ -78,7 +78,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNoiseHits.setTitleX("energy");
         h1_energyNoiseHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_energyNoiseHits, 6); 
-        H1F h1_timeNoiseHits = new H1F("timeNoiseHits", "time for noise hits", 100, 500, 1000);
+        H1F h1_timeNoiseHits = new H1F("timeNoiseHits", "time for noise hits", 100, 0, 300);
         h1_timeNoiseHits.setTitleX("time");
         h1_timeNoiseHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_timeNoiseHits, 7); 
@@ -86,7 +86,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h2_energyVsStripNoiseHits.setTitleX("strip");
         h2_energyVsStripNoiseHits.setTitleY("energy");
         histoGroupHits.addDataSet(h2_energyVsStripNoiseHits, 8);
-        H2F h2_timeVsStripNoiseHits = new H2F("timeVsStripNoiseHits", "time vs strip for noise hits", 100, 0, 2000, 100, 500, 1000);
+        H2F h2_timeVsStripNoiseHits = new H2F("timeVsStripNoiseHits", "time vs strip for noise hits", 100, 0, 2000, 100, 0, 300);
         h2_timeVsStripNoiseHits.setTitleX("strip");
         h2_timeVsStripNoiseHits.setTitleY("time");
         histoGroupHits.addDataSet(h2_timeVsStripNoiseHits, 9); 
@@ -98,7 +98,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyAllHits.setTitleX("energy");
         h1_energyAllHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_energyAllHits, 11); 
-        H1F h1_timeAllHits = new H1F("timeAllHits", "time for all hits", 100, 500, 1000);
+        H1F h1_timeAllHits = new H1F("timeAllHits", "time for all hits", 100, 0, 300);
         h1_timeAllHits.setTitleX("time");
         h1_timeAllHits.setTitleY("Counts");
         histoGroupHits.addDataSet(h1_timeAllHits, 12); 
@@ -106,11 +106,20 @@ public class URWellReconstruction extends BaseAnalysis{
         h2_energyVsStripAllHits.setTitleX("strip");
         h2_energyVsStripAllHits.setTitleY("energy");
         histoGroupHits.addDataSet(h2_energyVsStripAllHits, 13);
-        H2F h2_timeVsStripAllHits = new H2F("timeVsStripAllHits", "time vs strip for all hits", 100, 0, 2000, 100, 500, 1000);
+        H2F h2_timeVsStripAllHits = new H2F("timeVsStripAllHits", "time vs strip for all hits", 100, 0, 2000, 100, 0, 300);
         h2_timeVsStripAllHits.setTitleX("strip");
         h2_timeVsStripAllHits.setTitleY("time");
         histoGroupHits.addDataSet(h2_timeVsStripAllHits, 14);         
-        histoGroupMap.put(histoGroupHits.getName(), histoGroupHits);        
+        histoGroupMap.put(histoGroupHits.getName(), histoGroupHits); 
+        
+        HistoGroup histoGroupHitsPure = new HistoGroup("hitsPure", 3, 2); 
+        histoGroupHitsPure.addDataSet(h1_stripNormalHits, 0); 
+        histoGroupHitsPure.addDataSet(h1_energyNormalHits, 1); 
+        histoGroupHitsPure.addDataSet(h1_timeNormalHits, 2); 
+        histoGroupHitsPure.addDataSet(h2_energyVsStripNormalHits, 3);
+        histoGroupHitsPure.addDataSet(h2_timeVsStripNormalHits, 4);   
+        histoGroupMap.put(histoGroupHitsPure.getName(), histoGroupHitsPure); 
+        
         
         HistoGroup histoGroupCluster1 = new HistoGroup("cluster1", 5, 3);        
         H1F h1_mainStripNormalCluster1 = new H1F("mainStripNormalCluster1", "main strip for normal cluster1", 100, 0, 2000);
@@ -129,7 +138,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNormalCluster1.setTitleX("energy");
         h1_energyNormalCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_energyNormalCluster1, 3);        
-        H1F h1_timeNormalCluster1 = new H1F("timeNormalCluster1", "time for normal cluster1", 100, 500, 1000);
+        H1F h1_timeNormalCluster1 = new H1F("timeNormalCluster1", "time for normal cluster1", 100, 0, 300);
         h1_timeNormalCluster1.setTitleX("time");
         h1_timeNormalCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_timeNormalCluster1, 4);         
@@ -149,7 +158,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNoiseCluster1.setTitleX("energy");
         h1_energyNoiseCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_energyNoiseCluster1, 8);        
-        H1F h1_timeNoiseCluster1 = new H1F("timeNoiseCluster1", "time for noise cluster1", 100, 500, 1000);
+        H1F h1_timeNoiseCluster1 = new H1F("timeNoiseCluster1", "time for noise cluster1", 100, 0, 300);
         h1_timeNoiseCluster1.setTitleX("time");
         h1_timeNoiseCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_timeNoiseCluster1, 9);         
@@ -169,11 +178,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyAllCluster1.setTitleX("energy");
         h1_energyAllCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_energyAllCluster1, 13);        
-        H1F h1_timeAllCluster1 = new H1F("timeAllCluster1", "time for all cluster1", 100, 500, 1000);
+        H1F h1_timeAllCluster1 = new H1F("timeAllCluster1", "time for all cluster1", 100, 0, 300);
         h1_timeAllCluster1.setTitleX("time");
         h1_timeAllCluster1.setTitleY("Counts");
         histoGroupCluster1.addDataSet(h1_timeAllCluster1, 14);                      
         histoGroupMap.put(histoGroupCluster1.getName(), histoGroupCluster1);
+        
+        HistoGroup histoGroupCluster1Pure = new HistoGroup("cluster1Pure", 2, 2);  
+        histoGroupCluster1Pure.addDataSet(h1_mainStripNormalCluster1, 0);  
+        histoGroupCluster1Pure.addDataSet(h1_sizeNormalCluster1, 1); 
+        histoGroupCluster1Pure.addDataSet(h1_energyNormalCluster1, 2);
+        histoGroupCluster1Pure.addDataSet(h1_timeNormalCluster1, 3); 
+        histoGroupMap.put(histoGroupCluster1Pure.getName(), histoGroupCluster1Pure);
+        
         
         HistoGroup histoGroupCluster2 = new HistoGroup("cluster2", 5, 3);        
         H1F h1_mainStripNormalCluster2 = new H1F("mainStripNormalCluster2", "main strip for normal cluster2", 100, 0, 2000);
@@ -192,7 +209,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNormalCluster2.setTitleX("energy");
         h1_energyNormalCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_energyNormalCluster2, 3);        
-        H1F h1_timeNormalCluster2 = new H1F("timeNormalCluster2", "time for normal cluster2", 100, 500, 1000);
+        H1F h1_timeNormalCluster2 = new H1F("timeNormalCluster2", "time for normal cluster2", 100, 0, 300);
         h1_timeNormalCluster2.setTitleX("time");
         h1_timeNormalCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_timeNormalCluster2, 4);         
@@ -212,7 +229,7 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyNoiseCluster2.setTitleX("energy");
         h1_energyNoiseCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_energyNoiseCluster2, 8);        
-        H1F h1_timeNoiseCluster2 = new H1F("timeNoiseCluster2", "time for noise cluster2", 100, 500, 1000);
+        H1F h1_timeNoiseCluster2 = new H1F("timeNoiseCluster2", "time for noise cluster2", 100, 0, 300);
         h1_timeNoiseCluster2.setTitleX("time");
         h1_timeNoiseCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_timeNoiseCluster2, 9);         
@@ -232,11 +249,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyAllCluster2.setTitleX("energy");
         h1_energyAllCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_energyAllCluster2, 13);        
-        H1F h1_timeAllCluster2 = new H1F("timeAllCluster2", "time for all cluster2", 100, 500, 1000);
+        H1F h1_timeAllCluster2 = new H1F("timeAllCluster2", "time for all cluster2", 100, 0, 300);
         h1_timeAllCluster2.setTitleX("time");
         h1_timeAllCluster2.setTitleY("Counts");
         histoGroupCluster2.addDataSet(h1_timeAllCluster2, 14);                      
         histoGroupMap.put(histoGroupCluster2.getName(), histoGroupCluster2);
+        
+        HistoGroup histoGroupCluster2Pure = new HistoGroup("cluster2Pure", 2, 2);  
+        histoGroupCluster2Pure.addDataSet(h1_mainStripNormalCluster2, 0);  
+        histoGroupCluster2Pure.addDataSet(h1_sizeNormalCluster2, 1); 
+        histoGroupCluster2Pure.addDataSet(h1_energyNormalCluster2, 2);
+        histoGroupCluster2Pure.addDataSet(h1_timeNormalCluster2, 3);         
+        histoGroupMap.put(histoGroupCluster2Pure.getName(), histoGroupCluster2Pure);
+        
         
         HistoGroup histoGroupCrossStatusNoCuts = new HistoGroup("crossStatusNoCuts", 5, 3);         
         H1F h1_crossStatusNoCuts = new H1F("crossStatusNoCuts", "uRWell cross status", 4, -0.5, 3.5);
@@ -246,7 +271,7 @@ public class URWellReconstruction extends BaseAnalysis{
         histoGroupMap.put(histoGroupCrossStatusNoCuts.getName(), histoGroupCrossStatusNoCuts);
         
         HistoGroup histoGroupCrossesNoCuts = new HistoGroup("crossesNoCuts", 7, 5); 
-        H2F h2_xyCrossesBothNormalNoCuts = new H2F("xyCrossesBothNormalNoCuts", "x vs y", 100, -200, 200, 100, -200, 200);
+        H2F h2_xyCrossesBothNormalNoCuts = new H2F("xyCrossesBothNormalNoCuts", "x vs y", 100, -100, 100, 100, -100, 100);
         h2_xyCrossesBothNormalNoCuts.setTitleX("x (cm)");
         h2_xyCrossesBothNormalNoCuts.setTitleY("y (cm)");
         histoGroupCrossesNoCuts.addDataSet(h2_xyCrossesBothNormalNoCuts, 0); 
@@ -262,19 +287,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyDiffCrossesBothNormalNoCuts.setTitleX("energy difference");
         h1_energyDiffCrossesBothNormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_energyDiffCrossesBothNormalNoCuts, 3);
-        H2F h2_timeCompCrossesBothNormalNoCuts = new H2F("timeCompCrossesBothNormalNoCuts", "time comparison", 100, 500, 1000, 100, 500, 1000);
+        H2F h2_timeCompCrossesBothNormalNoCuts = new H2F("timeCompCrossesBothNormalNoCuts", "time comparison", 100, 0, 300, 100, 0, 300);
         h2_timeCompCrossesBothNormalNoCuts.setTitleX("time of cluster1");
         h2_timeCompCrossesBothNormalNoCuts.setTitleY("time of cluster2");
         histoGroupCrossesNoCuts.addDataSet(h2_timeCompCrossesBothNormalNoCuts, 4);                
-        H1F h1_timeDiffCrossesBothNormalNoCuts = new H1F("timeDiffCrossesBothNormalNoCuts", "time difference", 100, -200, 200);
+        H1F h1_timeDiffCrossesBothNormalNoCuts = new H1F("timeDiffCrossesBothNormalNoCuts", "time difference", 100, -100, 100);
         h1_timeDiffCrossesBothNormalNoCuts.setTitleX("time difference");
         h1_timeDiffCrossesBothNormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeDiffCrossesBothNormalNoCuts, 5);        
-        H1F h1_timeCrossesBothNormalNoCuts = new H1F("timeCrossesBothNormalNoCuts", "time", 100, 500, 1000);
+        H1F h1_timeCrossesBothNormalNoCuts = new H1F("timeCrossesBothNormalNoCuts", "time", 100, 0, 300);
         h1_timeCrossesBothNormalNoCuts.setTitleX("time");
         h1_timeCrossesBothNormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeCrossesBothNormalNoCuts, 6);
-        H2F h2_xyCrossesOnlyCluster1NormalNoCuts = new H2F("xyCrossesOnlyCluster1NormalNoCuts", "x vs y", 100, -200, 200, 100, -200, 200);
+        H2F h2_xyCrossesOnlyCluster1NormalNoCuts = new H2F("xyCrossesOnlyCluster1NormalNoCuts", "x vs y", 100, -100, 100, 100, -100, 100);
         h2_xyCrossesOnlyCluster1NormalNoCuts.setTitleX("x (cm)");
         h2_xyCrossesOnlyCluster1NormalNoCuts.setTitleY("y (cm)");
         histoGroupCrossesNoCuts.addDataSet(h2_xyCrossesOnlyCluster1NormalNoCuts, 7); 
@@ -290,19 +315,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyDiffCrossesOnlyCluster1NormalNoCuts.setTitleX("energy difference");
         h1_energyDiffCrossesOnlyCluster1NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_energyDiffCrossesOnlyCluster1NormalNoCuts, 10);
-        H2F h2_timeCompCrossesOnlyCluster1NormalNoCuts = new H2F("timeCompCrossesOnlyCluster1NormalNoCuts", "time comparison", 100, 500, 1000, 100, 500, 1000);
+        H2F h2_timeCompCrossesOnlyCluster1NormalNoCuts = new H2F("timeCompCrossesOnlyCluster1NormalNoCuts", "time comparison", 100, 0, 300, 100, 0, 300);
         h2_timeCompCrossesOnlyCluster1NormalNoCuts.setTitleX("time of cluster1");
         h2_timeCompCrossesOnlyCluster1NormalNoCuts.setTitleY("time of cluster2");
         histoGroupCrossesNoCuts.addDataSet(h2_timeCompCrossesOnlyCluster1NormalNoCuts, 11);                
-        H1F h1_timeDiffCrossesOnlyCluster1NormalNoCuts = new H1F("timeDiffCrossesOnlyCluster1NormalNoCuts", "time difference", 100, -200, 200);
+        H1F h1_timeDiffCrossesOnlyCluster1NormalNoCuts = new H1F("timeDiffCrossesOnlyCluster1NormalNoCuts", "time difference", 100, -100, 100);
         h1_timeDiffCrossesOnlyCluster1NormalNoCuts.setTitleX("time difference");
         h1_timeDiffCrossesOnlyCluster1NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeDiffCrossesOnlyCluster1NormalNoCuts, 12);        
-        H1F h1_timeCrossesOnlyCluster1NormalNoCuts = new H1F("timeCrossesOnlyCluster1NormalNoCuts", "time", 100, 500, 1000);
+        H1F h1_timeCrossesOnlyCluster1NormalNoCuts = new H1F("timeCrossesOnlyCluster1NormalNoCuts", "time", 100, 0, 300);
         h1_timeCrossesOnlyCluster1NormalNoCuts.setTitleX("time");
         h1_timeCrossesOnlyCluster1NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeCrossesOnlyCluster1NormalNoCuts, 13);        
-        H2F h2_xyCrossesOnlyCluster2NormalNoCuts = new H2F("xyCrossesOnlyCluster2NormalNoCuts", "x vs y", 100, -200, 200, 100, -200, 200);
+        H2F h2_xyCrossesOnlyCluster2NormalNoCuts = new H2F("xyCrossesOnlyCluster2NormalNoCuts", "x vs y", 100, -100, 100, 100, -100, 100);
         h2_xyCrossesOnlyCluster2NormalNoCuts.setTitleX("x (cm)");
         h2_xyCrossesOnlyCluster2NormalNoCuts.setTitleY("y (cm)");
         histoGroupCrossesNoCuts.addDataSet(h2_xyCrossesOnlyCluster2NormalNoCuts, 14); 
@@ -318,19 +343,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyDiffCrossesOnlyCluster2NormalNoCuts.setTitleX("energy difference");
         h1_energyDiffCrossesOnlyCluster2NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_energyDiffCrossesOnlyCluster2NormalNoCuts, 17);
-        H2F h2_timeCompCrossesOnlyCluster2NormalNoCuts = new H2F("timeCompCrossesOnlyCluster2NormalNoCuts", "time comparison", 100, 500, 1000, 100, 500, 1000);
+        H2F h2_timeCompCrossesOnlyCluster2NormalNoCuts = new H2F("timeCompCrossesOnlyCluster2NormalNoCuts", "time comparison", 100, 0, 300, 100, 0, 300);
         h2_timeCompCrossesOnlyCluster2NormalNoCuts.setTitleX("time of cluster1");
         h2_timeCompCrossesOnlyCluster2NormalNoCuts.setTitleY("time of cluster2");
         histoGroupCrossesNoCuts.addDataSet(h2_timeCompCrossesOnlyCluster2NormalNoCuts, 18);                
-        H1F h1_timeDiffCrossesOnlyCluster2NormalNoCuts = new H1F("timeDiffCrossesOnlyCluster2NormalNoCuts", "time difference", 100, -200, 200);
+        H1F h1_timeDiffCrossesOnlyCluster2NormalNoCuts = new H1F("timeDiffCrossesOnlyCluster2NormalNoCuts", "time difference", 100, -100, 100);
         h1_timeDiffCrossesOnlyCluster2NormalNoCuts.setTitleX("time difference");
         h1_timeDiffCrossesOnlyCluster2NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeDiffCrossesOnlyCluster2NormalNoCuts, 19);        
-        H1F h1_timeCrossesOnlyCluster2NormalNoCuts = new H1F("timeCrossesOnlyCluster2NormalNoCuts", "time", 100, 500, 1000);
+        H1F h1_timeCrossesOnlyCluster2NormalNoCuts = new H1F("timeCrossesOnlyCluster2NormalNoCuts", "time", 100, 0, 300);
         h1_timeCrossesOnlyCluster2NormalNoCuts.setTitleX("time");
         h1_timeCrossesOnlyCluster2NormalNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeCrossesOnlyCluster2NormalNoCuts, 20);
-        H2F h2_xyCrossesBothNoiseNoCuts = new H2F("xyCrossesBothNoiseNoCuts", "x vs y", 100, -200, 200, 100, -200, 200);
+        H2F h2_xyCrossesBothNoiseNoCuts = new H2F("xyCrossesBothNoiseNoCuts", "x vs y", 100, -100, 100, 100, -100, 100);
         h2_xyCrossesBothNoiseNoCuts.setTitleX("x (cm)");
         h2_xyCrossesBothNoiseNoCuts.setTitleY("y (cm)");
         histoGroupCrossesNoCuts.addDataSet(h2_xyCrossesBothNoiseNoCuts, 21); 
@@ -346,19 +371,19 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyDiffCrossesBothNoiseNoCuts.setTitleX("energy difference");
         h1_energyDiffCrossesBothNoiseNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_energyDiffCrossesBothNoiseNoCuts, 24);
-        H2F h2_timeCompCrossesBothNoiseNoCuts = new H2F("timeCompCrossesBothNoiseNoCuts", "time comparison", 100, 500, 1000, 100, 500, 1000);
+        H2F h2_timeCompCrossesBothNoiseNoCuts = new H2F("timeCompCrossesBothNoiseNoCuts", "time comparison", 100, 0, 300, 100, 0, 300);
         h2_timeCompCrossesBothNoiseNoCuts.setTitleX("time of cluster1");
         h2_timeCompCrossesBothNoiseNoCuts.setTitleY("time of cluster2");
         histoGroupCrossesNoCuts.addDataSet(h2_timeCompCrossesBothNoiseNoCuts, 25);                
-        H1F h1_timeDiffCrossesBothNoiseNoCuts = new H1F("timeDiffCrossesBothNoiseNoCuts", "time difference", 100, -200, 200);
+        H1F h1_timeDiffCrossesBothNoiseNoCuts = new H1F("timeDiffCrossesBothNoiseNoCuts", "time difference", 100, -100, 100);
         h1_timeDiffCrossesBothNoiseNoCuts.setTitleX("time difference");
         h1_timeDiffCrossesBothNoiseNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeDiffCrossesBothNoiseNoCuts, 26);        
-        H1F h1_timeCrossesBothNoiseNoCuts = new H1F("timeCrossesBothNoiseNoCuts", "time", 100, 500, 1000);
+        H1F h1_timeCrossesBothNoiseNoCuts = new H1F("timeCrossesBothNoiseNoCuts", "time", 100, 0, 300);
         h1_timeCrossesBothNoiseNoCuts.setTitleX("time");
         h1_timeCrossesBothNoiseNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeCrossesBothNoiseNoCuts, 27);                  
-        H2F h2_xyCrossesAllNoCuts = new H2F("xyCrossesAllNoCuts", "x vs y", 100, -200, 200, 100, -200, 200);
+        H2F h2_xyCrossesAllNoCuts = new H2F("xyCrossesAllNoCuts", "x vs y", 100, -100, 100, 100, -100, 100);
         h2_xyCrossesAllNoCuts.setTitleX("x (cm)");
         h2_xyCrossesAllNoCuts.setTitleY("y (cm)");
         histoGroupCrossesNoCuts.addDataSet(h2_xyCrossesAllNoCuts, 28); 
@@ -374,19 +399,29 @@ public class URWellReconstruction extends BaseAnalysis{
         h1_energyDiffCrossesAllNoCuts.setTitleX("energy difference");
         h1_energyDiffCrossesAllNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_energyDiffCrossesAllNoCuts, 31);
-        H2F h2_timeCompCrossesAllNoCuts = new H2F("timeCompCrossesAllNoCuts", "time comparison", 100, 500, 1000, 100, 500, 1000);
+        H2F h2_timeCompCrossesAllNoCuts = new H2F("timeCompCrossesAllNoCuts", "time comparison", 100, 0, 300, 100, 0, 300);
         h2_timeCompCrossesAllNoCuts.setTitleX("time of cluster1");
         h2_timeCompCrossesAllNoCuts.setTitleY("time of cluster2");
         histoGroupCrossesNoCuts.addDataSet(h2_timeCompCrossesAllNoCuts, 32);                
-        H1F h1_timeDiffCrossesAllNoCuts = new H1F("timeDiffCrossesAllNoCuts", "time difference", 100, -200, 200);
+        H1F h1_timeDiffCrossesAllNoCuts = new H1F("timeDiffCrossesAllNoCuts", "time difference", 100, -100, 100);
         h1_timeDiffCrossesAllNoCuts.setTitleX("time difference");
         h1_timeDiffCrossesAllNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeDiffCrossesAllNoCuts, 33);        
-        H1F h1_timeCrossesAllNoCuts = new H1F("timeCrossesAllNoCuts", "time", 100, 500, 1000);
+        H1F h1_timeCrossesAllNoCuts = new H1F("timeCrossesAllNoCuts", "time", 100, 0, 300);
         h1_timeCrossesAllNoCuts.setTitleX("time");
         h1_timeCrossesAllNoCuts.setTitleY("counts");
         histoGroupCrossesNoCuts.addDataSet(h1_timeCrossesAllNoCuts, 34); 
         histoGroupMap.put(histoGroupCrossesNoCuts.getName(), histoGroupCrossesNoCuts);
+        
+        HistoGroup histoGroupCrossesNoCutsPure = new HistoGroup("crossesNoCutsPure", 4, 2); 
+        histoGroupCrossesNoCutsPure.addDataSet(h2_xyCrossesBothNormalNoCuts, 0);      
+        histoGroupCrossesNoCutsPure.addDataSet(h2_sizeCompBothNormalNoCuts, 1);        
+        histoGroupCrossesNoCutsPure.addDataSet(h2_energyCompCrossesBothNormalNoCuts, 2);
+        histoGroupCrossesNoCutsPure.addDataSet(h1_energyDiffCrossesBothNormalNoCuts, 3);
+        histoGroupCrossesNoCutsPure.addDataSet(h2_timeCompCrossesBothNormalNoCuts, 4);                
+        histoGroupCrossesNoCutsPure.addDataSet(h1_timeDiffCrossesBothNormalNoCuts, 5);        
+        histoGroupCrossesNoCutsPure.addDataSet(h1_timeCrossesBothNormalNoCuts, 6);  
+        histoGroupMap.put(histoGroupCrossesNoCutsPure.getName(), histoGroupCrossesNoCutsPure);        
         
         
         HistoGroup histoGroupCrossStatus = new HistoGroup("crossStatus", 5, 3);         
@@ -420,6 +455,7 @@ public class URWellReconstruction extends BaseAnalysis{
         
         
         HistoGroup histoGroupHits = histoGroupMap.get("hits");
+        HistoGroup histoGroupHitsPure = histoGroupMap.get("hitsPure");        
         for(URWellHit hit : hits){
             if(hit.isNormalHit()){
                 histoGroupHits.getH1F("stripNormalHits").fill(hit.strip());
@@ -427,6 +463,12 @@ public class URWellReconstruction extends BaseAnalysis{
                 histoGroupHits.getH1F("timeNormalHits").fill(hit.time());
                 histoGroupHits.getH2F("energyVsStripNormalHits").fill(hit.strip(), hit.energy());
                 histoGroupHits.getH2F("timeVsStripNormalHits").fill(hit.strip(), hit.time());
+                
+                histoGroupHitsPure.getH1F("stripNormalHits").fill(hit.strip());
+                histoGroupHitsPure.getH1F("energyNormalHits").fill(hit.energy());
+                histoGroupHitsPure.getH1F("timeNormalHits").fill(hit.time());
+                histoGroupHitsPure.getH2F("energyVsStripNormalHits").fill(hit.strip(), hit.energy());
+                histoGroupHitsPure.getH2F("timeVsStripNormalHits").fill(hit.strip(), hit.time());                
             }
             else{
                 histoGroupHits.getH1F("stripNoiseHits").fill(hit.strip());
@@ -445,6 +487,7 @@ public class URWellReconstruction extends BaseAnalysis{
         
         
         HistoGroup histoGroupCluster1 = histoGroupMap.get("cluster1");
+        HistoGroup histoGroupCluster1Pure = histoGroupMap.get("cluster1Pure");
         for(URWellCluster cls1 : clusters1){
             if(cls1.isMainStripNormal()) {
                 histoGroupCluster1.getH1F("mainStripNormalCluster1").fill(cls1.strip());
@@ -452,6 +495,11 @@ public class URWellReconstruction extends BaseAnalysis{
                 histoGroupCluster1.getH1F("ratioNormalHitsCluster1").fill(cls1.getRatioNormalHits());
                 histoGroupCluster1.getH1F("energyNormalCluster1").fill(cls1.energy());
                 histoGroupCluster1.getH1F("timeNormalCluster1").fill(cls1.time());
+                
+                histoGroupCluster1Pure.getH1F("mainStripNormalCluster1").fill(cls1.strip());
+                histoGroupCluster1Pure.getH1F("sizeNormalCluster1").fill(cls1.size());
+                histoGroupCluster1Pure.getH1F("energyNormalCluster1").fill(cls1.energy());
+                histoGroupCluster1Pure.getH1F("timeNormalCluster1").fill(cls1.time());                
             }
             else{
                 histoGroupCluster1.getH1F("mainStripNoiseCluster1").fill(cls1.strip());
@@ -469,6 +517,7 @@ public class URWellReconstruction extends BaseAnalysis{
         }
         
         HistoGroup histoGroupCluster2 = histoGroupMap.get("cluster2");
+        HistoGroup histoGroupCluster2Pure = histoGroupMap.get("cluster2Pure");
         for(URWellCluster cls2 : clusters2){
             if(cls2.isMainStripNormal()) {
                 histoGroupCluster2.getH1F("mainStripNormalCluster2").fill(cls2.strip());
@@ -476,6 +525,11 @@ public class URWellReconstruction extends BaseAnalysis{
                 histoGroupCluster2.getH1F("ratioNormalHitsCluster2").fill(cls2.getRatioNormalHits());
                 histoGroupCluster2.getH1F("energyNormalCluster2").fill(cls2.energy());
                 histoGroupCluster2.getH1F("timeNormalCluster2").fill(cls2.time());
+                
+                histoGroupCluster2Pure.getH1F("mainStripNormalCluster2").fill(cls2.strip());
+                histoGroupCluster2Pure.getH1F("sizeNormalCluster2").fill(cls2.size());
+                histoGroupCluster2Pure.getH1F("energyNormalCluster2").fill(cls2.energy());
+                histoGroupCluster2Pure.getH1F("timeNormalCluster2").fill(cls2.time());                
             }
             else{
                 histoGroupCluster2.getH1F("mainStripNoiseCluster2").fill(cls2.strip());
@@ -494,6 +548,7 @@ public class URWellReconstruction extends BaseAnalysis{
         
         HistoGroup histoGroupCrossStatusNoCuts = histoGroupMap.get("crossStatusNoCuts");
         HistoGroup histoGroupCrossesNoCuts = histoGroupMap.get("crossesNoCuts");
+        HistoGroup histoGroupCrossesNoCutsPure = histoGroupMap.get("crossesNoCutsPure");
         for(URWellCross crs : crossesNoCuts){
             if(crs.isBothClustersNoise()) {
                 histoGroupCrossStatusNoCuts.getH1F("crossStatusNoCuts").fill(0);
@@ -538,6 +593,14 @@ public class URWellReconstruction extends BaseAnalysis{
                 histoGroupCrossesNoCuts.getH2F("timeCompCrossesBothNormalNoCuts").fill(crs.getCluster1().time(), crs.getCluster2().time());                
                 histoGroupCrossesNoCuts.getH1F("timeDiffCrossesBothNormalNoCuts").fill(crs.getCluster1().time() - crs.getCluster2().time());                
                 histoGroupCrossesNoCuts.getH1F("timeCrossesBothNormalNoCuts").fill(crs.time());
+                
+                histoGroupCrossesNoCutsPure.getH2F("xyCrossesBothNormalNoCuts").fill(crs.pointLocal().x(), crs.pointLocal().y());
+                histoGroupCrossesNoCutsPure.getH2F("sizeCompBothNormalNoCuts").fill(crs.getCluster1().size(), crs.getCluster2().size());                                
+                histoGroupCrossesNoCutsPure.getH2F("energyCompCrossesBothNormalNoCuts").fill(crs.getCluster1().energy(), crs.getCluster2().energy());                
+                histoGroupCrossesNoCutsPure.getH1F("energyDiffCrossesBothNormalNoCuts").fill(crs.getCluster1().energy() - crs.getCluster2().energy());                
+                histoGroupCrossesNoCutsPure.getH2F("timeCompCrossesBothNormalNoCuts").fill(crs.getCluster1().time(), crs.getCluster2().time());                
+                histoGroupCrossesNoCutsPure.getH1F("timeDiffCrossesBothNormalNoCuts").fill(crs.getCluster1().time() - crs.getCluster2().time());                
+                histoGroupCrossesNoCutsPure.getH1F("timeCrossesBothNormalNoCuts").fill(crs.time());                
             }
             
             histoGroupCrossesNoCuts.getH2F("xyCrossesAllNoCuts").fill(crs.pointLocal().x(), crs.pointLocal().y());
@@ -648,7 +711,7 @@ public class URWellReconstruction extends BaseAnalysis{
             JFrame frame = new JFrame();
             EmbeddedCanvasTabbed canvas = analysis.plotHistos();
             if(canvas != null){
-                frame.setSize(1750, 1050);
+                frame.setSize(1600, 800);
                 frame.add(canvas);
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
