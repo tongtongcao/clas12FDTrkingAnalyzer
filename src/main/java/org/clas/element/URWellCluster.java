@@ -145,7 +145,7 @@ public class URWellCluster implements Comparable<URWellCluster> {
             
             numNormalHits = normalHits.size();
             numBgHits = bgHits.size();
-            ratioNormalHits = (double) numNormalHits/size;
+            ratioNormalHits = (double) numNormalHits/(numNormalHits + numBgHits);
             return true;
         }
     }
