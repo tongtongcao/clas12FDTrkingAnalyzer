@@ -181,7 +181,7 @@ public class DemoBase{
     }
     
     public GraphErrors createBaseLocalSuperlayerWithURWell(String name, String title, int markerStyle, int markerColor, int markerSize){
-        double[] locX = {-2, -2, 7., 7.};
+        double[] locX = {-6, -6, 7., 7.};
         double[] locY = {0, 130, 0, 130};
         GraphErrors graph = new GraphErrors(name, locX, locY);
         graph.setTitle(title);
@@ -231,7 +231,7 @@ public class DemoBase{
         List<Double> locX = new ArrayList();
         List<Double> locY = new ArrayList();
         
-        locX.add(URWellCross.getXRelativeDCSL1LC(uRWellCross.region()));
+        locX.add(uRWellCross.getXRelativeDCSL1LC());
         locY.add(uRWellCross.getYRelativeDCSL1LC());
                 
         GraphErrors graph = new GraphErrors(name, new DataVector(locX), new DataVector(locY));
@@ -247,7 +247,7 @@ public class DemoBase{
         List<Double> locX = new ArrayList();
         List<Double> locY = new ArrayList();
         for(URWellCross crs : uRWellCrosses){
-            locX.add(URWellCross.getXRelativeDCSL1LC(crs.region()));
+            locX.add(crs.getXRelativeDCSL1LC());
             locY.add(crs.getYRelativeDCSL1LC());
         }
         

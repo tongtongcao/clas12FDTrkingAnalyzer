@@ -366,7 +366,7 @@ public class Cluster implements Comparable<Cluster> {
             URWellCross selectedCrossR1 = null;
             double minABSResidualR1 = 999;
             for(URWellCross crs : crossesR1){
-                double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+                double x = crs.getXRelativeDCSL1LC();
                 double y = crs.getYRelativeDCSL1LC();
                 double absResidual = Math.abs(x * slope + intercept - y);
                 if(absResidual < minABSResidualR1 && absResidual < 1){
@@ -378,7 +378,7 @@ public class Cluster implements Comparable<Cluster> {
             URWellCross selectedCrossR2 = null;
             double minABSResidualR2 = 999;
             for(URWellCross crs : crossesR2){
-                double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+                double x = crs.getXRelativeDCSL1LC();
                 double y = crs.getYRelativeDCSL1LC();
                 double absResidual = Math.abs(x * slope + intercept - y);
                 if(absResidual < minABSResidualR2 && absResidual < 1){
@@ -423,7 +423,7 @@ public class Cluster implements Comparable<Cluster> {
             double intercept = fit.getLineFitter().intercept();
             
             for(URWellCross crs : this.matchedURWellCrosses){
-                double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
+                double residual = slope * crs.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
                 residuals.add(residual);
             }
         }
@@ -443,7 +443,7 @@ public class Cluster implements Comparable<Cluster> {
             double intercept = fit.getLineFitter().intercept();
             
             for(URWellCross crs : crosses){
-                double residual = slope * URWellCross.getXRelativeDCSL1LC(crs.region()) + intercept - crs.getYRelativeDCSL1LC();
+                double residual = slope * crs.getXRelativeDCSL1LC() + intercept - crs.getYRelativeDCSL1LC();
                 residuals.add(residual);
             }
         }

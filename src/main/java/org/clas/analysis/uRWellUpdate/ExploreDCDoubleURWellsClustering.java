@@ -233,7 +233,7 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
              
     public void processEvent(Event event){        
         //Read banks
-        LocalEvent localEvent = new LocalEvent(reader, event, Constants.CONVTB, true);
+        LocalEvent localEvent = new LocalEvent(reader, event, Constants.AITB, true);
         
         List<Cluster> validClustersSL1 = new ArrayList();
         for(Track trk : localEvent.getTracksTB()){
@@ -246,9 +246,11 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
         List<URWellCross> uRWellCrosses = localEvent.getURWellCrosses();       
         List<URWellCross> uRWellCrossesR1 = new ArrayList();
         List<URWellCross> uRWellCrossesR2 = new ArrayList();
-        for(URWellCross crs : uRWellCrosses){
-            if(crs.region() == 1) uRWellCrossesR1.add(crs);
-            else if(crs.region() == 2) uRWellCrossesR2.add(crs);
+        if(uRWellCrosses.size() == 2){
+            for(URWellCross crs : uRWellCrosses){
+                if(crs.region() == 1) uRWellCrossesR1.add(crs);
+                else if(crs.region() == 2) uRWellCrossesR2.add(crs);
+            }
         }
         
         
@@ -277,7 +279,7 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
                 double minAbsResidual = 9999;
                 for(URWellCross crs : uRWellCrossesR1){
                     if(crs.sector() == cls.sector()){
-                        double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+                        double x = crs.getXRelativeDCSL1LC();
                         double y = crs.getYRelativeDCSL1LC();
                         double absResidual = Math.abs(slope * x + intercept - y);
                         if(absResidual < minAbsResidual){
@@ -289,7 +291,7 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
                 }
                 for(URWellCross crs : uRWellCrossesR2){
                     if(crs.sector() == cls.sector()){
-                        double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+                        double x = crs.getXRelativeDCSL1LC();
                         double y = crs.getYRelativeDCSL1LC();
                         double absResidual = Math.abs(slope * x + intercept - y);
                         if(absResidual < minAbsResidual){
@@ -305,7 +307,7 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
         HistoGroup histoGroupFit = histoGroupMap.get("fit");
         for(Cluster cls : map_cluster_uRWellCrossR1.keySet()){
             URWellCross crs = map_cluster_uRWellCrossR1.get(cls);                                              
-            double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+            double x = crs.getXRelativeDCSL1LC();
             double y = crs.getYRelativeDCSL1LC();     
             
             for(Hit hit : cls.getHitsAtMostLeftLayer()){
@@ -334,7 +336,7 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
         
         for(Cluster cls : map_cluster_uRWellCrossR2.keySet()){
             URWellCross crs = map_cluster_uRWellCrossR2.get(cls);                                              
-            double x = URWellCross.getXRelativeDCSL1LC(crs.region());
+            double x = crs.getXRelativeDCSL1LC();
             double y = crs.getYRelativeDCSL1LC();     
             
             for(Hit hit : cls.getHitsAtMostLeftLayer()){
@@ -364,11 +366,11 @@ public class ExploreDCDoubleURWellsClustering extends BaseAnalysis{
         for(Cluster cls : map_cluster_uRWellCrossR1.keySet()){
             if(map_cluster_uRWellCrossR2.keySet().contains(cls)){
                 URWellCross crsR1 = map_cluster_uRWellCrossR1.get(cls);                                              
-                double xR1 = URWellCross.getXRelativeDCSL1LC(crsR1.region());
+                double xR1 = crsR1.getXRelativeDCSL1LC();
                 double yR1 = crsR1.getYRelativeDCSL1LC(); 
                 
                 URWellCross crsR2 = map_cluster_uRWellCrossR2.get(cls);                                              
-                double xR2 = URWellCross.getXRelativeDCSL1LC(crsR2.region());
+                double xR2 = crsR2.getXRelativeDCSL1LC();
                 double yR2 = crsR2.getYRelativeDCSL1LC(); 
 
                 ClusterFitLC fitClus = new ClusterFitLC(cls);

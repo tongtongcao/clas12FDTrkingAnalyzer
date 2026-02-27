@@ -77,7 +77,7 @@ public class Constants {
     public static final int[] DENOISINGHITORDERS = {0, 10, 40, 70};
     
     // CalCulate uRWell crosses in LC
-    public static double URWELLZTSC[] = {226.0464, 227.3464}; // cm
+    public static double URWELLZTSC[] = {223.0, 226.0}; // cm
     public static double INTERVALDCSL1L1L2TSC = 1.15848; // cm
     public static double DCSL1L1ZTSC = 229.27948; // cm
     public static double DCSL1L1W1XTSC = -83.7509153; // cm
