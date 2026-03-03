@@ -525,7 +525,7 @@ public class URWellReconstruction extends BaseAnalysis{
                 histoGroupCluster1Pure.getH1F("sizeNormalCluster1").fill(cls1.size());
                 histoGroupCluster1Pure.getH1F("energyNormalCluster1").fill(cls1.energy());
                 histoGroupCluster1Pure.getH1F("timeNormalCluster1").fill(cls1.time());   
-                histoGroupCluster1Pure.getH2F("endPointsNormalCluster1").fill(cls1.endPointLocal().x(), cls1.endPointLocal().y());
+                histoGroupCluster1Pure.getH2F("endPointsNormalCluster1").fill(cls1.originalPointLocal().x(), cls1.originalPointLocal().y());
                 histoGroupCluster1Pure.getH2F("endPointsNormalCluster1").fill(cls1.endPointLocal().x(), cls1.endPointLocal().y());                    
             }
             else{
