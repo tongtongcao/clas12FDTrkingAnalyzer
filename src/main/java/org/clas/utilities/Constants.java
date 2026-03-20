@@ -7,7 +7,9 @@ import org.jlab.detector.base.DetectorType;
  *
  * @author Tongtong
  */
-public class Constants {       
+public class Constants {     
+    public static final double LIGHTSPEED = 29.9792458; // unit: cm/ns
+    
     // CONSTATNS for TRANSFORMATION
     public static final double SIN25 = Math.sin(Math.toRadians(25.));
     public static final double COS25 = Math.cos(Math.toRadians(25.));

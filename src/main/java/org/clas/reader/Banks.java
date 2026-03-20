@@ -43,7 +43,10 @@ public class Banks {
     private Bank cvHBSegmentBank;
     private Bank cvHBClusterBank;
     private Bank cvHBHitBank;
+    private Bank cvRecHBEventBank;
+    private Bank cvHBURWellCrossBank;
     private Bank cvHBHitTrkIdBank;
+    
     private Bank cvTBParticleBank;
     private Bank cvTBTrajectoryBank;
     private Bank cvTBTrackBank;
@@ -52,8 +55,8 @@ public class Banks {
     private Bank cvTBSegmentBank;
     private Bank cvTBClusterBank;
     private Bank cvTBHitBank;
-    private Bank cvRecHBEventBank;
-    private Bank cvRecTBEventBank;
+    private Bank cvRecTBEventBank;    
+    private Bank cvTBURWellCrossBank;
     
     // ai banks
     private Bank aiCandidates;
@@ -65,7 +68,10 @@ public class Banks {
     private Bank aiHBSegmentBank;
     private Bank aiHBClusterBank;
     private Bank aiHBHitBank;
+    private Bank aiRecHBEventBank;
+    private Bank aiHBURWellCrossBank;
     private Bank aiHBHitTrkIdBank;
+    
     private Bank aiTBParticleBank;
     private Bank aiTBTrajectoryBank;
     private Bank aiTBTrackBank;
@@ -73,9 +79,9 @@ public class Banks {
     private Bank aiTBCrossBank;
     private Bank aiTBSegmentBank;
     private Bank aiTBClusterBank;
-    private Bank aiTBHitBank;
-    private Bank aiRecHBEventBank;
+    private Bank aiTBHitBank;    
     private Bank aiRecTBEventBank;
+    private Bank aiTBURWellCrossBank;
     
 
     public Banks(SchemaFactory schema) {
@@ -139,6 +145,9 @@ public class Banks {
         }
         if(schema.hasSchema("RECHB::Event")) {
             this.cvRecHBEventBank   = new Bank(schema.getSchema("RECHB::Event"));
+        } 
+        if(schema.hasSchema("HitBasedTrkg::HBURWellCrosses")) {
+            this.cvHBURWellCrossBank   = new Bank(schema.getSchema("HitBasedTrkg::HBURWellCrosses"));
         }        
 
         // Conventional TB banks
@@ -165,7 +174,10 @@ public class Banks {
         }
         if(schema.hasSchema("REC::Event")) {
             this.cvRecTBEventBank   = new Bank(schema.getSchema("REC::Event"));
-        }   
+        } 
+        if(schema.hasSchema("TimeBasedTrkg::TBURWellCrosses")) {
+            this.cvTBURWellCrossBank   = new Bank(schema.getSchema("TimeBasedTrkg::TBURWellCrosses"));
+        }         
 
         // AI HB banks
         if(schema.hasSchema("ai::tracks"))
@@ -196,6 +208,9 @@ public class Banks {
         }
         if(schema.hasSchema("RECHBAI::Event")) {
             this.aiRecHBEventBank   = new Bank(schema.getSchema("RECHBAI::Event"));
+        }
+        if(schema.hasSchema("HitBasedTrkg::AIURWellCrosses")) {
+            this.aiHBURWellCrossBank   = new Bank(schema.getSchema("HitBasedTrkg::AIURWellCrosses"));
         }         
 
         // AI TB banks
@@ -222,7 +237,10 @@ public class Banks {
         }
         if(schema.hasSchema("RECAI::Event")) {
             this.aiRecTBEventBank   = new Bank(schema.getSchema("RECAI::Event"));
-        } 
+        }
+        if(schema.hasSchema("TimeBasedTrkg::AIURWellCrosses")) {
+            this.aiTBURWellCrossBank   = new Bank(schema.getSchema("TimeBasedTrkg::AIURWellCrosses"));
+        }         
     }
 
     public Bank getRunConfig() {
@@ -393,6 +411,21 @@ public class Banks {
         }  
     }
     
+    public Bank getTrackingURWellCrossBank(int type) {
+        switch(type) {
+            case Constants.CONVHB:
+                return cvHBURWellCrossBank;
+            case Constants.CONVTB:
+                return cvTBURWellCrossBank;
+            case Constants.AIHB:
+                return aiHBURWellCrossBank;
+            case Constants.AITB:
+                return aiTBURWellCrossBank;
+            default:
+                return null;                 
+        }  
+    }    
+    
     public Bank getHBTrackingHitTrkIdBank(int type){
         switch(type){
             case Constants.CONVHB:
@@ -419,7 +452,7 @@ public class Banks {
                 return null;                 
         }  
     }
-    
+          
     public Bank getAICandidateBank() {
 	return aiCandidates;
     }

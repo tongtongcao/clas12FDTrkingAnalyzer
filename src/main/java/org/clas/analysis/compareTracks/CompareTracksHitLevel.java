@@ -219,8 +219,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
 
     public void processEvent(Event event1, Event event2, int trkType) {
         //// Read banks
-        LocalEvent localEvent1 = new LocalEvent(reader, event1, trkType, Constants.URWELL);
-        LocalEvent localEvent2 = new LocalEvent(reader, event2, trkType, Constants.URWELL);
+        LocalEvent localEvent1 = new LocalEvent(reader1, event1, trkType, Constants.URWELL);
+        LocalEvent localEvent2 = new LocalEvent(reader2, event2, trkType, Constants.URWELL);
         
         List<Track> trackList1 = new ArrayList();    
         List<Track> trackList2 = new ArrayList();    
@@ -550,8 +550,9 @@ public class CompareTracksHitLevel extends BaseAnalysis {
             HipoReader reader2 = new HipoReader();
             reader2.open(inputList.get(1));
 
-            SchemaFactory schema = reader1.getSchemaFactory();
-            analysis.initReader(new Banks(schema));
+            SchemaFactory schema1 = reader1.getSchemaFactory();
+            SchemaFactory schema2 = reader2.getSchemaFactory();
+            analysis.initReader(new Banks(schema1), new Banks(schema2));
 
             int counter = 0;
             Event event1 = new Event();

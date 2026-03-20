@@ -62,6 +62,8 @@ public class LocalEvent {
     private List<URWellCluster> uRWellClusters = new ArrayList();
     private List<URWellCross> uRWellCrosses = new ArrayList();
     private List<URWellCross> uRWellCrossesNoCuts = new ArrayList();
+    private List<URWellCross> uRWellCrossesHB = new ArrayList();
+    private List<URWellCross> uRWellCrossesTB = new ArrayList();
     private RecEvent recHBEvent = null;
     private RecEvent recTBEvent = null;
     
@@ -230,7 +232,15 @@ public class LocalEvent {
                 }
             }
             
-            
+            uRWellCrossesHB = reader.readURWellCrosses(event, trkType);
+            for(URWellCross crs : uRWellCrossesHB){
+                for(URWellCluster cls : uRWellClusters){
+                    if(crs.cluster1Id() == cls.id()) crs.setCluster1(cls);
+                    if(crs.cluster2Id() == cls.id()) crs.setCluster2(cls);
+                    if(crs.getCluster1() != null && crs.getCluster2() != null) break;
+                }
+            }            
+                        
             tracksHB = reader.readTracks(event, trkType);                  
             for(Track trk : tracksHB) {
                 trk.setCrosses(crossesAllHB);
@@ -250,17 +260,21 @@ public class LocalEvent {
             
             if(readURWell){
                 for(Track trk : tracksHB){
-                    List<URWellCross> matchedURWellCrosses = new ArrayList(); 
+                    List<URWellCross> matchedURWellCrosses = new ArrayList();
+                    for(URWellCross uRWellCross : uRWellCrossesHB){
+                        if(uRWellCross.tid() == trk.id()) matchedURWellCrosses.add(uRWellCross);
+                    }
+                    
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
                     }
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
@@ -282,6 +296,15 @@ public class LocalEvent {
                     if(crs.getCluster1() != null && crs.getCluster2() != null) break;
                 }
             }
+            
+            uRWellCrossesHB = reader.readURWellCrosses(event, trkType-1);
+            for(URWellCross crs : uRWellCrossesHB){
+                for(URWellCluster cls : uRWellClusters){
+                    if(crs.cluster1Id() == cls.id()) crs.setCluster1(cls);
+                    if(crs.cluster2Id() == cls.id()) crs.setCluster2(cls);
+                    if(crs.getCluster1() != null && crs.getCluster2() != null) break;
+                }
+            }            
             
             tracksHB = reader.readTracks(event, trkType-1);                  
             for(Track trk : tracksHB) {
@@ -313,6 +336,15 @@ public class LocalEvent {
                 }
             }
             
+            uRWellCrossesTB = reader.readURWellCrosses(event, trkType);
+            for(URWellCross crs : uRWellCrossesTB){
+                for(URWellCluster cls : uRWellClusters){
+                    if(crs.cluster1Id() == cls.id()) crs.setCluster1(cls);
+                    if(crs.cluster2Id() == cls.id()) crs.setCluster2(cls);
+                    if(crs.getCluster1() != null && crs.getCluster2() != null) break;
+                }
+            }             
+            
             tracksTB = reader.readTracks(event, trkType);                 
             for(Track trk : tracksTB) {
                 trk.setCrosses(crossesAllTB);
@@ -333,16 +365,20 @@ public class LocalEvent {
             if(readURWell){
                 for(Track trk : tracksHB){
                     List<URWellCross> matchedURWellCrosses = new ArrayList(); 
+                    for(URWellCross uRWellCross : uRWellCrossesHB){
+                        if(uRWellCross.tid() == trk.id()) matchedURWellCrosses.add(uRWellCross);
+                    }
+                    
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
                     }
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedHB(true);
                             break;
                         }
@@ -352,16 +388,20 @@ public class LocalEvent {
                 
                 for(Track trk : tracksTB){
                     List<URWellCross> matchedURWellCrosses = new ArrayList(); 
+                    for(URWellCross uRWellCross : uRWellCrossesTB){
+                        if(uRWellCross.tid() == trk.id()) matchedURWellCrosses.add(uRWellCross);
+                    }
+                    
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[0]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedTB(true);
                             break;
                         }
                     }
                     for(URWellCross uRWellCross : uRWellCrosses){
                         if(uRWellCross.id() == trk.uRWellCrossIds()[1]){
-                            matchedURWellCrosses.add(uRWellCross);
+                            //matchedURWellCrosses.add(uRWellCross);
                             uRWellCross.setIsUsedTB(true);
                             break;
                         }
@@ -470,7 +510,11 @@ public class LocalEvent {
     
     public List<Cross> getCrossesHB(){
         return crossesHB;
-    }    
+    } 
+    
+    public List<URWellCross> getURWellCrossesHB(){
+        return uRWellCrossesHB;
+    }     
     
     public List<Track> getTracksHB(){
         return tracksHB;
@@ -498,7 +542,11 @@ public class LocalEvent {
     
     public List<Cross> getCrossesTB(){
         return crossesTB;
-    }    
+    }   
+    
+    public List<URWellCross> getURWellCrossesTB(){
+        return uRWellCrossesTB;
+    }      
     
     public List<Track> getTracksTB(){
         return tracksTB;

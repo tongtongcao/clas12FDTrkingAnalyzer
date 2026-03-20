@@ -254,7 +254,7 @@ public class Reader {
     public List<Cross> readCrosses(Event event, int type) {
         Bank crossBank = banks.getTrackingCrossBank(type);
         
-        ArrayList<Cross> crosses = new ArrayList();
+        List<Cross> crosses = new ArrayList();
         
         if(crossBank != null){
             event.read(crossBank);
@@ -320,7 +320,7 @@ public class Reader {
             }
         }
         
-        ArrayList<Cluster> clusters = new ArrayList();
+        List<Cluster> clusters = new ArrayList();
         
         if(clusterBank != null){
             event.read(clusterBank);
@@ -389,7 +389,7 @@ public class Reader {
     //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22) or Cluster from clusterring(others)
     public List<Hit> readHits(Event event, int type) {
         Bank dcTDCBank = banks.getDCTDCBank();
-        ArrayList<TDC> tdcs = new ArrayList();
+        List<TDC> tdcs = new ArrayList();
         if(dcTDCBank != null){
             tdcs = readTDCs(event);
         }
@@ -418,7 +418,7 @@ public class Reader {
             hitBank = banks.getTrackingHitBank(type);           
         }
         
-        ArrayList<Hit> hits = new ArrayList();
+        List<Hit> hits = new ArrayList();
         
         if(hitBank != null){
             event.read(hitBank);
@@ -449,12 +449,14 @@ public class Reader {
                     hit.setTProp(hitBank.getFloat("TProp", loop));
                     hit.setBeta(hitBank.getFloat("beta", loop));
                     
+                    /*
                     try{
                         hit.dafWeight(hitBank.getFloat("DAFWeight", loop));
                     }              
                     catch(Exception e){
                        LOGGER.log(Level.FINER, "no item DAFWeight in DC hit bank!");
                     }
+*/
                 }
                 
                 if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){                 
@@ -490,8 +492,8 @@ public class Reader {
         return hits;
     }  
     
-    public ArrayList<TDC> readTDCs(Event event) {
-        ArrayList<TDC> tdcs = new ArrayList();
+    public List<TDC> readTDCs(Event event) {
+        List<TDC> tdcs = new ArrayList();
         
         Bank dcTOTBank = banks.getDCTOTBank();
         if(dcTOTBank != null){
@@ -532,9 +534,9 @@ public class Reader {
         return tdcs;
     } 
     
-    public ArrayList<AICandidate> readAICandidates(Event event) {
+    public List<AICandidate> readAICandidates(Event event) {
         Bank aiCandidateBank = banks.getAICandidateBank();
-        ArrayList<AICandidate> cands = new ArrayList();
+        List<AICandidate> cands = new ArrayList();
         
         if(aiCandidateBank != null){
             event.read(aiCandidateBank);
@@ -562,10 +564,81 @@ public class Reader {
         return cands;
     }
     
-    public ArrayList<URWellCross> readURWellCrosses(Event event){
+    //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22)
+    public List<URWellCross> readURWellCrosses(Event event, int type){
+        Bank uRWellCrossBank = banks.getTrackingURWellCrossBank(type);
+        
+        List<URWellCross> crosses = new ArrayList();
+        
+        if(uRWellCrossBank != null){
+            event.read(uRWellCrossBank);
+            
+            for(int loop = 0; loop < uRWellCrossBank.getRows(); loop++){
+
+                if(type == Constants.CONVHB || type == Constants.AIHB) {
+                    URWellCross cross = new URWellCross( 
+                            uRWellCrossBank.getInt("id", loop),
+                            uRWellCrossBank.getInt("tid", loop),
+                            uRWellCrossBank.getInt("status", loop),
+                            uRWellCrossBank.getInt("sector", loop),
+                            uRWellCrossBank.getInt("region", loop),
+                            uRWellCrossBank.getInt("cluster1", loop),
+                            uRWellCrossBank.getInt("cluster2", loop),
+                            uRWellCrossBank.getFloat("energy", loop),
+                            uRWellCrossBank.getFloat("time", loop),
+                            uRWellCrossBank.getFloat("x", loop),
+                            uRWellCrossBank.getFloat("y", loop),
+                            uRWellCrossBank.getFloat("z", loop),
+                            uRWellCrossBank.getFloat("cluster1_x_state", loop),
+                            uRWellCrossBank.getFloat("cluster1_y_state", loop),
+                            uRWellCrossBank.getFloat("cluster1_B", loop),
+                            uRWellCrossBank.getFloat("cluster1_pathLength", loop),
+                            uRWellCrossBank.getFloat("cluster2_x_state", loop),
+                            uRWellCrossBank.getFloat("cluster2_y_state", loop),
+                            uRWellCrossBank.getFloat("cluster2_B", loop),
+                            uRWellCrossBank.getFloat("cluster2_pathLength", loop)                            
+                            );
+
+                    crosses.add(cross);
+                }
+                else {
+                    URWellCross cross = new URWellCross( 
+                            uRWellCrossBank.getInt("id", loop),
+                            uRWellCrossBank.getInt("tid", loop),
+                            uRWellCrossBank.getInt("status", loop),
+                            uRWellCrossBank.getInt("sector", loop),
+                            uRWellCrossBank.getInt("region", loop),
+                            uRWellCrossBank.getInt("cluster1", loop),
+                            uRWellCrossBank.getInt("cluster2", loop),
+                            uRWellCrossBank.getFloat("energy", loop),
+                            uRWellCrossBank.getFloat("time", loop),
+                            uRWellCrossBank.getFloat("x", loop),
+                            uRWellCrossBank.getFloat("y", loop),
+                            uRWellCrossBank.getFloat("z", loop),
+                            uRWellCrossBank.getFloat("cluster1_x_state", loop),
+                            uRWellCrossBank.getFloat("cluster1_y_state", loop),
+                            uRWellCrossBank.getFloat("cluster1_B", loop),
+                            uRWellCrossBank.getFloat("cluster1_pathLength", loop),
+                            uRWellCrossBank.getFloat("cluster1_DAFWeight", loop),
+                            uRWellCrossBank.getFloat("cluster2_x_state", loop),
+                            uRWellCrossBank.getFloat("cluster2_y_state", loop),
+                            uRWellCrossBank.getFloat("cluster2_B", loop),
+                            uRWellCrossBank.getFloat("cluster2_pathLength", loop),
+                            uRWellCrossBank.getFloat("cluster2_DAFWeight", loop)
+                            );
+
+                    crosses.add(cross);
+                }
+            }
+        }                
+        
+        return crosses;
+    }    
+    
+    public List<URWellCross> readURWellCrosses(Event event){
         Bank uRWellCrossBank = banks.getURWellCrossBank();
         
-        ArrayList<URWellCross> crosses = new ArrayList();
+        List<URWellCross> crosses = new ArrayList();
         
         if(uRWellCrossBank != null){
             event.read(uRWellCrossBank);
@@ -593,10 +666,10 @@ public class Reader {
         return crosses;
     }
     
-    public ArrayList<URWellCluster> readURWellClusters(Event event){
+    public List<URWellCluster> readURWellClusters(Event event){
         Bank uRWellClusterBank = banks.getURWellClusterBank();
         
-        ArrayList<URWellCluster> clusters = new ArrayList();
+        List<URWellCluster> clusters = new ArrayList();
         
         if(uRWellClusterBank != null){
             event.read(uRWellClusterBank);
@@ -627,10 +700,10 @@ public class Reader {
         return clusters;
     }
     
-    public ArrayList<URWellHit> readURWellHits(Event event){
+    public List<URWellHit> readURWellHits(Event event){
         Bank uRWellADCBank = banks.getURWellADCBank();
         
-        ArrayList<URWellADC> adcs = new ArrayList();
+        List<URWellADC> adcs = new ArrayList();
         
         if(uRWellADCBank != null){
             event.read(uRWellADCBank);
@@ -653,7 +726,7 @@ public class Reader {
         
         Bank uRWellHitBank = banks.getURWellHitBank();
         
-        ArrayList<URWellHit> hits = new ArrayList();
+        List<URWellHit> hits = new ArrayList();
         
         if(uRWellHitBank != null){
             event.read(uRWellHitBank);
@@ -683,10 +756,10 @@ public class Reader {
     }
     
     
-    public ArrayList<MCParticle> readMCParticles(Event event){
+    public List<MCParticle> readMCParticles(Event event){
         Bank mcParticleBank = banks.getMCParticle();
         
-        ArrayList<MCParticle> mcParticles = new ArrayList();
+        List<MCParticle> mcParticles = new ArrayList();
         
         if(mcParticleBank != null){
             event.read(mcParticleBank);
