@@ -146,7 +146,7 @@ public class Reader {
                               trackingBank.getShort("Cross2_ID", it),
                               trackingBank.getShort("Cross3_ID", it));
                 
-                try{
+                if (trackingBank.getSchema().hasEntry("URWellCross1_ID") && trackingBank.getSchema().hasEntry("URWellCross2_ID")){
                     track.uRWellCrossIds(trackingBank.getInt("URWellCross1_ID", it), trackingBank.getInt("URWellCross2_ID", it));
                     track.setURWellProjectionR1(trackingBank.getFloat("URWell_R1_x", it),
                                               trackingBank.getFloat("URWell_R1_y", it),
@@ -156,9 +156,6 @@ public class Reader {
                                               trackingBank.getFloat("URWell_R2_z", it));
                     
                     
-                }
-                catch(Exception e){
-                    LOGGER.log(Level.FINER, "no items for URWell in track bank!");
                 }
                 track.polarity(torusScale);
                 tracks.add(track);
