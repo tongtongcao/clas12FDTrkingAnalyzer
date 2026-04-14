@@ -448,22 +448,17 @@ public class Reader {
                     hit.setTFlight(hitBank.getFloat("TFlight", loop));
                     hit.setTProp(hitBank.getFloat("TProp", loop));
                     hit.setBeta(hitBank.getFloat("beta", loop));
+                    hit.setFitResidual(hitBank.getFloat("fitResidual", loop));
                     
-                    try{
+                    if (hitBank.getSchema().hasEntry("DAFWeight")) {
                         hit.dafWeight(hitBank.getFloat("DAFWeight", loop));
                     }              
-                    catch(Exception e){
-                       LOGGER.log(Level.FINER, "no item DAFWeight in DC hit bank!");
-                    }
                 }
                 
                 if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){                 
-                    try{
+                    if (hitBank.getSchema().hasEntry("indexTDC")) {
                         hit.indexTDC(hitBank.getInt("indexTDC", loop));
                     }              
-                    catch(Exception e){
-                        LOGGER.log(Level.FINER, "no item indexTDC in DC hit bank!");
-                    }
                 }
                 for(TDC tdc : tdcs){
                     if(hit.hitMatched(tdc)) {
