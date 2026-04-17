@@ -58,6 +58,7 @@ public class LocalEvent {
     private List<Cluster> clustersTB = new ArrayList();
     private List<Cross> crossesTB = new ArrayList();
     private List<Track> tracksTB = new ArrayList();   
+    private List<URWellADC> uRWellADCs = new ArrayList();
     private List<URWellHit> uRWellHits = new ArrayList();
     private List<URWellCluster> uRWellClusters = new ArrayList();
     private List<URWellCross> uRWellCrosses = new ArrayList();
@@ -104,6 +105,8 @@ public class LocalEvent {
         mcTrue = reader.readMCTrue(event);
         
         if(readURWell){
+            List<URWellADC> uRWellADCs = reader.readURWellADCs(event);
+            
             List<URWellHit> allURWellHits = reader.readURWellHits(event);
             List<URWellCluster> allURWellClusters = reader.readURWellClusters(event);
             List<URWellCross> allURWellCrosses = reader.readURWellCrosses(event);
@@ -426,6 +429,10 @@ public class LocalEvent {
 
     public MCTrue getMCTrue(){
         return mcTrue;
+    } 
+    
+    public List<URWellADC> getURWellADCs(){
+        return uRWellADCs;
     }    
     
     public List<URWellHit> getURWellHits(){

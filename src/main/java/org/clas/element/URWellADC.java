@@ -1,5 +1,6 @@
 package org.clas.element;
 
+import org.clas.utilities.Constants;
 import org.jlab.geom.prim.Point3D;
 
 /**
@@ -52,5 +53,18 @@ public class URWellADC{
         
     public double time(){
         return time;
-    }         
+    }  
+    
+    public boolean isRemainedAfterDecoding(){
+        boolean flagRejection = false;
+        for(int rejectedOrder : Constants.DECODINGREJECTEDHITORDERS){
+            if(order == rejectedOrder) {
+                flagRejection = true;
+                break;
+            }
+        }
+        
+        if(flagRejection) return false;
+        else return true;
+    } 
 }

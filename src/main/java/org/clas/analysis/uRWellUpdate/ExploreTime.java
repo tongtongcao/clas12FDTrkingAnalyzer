@@ -55,25 +55,25 @@ public class ExploreTime extends BaseAnalysis{
     @Override
     public void createHistoGroupMap(){
         HistoGroup histoGroupTimeHB = new HistoGroup("timeHB", 4, 4);
-        H1F h1_startTimeHB= new H1F("startTimeHB","start time for HB" , 100, 120, 130);
+        H1F h1_startTimeHB= new H1F("startTimeHB","start time for HB" , 100, 90, 110);
         h1_startTimeHB.setTitleX("start time");
         h1_startTimeHB.setTitleY("Counts");
         histoGroupTimeHB.addDataSet(h1_startTimeHB, 0);           
         for (int i = 0; i < 4; i++) {
             H1F h1_clusterTime = new H1F("clusterTimeLayer" + Integer.toString(i + 1),
-                    "cluster time for layer" + Integer.toString(i + 1), 100, 100, 160);
+                    "cluster time for layer" + Integer.toString(i + 1), 100, 60, 160);
             h1_clusterTime.setTitleX("cluster time");
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_clusterTime, i+4);            
 
             H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
-                    "propagation time for layer" + Integer.toString(i + 1), 100, 8, 12);
+                    "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
             h1_propTime.setTitleX("propagation time");
             h1_propTime.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_propTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
-                    "time difference for layer" + Integer.toString(i + 1), 100, -20, 20);
+                    "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
             h1_timeDiff.setTitleX("time difference");
             h1_timeDiff.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_timeDiff, i+12);            
@@ -81,25 +81,25 @@ public class ExploreTime extends BaseAnalysis{
         histoGroupMap.put(histoGroupTimeHB.getName(), histoGroupTimeHB);
         
         HistoGroup histoGroupTimeTB = new HistoGroup("timeTB", 4, 4);
-        H1F h1_startTimeTB= new H1F("startTimeTB","start time for TB" , 100, 120, 130);
+        H1F h1_startTimeTB= new H1F("startTimeTB","start time for TB" , 100, 90, 110);
         h1_startTimeTB.setTitleX("start time");
         h1_startTimeTB.setTitleY("Counts");
         histoGroupTimeTB.addDataSet(h1_startTimeTB, 0);           
         for (int i = 0; i < 4; i++) {
             H1F h1_clusterTime = new H1F("clusterTimeLayer" + Integer.toString(i + 1),
-                    "cluster time for layer" + Integer.toString(i + 1), 100, 100, 160);
+                    "cluster time for layer" + Integer.toString(i + 1), 100, 60, 160);
             h1_clusterTime.setTitleX("cluster time");
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_clusterTime, i+4);            
 
             H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
-                    "propagation time for layer" + Integer.toString(i + 1), 100, 8, 12);
+                    "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
             h1_propTime.setTitleX("propagation time");
             h1_propTime.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_propTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
-                    "time difference for layer" + Integer.toString(i + 1), 100, -20, 20);
+                    "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
             h1_timeDiff.setTitleX("time difference");
             h1_timeDiff.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_timeDiff, i+12);            

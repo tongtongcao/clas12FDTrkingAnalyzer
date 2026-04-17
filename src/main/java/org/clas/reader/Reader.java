@@ -755,6 +755,32 @@ public class Reader {
         return hits;
     }
     
+    public List<URWellADC> readURWellADCs(Event event){
+        Bank uRWellADCBank = banks.getURWellADCBank();
+        
+        List<URWellADC> adcs = new ArrayList();
+        
+        if(uRWellADCBank != null){
+            event.read(uRWellADCBank);
+            
+            for(int loop = 0; loop < uRWellADCBank.getRows(); loop++){
+
+                URWellADC adc = new URWellADC( 
+                        uRWellADCBank.getInt("sector", loop),
+                        uRWellADCBank.getInt("layer", loop),
+                        uRWellADCBank.getInt("component", loop),
+                        uRWellADCBank.getInt("order", loop),
+                        uRWellADCBank.getInt("ADC", loop),
+                        uRWellADCBank.getInt("ped", loop),
+                        uRWellADCBank.getFloat("time", loop)
+                        );                
+                
+                adcs.add(adc);
+            }
+        }
+        
+        return adcs;
+    }        
     
     public List<MCParticle> readMCParticles(Event event){
         Bank mcParticleBank = banks.getMCParticle();
