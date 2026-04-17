@@ -55,52 +55,52 @@ public class ExploreTime extends BaseAnalysis{
     @Override
     public void createHistoGroupMap(){
         HistoGroup histoGroupTimeHB = new HistoGroup("timeHB", 4, 4);
-        H1F h1_startTimeHB= new H1F("startTimeHB","start time for HB" , 100, 90, 110);
-        h1_startTimeHB.setTitleX("start time");
+        H1F h1_startTimeHB= new H1F("startTimeHB","start time for HB" , 100, 94, 98);
+        h1_startTimeHB.setTitleX("start time (ns)");
         h1_startTimeHB.setTitleY("Counts");
         histoGroupTimeHB.addDataSet(h1_startTimeHB, 0);           
         for (int i = 0; i < 4; i++) {
             H1F h1_clusterTime = new H1F("clusterTimeLayer" + Integer.toString(i + 1),
                     "cluster time for layer" + Integer.toString(i + 1), 100, 60, 160);
-            h1_clusterTime.setTitleX("cluster time");
+            h1_clusterTime.setTitleX("cluster time (ns)");
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_clusterTime, i+4);            
 
             H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
                     "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
-            h1_propTime.setTitleX("propagation time");
+            h1_propTime.setTitleX("propagation time (ns)");
             h1_propTime.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_propTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
                     "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
-            h1_timeDiff.setTitleX("time difference");
+            h1_timeDiff.setTitleX("time difference (ns)");
             h1_timeDiff.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_timeDiff, i+12);            
         }           
         histoGroupMap.put(histoGroupTimeHB.getName(), histoGroupTimeHB);
         
         HistoGroup histoGroupTimeTB = new HistoGroup("timeTB", 4, 4);
-        H1F h1_startTimeTB= new H1F("startTimeTB","start time for TB" , 100, 90, 110);
-        h1_startTimeTB.setTitleX("start time");
+        H1F h1_startTimeTB= new H1F("startTimeTB","start time for TB" , 100, 94, 98);
+        h1_startTimeTB.setTitleX("start time (ns)");
         h1_startTimeTB.setTitleY("Counts");
         histoGroupTimeTB.addDataSet(h1_startTimeTB, 0);           
         for (int i = 0; i < 4; i++) {
             H1F h1_clusterTime = new H1F("clusterTimeLayer" + Integer.toString(i + 1),
                     "cluster time for layer" + Integer.toString(i + 1), 100, 60, 160);
-            h1_clusterTime.setTitleX("cluster time");
+            h1_clusterTime.setTitleX("cluster time (ns)");
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_clusterTime, i+4);            
 
             H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
                     "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
-            h1_propTime.setTitleX("propagation time");
+            h1_propTime.setTitleX("propagation time (ns)");
             h1_propTime.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_propTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
                     "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
-            h1_timeDiff.setTitleX("time difference");
+            h1_timeDiff.setTitleX("time difference (ns)");
             h1_timeDiff.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_timeDiff, i+12);            
         }           
@@ -184,6 +184,26 @@ public class ExploreTime extends BaseAnalysis{
     }
     
     public void postEventProcess() {
+        
+        HistoGroup histoGroupTimeHB = histoGroupMap.get("timeHB");
+        HistoGroup histoGroupTimeTB = histoGroupMap.get("timeTB");
+        for(int i = 0; i < 4; i++){
+            F1D func_HB  = new F1D("func_HB for layer" +  Integer.toString(i + 1),"[amp]*gaus(x,[mean],[sigma])", -20,20);
+            func_HB.setParameter(0, histoGroupTimeHB.getH1F("clusterTimeLayer" + Integer.toString(i + 1)).getMax());
+            func_HB.setParameter(1, 0);
+            func_HB.setParameter(2, 10);
+            func_HB.setLineColor(2);
+            func_HB.setOptStat(1110);
+            histoGroupTimeHB.getH1F("timeDiffLayer" + Integer.toString(i + 1)).fit(func_HB); 
+            
+            F1D func_TB  = new F1D("func_TB for layer" +  Integer.toString(i + 1),"[amp]*gaus(x,[mean],[sigma])", -20,20);
+            func_TB.setParameter(0, histoGroupTimeTB.getH1F("clusterTimeLayer" + Integer.toString(i + 1)).getMax());
+            func_TB.setParameter(1, 0);
+            func_TB.setParameter(2, 10);
+            func_TB.setLineColor(2);
+            func_TB.setOptStat(1110);
+            histoGroupTimeTB.getH1F("timeDiffLayer" + Integer.toString(i + 1)).fit(func_TB); 
+        }
                                    
     }            
                             
