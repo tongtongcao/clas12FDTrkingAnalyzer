@@ -116,7 +116,7 @@ public class Banks {
         if(schema.hasSchema("REC::Particle"))
             this.cvHBParticleBank   = new Bank(schema.getSchema("RECHB::Particle"));
         if(schema.hasSchema("REC::Traj"))
-            this.cvHBTrajectoryBank = new Bank(schema.getSchema("RECHB::Traj"));
+            this.cvHBTrajectoryBank = new Bank(schema.getSchema("REC::Traj"));
         if(schema.hasSchema("REC::Track"))
             this.cvHBTrackBank      = new Bank(schema.getSchema("RECHB::Track"));
         if(schema.hasSchema("HitBasedTrkg::HBTracks")) {
