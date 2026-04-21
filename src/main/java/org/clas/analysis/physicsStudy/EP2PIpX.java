@@ -3,6 +3,10 @@ package org.clas.analysis.physicsStudy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
 import org.jlab.jnp.hipo4.data.Event;
@@ -18,22 +22,23 @@ import org.clas.reader.Banks;
 import org.clas.graph.HistoGroup;
 import org.clas.physicsEvent.EventValidTracks;
 import org.clas.analysis.BaseAnalysis;
+import org.jlab.groot.math.F1D;
 /**
  *
  * @author Tongtong Cao
  */
-public class EnPIp extends BaseAnalysis{
+public class EP2PIpX extends BaseAnalysis{
     
-    public EnPIp(){}
+    public EP2PIpX(){}
     
     @Override
     public void createHistoGroupMap(){                        
         // eh+/-
         HistoGroup histoGroup = new HistoGroup("Mx", 1, 1);
-        H1F hi_we = new H1F("Mx(ep#rarrow e'#pi-X)", "", 100, 0, 3.);     
-        hi_we.setTitleX("Mx(ep#rarrow e'#pi-X) (GeV)");
-        hi_we.setTitleY("Counts");
-        histoGroup.addDataSet(hi_we,   0);
+        H1F hi_mx = new H1F("Mx(ep#rarrow e'#pi+X)", "", 100, 0.7, 1.4);     
+        hi_mx.setTitleX("Mx(ep#rarrow e'#pi+X) (GeV)");
+        hi_mx.setTitleY("Counts");
+        histoGroup.addDataSet(hi_mx,   0);
                                 
         histoGroupMap.put(histoGroup.getName(), histoGroup);
     }
@@ -55,8 +60,34 @@ public class EnPIp extends BaseAnalysis{
 
                 X.combine(trigger, -1);
                 X.combine(piPlus.particle(), -1);
-                histoGroupMap.get("Mx").getH1F("Mx(ep#rarrow e'#pi-X)").fill(X.mass()); 
+                histoGroupMap.get("Mx").getH1F("Mx(ep#rarrow e'#pi+X)").fill(X.mass()); 
             }
+        }
+    }
+    
+    public void postEventProcess(){        
+        HistoGroup histoGroup = histoGroupMap.get("Mx");
+        H1F hi_mx =  histoGroup.getH1F("Mx(ep#rarrow e'#pi+X)");
+        F1D func  = new F1D("func","[amp]*gaus(x,[mean],[sigma]) + + [p0] + [p1]*x", 0.8, 1.2);
+        func.setParameter(0, hi_mx.getMax());
+        func.setParameter(1, 0.94);
+        func.setParameter(2, 0.04);
+        func.setLineColor(2);
+        hi_mx.setOptStat("1111111111111");
+        hi_mx.fit(func);
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("fit_results.txt"))) {
+            writer.write("Amp\tAmpErr\tMean\tMeanErr\tSigma\tSigmaErr\n");            
+            writer.write(String.format("%f\t%f\t%f\t%f\t%f\t%f\n",
+                    hi_mx.getFunction().getParameter(0), 
+                    hi_mx.getFunction().parameter(0).error(),
+                    hi_mx.getFunction().getParameter(1),
+                    hi_mx.getFunction().parameter(1).error(),
+                    hi_mx.getFunction().getParameter(2),   
+                    hi_mx.getFunction().parameter(2).error()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     
@@ -69,7 +100,7 @@ public class EnPIp extends BaseAnalysis{
         // valid options for event-base analysis
         parser.addOption("-o"          ,"",     "output file name prefix");
         parser.addOption("-n"          ,"-1",   "maximum number of events to process");
-        parser.addOption("-energy"     ,"10.6", "beam energy");
+        parser.addOption("-beam"     ,"10.6", "beam energy");
         parser.addOption("-target"     ,"2212", "target PDG");
         parser.addOption("-trkType"      ,"22",   "tracking type: ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22)");
         parser.addOption("-edge"       ,"",     "colon-separated DC, FTOF, ECAL edge cuts in cm (e.g. 5:10:5)");
@@ -83,7 +114,7 @@ public class EnPIp extends BaseAnalysis{
         
         String namePrefix  = parser.getOption("-o").stringValue(); 
         int   maxEvents  = parser.getOption("-n").intValue();
-        Constants.BEAMENERGY = parser.getOption("-energy").doubleValue();
+        Constants.BEAMENERGY = parser.getOption("-beam").doubleValue();
         Constants.TARGETPID  = parser.getOption("-target").intValue();  
         int trkType = parser.getOption("-trkType").intValue(); 
         String[] edge  = parser.getOption("-edge").stringValue().split(":");
@@ -111,7 +142,7 @@ public class EnPIp extends BaseAnalysis{
             histoName  = namePrefix + "_" + histoName;
         }
         
-        EnPIp analysis = new EnPIp();
+        EP2PIpX analysis = new EP2PIpX();
         analysis.createHistoGroupMap();
 
         if(!readHistos) {
@@ -145,9 +176,11 @@ public class EnPIp extends BaseAnalysis{
                 reader.close();
             }
             analysis.saveHistos(histoName);
+            analysis.postEventProcess();
         }
         else {
             analysis.readHistos(inputList.get(0)); 
+            analysis.postEventProcess();
         }
         
         analysis.loadStatistics();
