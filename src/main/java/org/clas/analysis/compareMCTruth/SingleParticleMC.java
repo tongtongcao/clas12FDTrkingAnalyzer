@@ -214,18 +214,18 @@ public class SingleParticleMC extends BaseAnalysis{
         func_p.setParameter(0, histoDiffGroup.getH1F("pDiff").getMax());
         func_p.setParameter(1, 0.004);
         func_p.setParameter(2, 0.003);
-        func_p.setParLimits(1, -0.01, 0.01);
-        func_p.setParLimits(2, -0.05, 0.05); 
+        //func_p.setParLimits(1, -0.01, 0.01);
+        //func_p.setParLimits(2, -0.05, 0.05); 
         func_p.setLineColor(2);
         func_p.setOptStat(1110);
         histoDiffGroup.getH1F("pDiff").fit(func_p);
         
         F1D func_theta  = new F1D("func_theta","[amp]*gaus(x,[mean],[sigma])", -0.09, 0.12);
-        func_p.setParameter(0, histoDiffGroup.getH1F("thetaDiff").getMax());
+        func_theta.setParameter(0, histoDiffGroup.getH1F("thetaDiff").getMax());
         func_theta.setParameter(1, 0.02);
         func_theta.setParameter(2, 0.02);
-        func_theta.setParLimits(1, -0.05, 0.05);
-        func_theta.setParLimits(2, -0.2, 0.2); 
+        //func_theta.setParLimits(1, -0.05, 0.05);
+        //func_theta.setParLimits(2, -0.2, 0.2); 
         func_theta.setLineColor(2);
         func_theta.setOptStat(1110);
         histoDiffGroup.getH1F("thetaDiff").fit(func_theta);
@@ -234,8 +234,8 @@ public class SingleParticleMC extends BaseAnalysis{
         func_phi.setParameter(0, histoDiffGroup.getH1F("phiDiff").getMax());
         func_phi.setParameter(1, 0.04);
         func_phi.setParameter(2, 0.1);
-        func_phi.setParLimits(1, -0.1, 0.1);
-        func_phi.setParLimits(2, -3, 3); 
+        //func_phi.setParLimits(1, -0.1, 0.1);
+        //func_phi.setParLimits(2, -3, 3); 
         func_phi.setLineColor(2);
         func_phi.setOptStat(1110);
         histoDiffGroup.getH1F("phiDiff").fit(func_phi);
