@@ -49,6 +49,21 @@ public class URWellReconstruction extends BaseAnalysis{
     
     @Override
     public void createHistoGroupMap(){
+        HistoGroup histoGroupOverview = new HistoGroup("overview", 2, 2);
+        H1F h1_numHits = new H1F("numHits", "numHits", 4, 0.5, 4.5);
+        h1_numHits.setTitleX("layer");
+        h1_numHits.setTitleY("counts");
+        histoGroupOverview.addDataSet(h1_numHits, 0);
+        H1F h1_numClusters = new H1F("numClusters", "numClusters", 4, 0.5, 4.5);
+        h1_numClusters.setTitleX("layer");
+        h1_numClusters.setTitleY("counts");
+        histoGroupOverview.addDataSet(h1_numClusters, 1);        
+        H1F h1_numCrosses = new H1F("numCrosses", "numCrosses", 2, 0.5, 2.5);   
+        h1_numCrosses.setTitleX("region");
+        h1_numCrosses.setTitleY("counts");
+        histoGroupOverview.addDataSet(h1_numCrosses, 2); 
+        histoGroupMap.put(histoGroupOverview.getName(), histoGroupOverview);         
+        
         HistoGroup histoGroupHits = new HistoGroup("hits", 5, 3); 
         H1F h1_stripNormalHits = new H1F("stripNormalHits", "strip for normal hits", 100, 0, 2000);
         h1_stripNormalHits.setTitleX("strip");
@@ -120,7 +135,7 @@ public class URWellReconstruction extends BaseAnalysis{
         histoGroupHitsPure.addDataSet(h2_timeVsStripNormalHits, 4);   
         histoGroupMap.put(histoGroupHitsPure.getName(), histoGroupHitsPure); 
         
-        
+               
         HistoGroup histoGroupCluster1 = new HistoGroup("cluster1", 6, 3);        
         H1F h1_mainStripNormalCluster1 = new H1F("mainStripNormalCluster1", "main strip for normal cluster1", 100, 0, 2000);
         h1_mainStripNormalCluster1.setTitleX("main strip");
@@ -475,6 +490,17 @@ public class URWellReconstruction extends BaseAnalysis{
         List<URWellCross> crossesNoCuts = localEvent.getURWellCrossesNoCuts();
 
         List<URWellCross> crosses = localEvent.getURWellCrosses();
+        
+        HistoGroup histoGroupOverview = histoGroupMap.get("overview");
+        for(URWellHit hit : hits){
+            histoGroupOverview.getH1F("numHits").fill(hit.layer());
+        }
+        for(URWellCluster cls : clusters){
+            histoGroupOverview.getH1F("numClusters").fill(cls.layer());
+        }
+        for(URWellCross crs : crossesNoCuts){
+            histoGroupOverview.getH1F("numCrosses").fill(crs.region());
+        }
         
         
         HistoGroup histoGroupHits = histoGroupMap.get("hits");
