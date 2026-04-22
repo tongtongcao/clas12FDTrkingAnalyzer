@@ -33,6 +33,7 @@ public class Hit implements Comparable<Hit> {
     private double tFlight = -999.;
     private double t0 = -999.;
     private double beta = -999.;
+    private double fitResidual = -999.;
     
     private int indexTDC = -1;
     private int order = -1;
@@ -153,7 +154,16 @@ public class Hit implements Comparable<Hit> {
     
     public double beta(){
         return beta;
+    } 
+    
+    public void setFitResidual(double fitResidual){
+        this.fitResidual = fitResidual;
+    }     
+    
+    public double fitResidual(){
+        return fitResidual;
     }    
+    
     
     public void indexTDC(int indexTDC){
         this.indexTDC = indexTDC;

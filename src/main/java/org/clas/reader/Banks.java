@@ -119,11 +119,11 @@ public class Banks {
             this.uRWellDCClusterBank = new Bank(schema.getSchema("HitBasedTrkg::URWellDCClusters"));  
         
         // Conventional HB banks
-        if(schema.hasSchema("REC::Particle"))
+        if(schema.hasSchema("RECHB::Particle"))
             this.cvHBParticleBank   = new Bank(schema.getSchema("RECHB::Particle"));
-        if(schema.hasSchema("REC::Traj"))
+        if(schema.hasSchema("RECHB::Traj"))
             this.cvHBTrajectoryBank = new Bank(schema.getSchema("RECHB::Traj"));
-        if(schema.hasSchema("REC::Track"))
+        if(schema.hasSchema("RECHB::Track"))
             this.cvHBTrackBank      = new Bank(schema.getSchema("RECHB::Track"));
         if(schema.hasSchema("HitBasedTrkg::HBTracks")) {
             this.cvHBTrackingBank   = new Bank(schema.getSchema("HitBasedTrkg::HBTracks"));

@@ -146,7 +146,7 @@ public class Reader {
                               trackingBank.getShort("Cross2_ID", it),
                               trackingBank.getShort("Cross3_ID", it));
                 
-                try{
+                if (trackingBank.getSchema().hasEntry("URWellCross1_ID") && trackingBank.getSchema().hasEntry("URWellCross2_ID")){
                     track.uRWellCrossIds(trackingBank.getInt("URWellCross1_ID", it), trackingBank.getInt("URWellCross2_ID", it));
                     track.setURWellProjectionR1(trackingBank.getFloat("URWell_R1_x", it),
                                               trackingBank.getFloat("URWell_R1_y", it),
@@ -156,9 +156,6 @@ public class Reader {
                                               trackingBank.getFloat("URWell_R2_z", it));
                     
                     
-                }
-                catch(Exception e){
-                    LOGGER.log(Level.FINER, "no items for URWell in track bank!");
                 }
                 track.polarity(torusScale);
                 tracks.add(track);
@@ -448,24 +445,17 @@ public class Reader {
                     hit.setTFlight(hitBank.getFloat("TFlight", loop));
                     hit.setTProp(hitBank.getFloat("TProp", loop));
                     hit.setBeta(hitBank.getFloat("beta", loop));
+                    hit.setFitResidual(hitBank.getFloat("fitResidual", loop));
                     
-                    /*
-                    try{
+                    if (hitBank.getSchema().hasEntry("DAFWeight")) {
                         hit.dafWeight(hitBank.getFloat("DAFWeight", loop));
                     }              
-                    catch(Exception e){
-                       LOGGER.log(Level.FINER, "no item DAFWeight in DC hit bank!");
-                    }
-*/
                 }
                 
                 if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){                 
-                    try{
+                    if (hitBank.getSchema().hasEntry("indexTDC")) {
                         hit.indexTDC(hitBank.getInt("indexTDC", loop));
                     }              
-                    catch(Exception e){
-                        LOGGER.log(Level.FINER, "no item indexTDC in DC hit bank!");
-                    }
                 }
                 for(TDC tdc : tdcs){
                     if(hit.hitMatched(tdc)) {
