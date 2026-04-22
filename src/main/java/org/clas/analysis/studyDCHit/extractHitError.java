@@ -63,13 +63,13 @@ public class extractHitError extends BaseAnalysis{
         for (int iSL = 0; iSL < 6; iSL++) {
             H1F h1_dafWeightSingleHit = new H1F("DAF weight for single hit in SL" + Integer.toString(iSL + 1),
                     "DAF weight for single hit in SL" + Integer.toString(iSL + 1), 101, 0, 1.01);
-            h1_dafWeightSingleHit.setTitleX("residual (cm)");
+            h1_dafWeightSingleHit.setTitleX("DAF weight");
             h1_dafWeightSingleHit.setTitleY("Counts");
             histoGroupDafWeightSingleHit.addDataSet(h1_dafWeightSingleHit, iSL);
             
             H1F h1_dafWeightDoubleHit = new H1F("DAF weight for double hit in SL" + Integer.toString(iSL + 1),
                     "DAF weight for double hit in SL" + Integer.toString(iSL + 1), 101, 0, 1.01);
-            h1_dafWeightDoubleHit.setTitleX("residual (cm)");
+            h1_dafWeightDoubleHit.setTitleX("DAF weight");
             h1_dafWeightDoubleHit.setTitleY("Counts");
             histoGroupDafWeightDoubleHit.addDataSet(h1_dafWeightDoubleHit, iSL);
 
