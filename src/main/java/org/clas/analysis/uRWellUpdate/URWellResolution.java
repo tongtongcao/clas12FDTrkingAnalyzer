@@ -148,7 +148,7 @@ public class URWellResolution extends BaseAnalysis{
         
         Vector3D norm = new Vector3D(0, 0, 1);
         
-        if(tracksHB.size() == 1 && crosses.size() == 2 && tracksHB.get(0).chi2()/tracksHB.get(0).NDF() < 5){
+        if(tracksHB.size() == 1 && crosses.size() == 2 && tracksHB.get(0).chi2()/tracksHB.get(0).NDF() < 10){
             Point3D projR1 = tracksHB.get(0).getURWellProjectionLocalR1();
             Point3D projR2 = tracksHB.get(0).getURWellProjectionLocalR2();
             for(URWellCross crs : crosses){
@@ -157,18 +157,18 @@ public class URWellResolution extends BaseAnalysis{
                     histoGroupURWellResolutionR1.getH1F("yURWellResolutionHBR1").fill(tracksHB.get(0).getURWellProjectionLocalR1().y() - crs.pointLocal().y());
                     
                     Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
-                    histoGroupMeasResolutionR1.getH1F("c1MeasResolutionHBR1").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().dot(norm)));
+                    histoGroupMeasResolutionR1.getH1F("c1MeasResolutionHBR1").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR1).direction()).dot(norm)));
                     Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
-                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionHBR1").fill(lineC2.distance(projR1).length() * Math.signum(lineC2.direction().dot(norm)));
+                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionHBR1").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR2).direction()).dot(norm)));  
                 }
                 if(crs.region() == 2){
                     histoGroupURWellResolutionR2.getH1F("xURWellResolutionHBR2").fill(tracksHB.get(0).getURWellProjectionLocalR2().x() - crs.pointLocal().x());
                     histoGroupURWellResolutionR2.getH1F("yURWellResolutionHBR2").fill(tracksHB.get(0).getURWellProjectionLocalR2().y() - crs.pointLocal().y());
                     
                     Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
-                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionHBR2").fill(lineC1.distance(projR2).length() * Math.signum(lineC1.direction().dot(norm)));
+                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionHBR2").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR1).direction()).dot(norm)));
                     Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
-                    histoGroupMeasResolutionR2.getH1F("c2MeasResolutionHBR2").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().dot(norm)));
+                    histoGroupMeasResolutionR2.getH1F("c2MeasResolutionHBR2").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR2).direction()).dot(norm)));  
                 }
             }   
         }
@@ -184,14 +184,14 @@ public class URWellResolution extends BaseAnalysis{
                     Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
                     histoGroupMeasResolutionR1.getH1F("c1MeasResolutionTBR1").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR1).direction()).dot(norm)));
                     Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
-                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionTBR1").fill(lineC2.distance(projR1).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR1).direction()).dot(norm)));                    
+                    histoGroupMeasResolutionR1.getH1F("c2MeasResolutionTBR1").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR2).direction()).dot(norm)));                    
                 }
                 if(crs.region() == 2){
                     histoGroupURWellResolutionR2.getH1F("xURWellResolutionTBR2").fill(tracksTB.get(0).getURWellProjectionLocalR2().x() - crs.pointLocal().x());
                     histoGroupURWellResolutionR2.getH1F("yURWellResolutionTBR2").fill(tracksTB.get(0).getURWellProjectionLocalR2().y() - crs.pointLocal().y());
                     
                     Line3D lineC1 = new Line3D(crs.getCluster1().originalPointLocal(), crs.getCluster1().endPointLocal());
-                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionTBR2").fill(lineC1.distance(projR2).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR2).direction()).dot(norm)));
+                    histoGroupMeasResolutionR2.getH1F("c1MeasResolutionTBR2").fill(lineC1.distance(projR1).length() * Math.signum(lineC1.direction().cross(lineC1.distance(projR1).direction()).dot(norm)));
                     Line3D lineC2 = new Line3D(crs.getCluster2().originalPointLocal(), crs.getCluster2().endPointLocal());
                     histoGroupMeasResolutionR2.getH1F("c2MeasResolutionTBR2").fill(lineC2.distance(projR2).length() * Math.signum(lineC2.direction().cross(lineC2.distance(projR2).direction()).dot(norm)));                                        
                 }

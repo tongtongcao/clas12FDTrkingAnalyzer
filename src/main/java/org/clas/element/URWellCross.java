@@ -124,7 +124,33 @@ public class URWellCross implements Comparable<URWellCross> {
         this.cluster2_B = cluster2_B;
         this.cluster2_pathLength = cluster2_pathLength;
         this.cluster2_DAFWeight = cluster2_DAFWeight;        
-    }    
+    } 
+    
+    public double xStateCluster1(){
+        return cluster1_x_state;
+    }
+    
+    public double yStateCluster1(){
+        return cluster1_y_state;
+    }
+    
+    public double xStateCluster2(){
+        return cluster2_x_state;
+    }
+    
+    public double yStateCluster2(){
+        return cluster2_y_state;
+    } 
+    
+    public Point3D getTrackProjectionCluster1(){
+        if(cluster1 != null) return new Point3D(cluster1_x_state, cluster1_y_state, cluster1.originalPointLocal().z());
+        else return null;
+    }
+    
+    public Point3D getTrackProjectionCluster2(){
+        if(cluster2 != null) return new Point3D(cluster2_x_state, cluster2_y_state, cluster2.originalPointLocal().z());
+        else return null;
+    }
     
     public void setIsUsedClustering(boolean isUsedClustering){
         this.isUsedClustering = isUsedClustering;
