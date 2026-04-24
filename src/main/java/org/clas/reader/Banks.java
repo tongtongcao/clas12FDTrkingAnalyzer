@@ -57,6 +57,7 @@ public class Banks {
     private Bank cvTBHitBank;
     private Bank cvRecTBEventBank;    
     private Bank cvTBURWellCrossBank;
+    private Bank cvTBCovMatBank;
     
     // ai banks
     private Bank aiCandidates;
@@ -82,6 +83,7 @@ public class Banks {
     private Bank aiTBHitBank;    
     private Bank aiRecTBEventBank;
     private Bank aiTBURWellCrossBank;
+    private Bank aiTBCovMatBank;
     
 
     public Banks(SchemaFactory schema) {
@@ -178,6 +180,9 @@ public class Banks {
         if(schema.hasSchema("TimeBasedTrkg::TBURWellCrosses")) {
             this.cvTBURWellCrossBank   = new Bank(schema.getSchema("TimeBasedTrkg::TBURWellCrosses"));
         }         
+        if(schema.hasSchema("TimeBasedTrkg::TBCovMat")) {
+            this.cvTBCovMatBank   = new Bank(schema.getSchema("TimeBasedTrkg::TBCovMat"));
+        }        
 
         // AI HB banks
         if(schema.hasSchema("ai::tracks"))
@@ -241,6 +246,9 @@ public class Banks {
         if(schema.hasSchema("TimeBasedTrkg::AIURWellCrosses")) {
             this.aiTBURWellCrossBank   = new Bank(schema.getSchema("TimeBasedTrkg::AIURWellCrosses"));
         }         
+        if(schema.hasSchema("TimeBasedTrkg::AICovMat")) {
+            this.aiTBCovMatBank   = new Bank(schema.getSchema("TimeBasedTrkg::AICovMat"));
+        }        
     }
 
     public Bank getRunConfig() {
@@ -452,7 +460,18 @@ public class Banks {
                 return null;                 
         }  
     }
-          
+    
+    public Bank getTBCovMat(int type){
+        switch(type) {
+            case Constants.CONVTB:
+                return cvTBCovMatBank;
+            case Constants.AITB:
+                return aiTBCovMatBank;
+            default:
+                return null;              
+        }
+    }
+    
     public Bank getAICandidateBank() {
 	return aiCandidates;
     }

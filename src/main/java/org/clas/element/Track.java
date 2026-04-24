@@ -42,6 +42,8 @@ public class Track implements Comparable<Track> {
     private Point3D preC1Pos;
     private Point3D preC1Dir;
     
+    private CovMat covMat;
+    
     // from particle bank
     private int    trackStatus  = 0;
     private double trackChi2pid = 0;
@@ -207,6 +209,14 @@ public class Track implements Comparable<Track> {
     
     public double vz() {
         return this.trackVertex.z();
+    }
+    
+    public void setCovMat(CovMat covMat){
+        this.covMat = covMat;
+    }
+    
+    public CovMat getCovMat(){
+        return covMat;
     }
     
     public int sector() {

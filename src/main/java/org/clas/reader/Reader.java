@@ -20,6 +20,7 @@ import org.clas.element.Hit;
 import org.clas.element.Cluster;
 import org.clas.element.Cross;
 import org.clas.element.Track;
+import org.clas.element.CovMat;
 import org.clas.element.AICandidate;
 import org.clas.element.RecEvent;
 import org.clas.element.URWellADC;
@@ -79,7 +80,63 @@ public class Reader {
                    
         
         return recEvent;
-    }    
+    }
+
+    public Map<Integer, CovMat> readTBCovMat(Event event, int type){
+        Bank tbCovMatBank = banks.getTBCovMat(type);
+        
+        Map<Integer, CovMat> map_id_covMat = new HashMap(); 
+        
+        if(tbCovMatBank != null) {
+            event.read(tbCovMatBank);
+            for(int it = 0; it < tbCovMatBank.getRows(); it++){
+                int id = tbCovMatBank.getInt("id", it);
+
+                CovMat covMat = new CovMat(type, 
+                        id,
+                        tbCovMatBank.getFloat("C11", it),
+                        tbCovMatBank.getFloat("C12", it),
+                        tbCovMatBank.getFloat("C13", it),
+                        tbCovMatBank.getFloat("C14", it),
+                        tbCovMatBank.getFloat("C15", it),
+                        tbCovMatBank.getFloat("C16", it),
+                        tbCovMatBank.getFloat("C21", it),
+                        tbCovMatBank.getFloat("C22", it),
+                        tbCovMatBank.getFloat("C23", it),
+                        tbCovMatBank.getFloat("C24", it),
+                        tbCovMatBank.getFloat("C25", it),
+                        tbCovMatBank.getFloat("C26", it),                    
+                        tbCovMatBank.getFloat("C31", it),
+                        tbCovMatBank.getFloat("C32", it),
+                        tbCovMatBank.getFloat("C33", it),
+                        tbCovMatBank.getFloat("C34", it),
+                        tbCovMatBank.getFloat("C35", it),
+                        tbCovMatBank.getFloat("C36", it),                    
+                        tbCovMatBank.getFloat("C41", it),
+                        tbCovMatBank.getFloat("C42", it),
+                        tbCovMatBank.getFloat("C43", it),
+                        tbCovMatBank.getFloat("C44", it),
+                        tbCovMatBank.getFloat("C45", it),
+                        tbCovMatBank.getFloat("C46", it),                    
+                        tbCovMatBank.getFloat("C51", it),
+                        tbCovMatBank.getFloat("C52", it),
+                        tbCovMatBank.getFloat("C53", it),
+                        tbCovMatBank.getFloat("C54", it),
+                        tbCovMatBank.getFloat("C55", it),
+                        tbCovMatBank.getFloat("C56", it),                    
+                        tbCovMatBank.getFloat("C61", it),
+                        tbCovMatBank.getFloat("C62", it),
+                        tbCovMatBank.getFloat("C63", it),
+                        tbCovMatBank.getFloat("C64", it),
+                        tbCovMatBank.getFloat("C65", it),
+                        tbCovMatBank.getFloat("C66", it)
+                );
+
+                map_id_covMat.put(id, covMat);            
+            }
+        }
+        return map_id_covMat;
+    }
     
     public List<Track> readTracks(Event event) {
         return readTracks(event, Constants.AITB);
@@ -93,7 +150,7 @@ public class Reader {
         Bank particleBank   = banks.getRecParticleBank(type);
         Bank trajectoryBank = banks.getRecTrajectoryBank(type);
         Bank trackBank      = banks.getRecTrackBank(type);
-        Bank trackingBank   = banks.getTrackingBank(type);
+        Bank trackingBank   = banks.getTrackingBank(type);        
         if(runConfig!=null)      event.read(runConfig);
         if(particleBank!=null)   event.read(particleBank);
         if(trajectoryBank!=null) event.read(trajectoryBank);

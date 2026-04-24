@@ -27,68 +27,42 @@ import org.jlab.groot.math.F1D;
  *
  * @author Tongtong Cao
  */
-public class EP2PIpX extends BaseAnalysis{
+public class EP2EPX extends BaseAnalysis{
     
-    public EP2PIpX(){}
+    public EP2EPX(){}
     
     @Override
     public void createHistoGroupMap(){                        
         // eh+/-
-        HistoGroup histoGroup = new HistoGroup("Mx", 1, 1);
-        H1F hi_mx = new H1F("Mx(ep#rarrow e'#pi+X)", "", 100, 0.7, 1.4);     
-        hi_mx.setTitleX("Mx(ep#rarrow e'#pi+X) (GeV)");
+        HistoGroup histoGroup = new HistoGroup("MxMx(ep#rarrow e'p'X)", 1, 1);
+        H1F hi_mx = new H1F("Mx(ep#rarrow e'p'X)", "", 200, -0.5, 3);     
+        hi_mx.setTitleX("Mx(ep#rarrow e'p'X) (GeV)");
         hi_mx.setTitleY("Counts");
         histoGroup.addDataSet(hi_mx,   0);
                                 
         histoGroupMap.put(histoGroup.getName(), histoGroup);
     }
       
-    public void processEvent(Event event, int trkType){
-        List<Track> tracks = reader.readTracks(event, trkType);   
-        
-        EventValidTracks localEvent = new EventValidTracks(tracks);
+    public void processEvent(EventValidTracks localEvent){
         
         if(localEvent.getTriggerTrk() != null){
             Particle beam = localEvent.getBeam();
             Particle target = localEvent.getTarget();
-            Particle trigger = localEvent.getTriggerTrk().particle();           
-            
-            for(Track piPlus : localEvent.getPiPlusTrks()){
+            Particle trigger = localEvent.getTriggerTrk().particle();  
+                        
+            for(Track proton : localEvent.getProtonTrks()){
                 Particle X = new Particle();
                 X.copy(target);
                 X.combine(beam, +1);
 
                 X.combine(trigger, -1);
-                X.combine(piPlus.particle(), -1);
-                histoGroupMap.get("Mx").getH1F("Mx(ep#rarrow e'#pi+X)").fill(X.mass()); 
+                X.combine(proton.particle(), -1);
+                histoGroupMap.get("MxMx(ep#rarrow e'p'X)").getH1F("Mx(ep#rarrow e'p'X)").fill(X.mass()); 
             }
         }
     }
     
     public void postEventProcess(){        
-        HistoGroup histoGroup = histoGroupMap.get("Mx");
-        H1F hi_mx =  histoGroup.getH1F("Mx(ep#rarrow e'#pi+X)");
-        F1D func  = new F1D("func","[amp]*gaus(x,[mean],[sigma]) + + [p0] + [p1]*x", 0.8, 1.2);
-        func.setParameter(0, hi_mx.getMax());
-        func.setParameter(1, 0.94);
-        func.setParameter(2, 0.04);
-        func.setLineColor(2);
-        hi_mx.setOptStat("1111111111111");
-        hi_mx.fit(func);
-        
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("fit_results.txt"))) {
-            writer.write("Amp\tAmpErr\tMean\tMeanErr\tSigma\tSigmaErr\n");            
-            writer.write(String.format("%f\t%f\t%f\t%f\t%f\t%f\n",
-                    hi_mx.getFunction().getParameter(0), 
-                    hi_mx.getFunction().parameter(0).error(),
-                    hi_mx.getFunction().getParameter(1),
-                    hi_mx.getFunction().parameter(1).error(),
-                    hi_mx.getFunction().getParameter(2),   
-                    hi_mx.getFunction().parameter(2).error()));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     public void loadStatistics(){
@@ -142,7 +116,7 @@ public class EP2PIpX extends BaseAnalysis{
             histoName  = namePrefix + "_" + histoName;
         }
         
-        EP2PIpX analysis = new EP2PIpX();
+        EP2EPX analysis = new EP2EPX();
         analysis.createHistoGroupMap();
 
         if(!readHistos) {
@@ -163,8 +137,10 @@ public class EP2PIpX extends BaseAnalysis{
                     counter++;
 
                     reader.nextEvent(event);
-
-                    analysis.processEvent(event, trkType);
+                    
+                    List<Track> tracks = analysis.reader.readTracks(event, trkType);          
+                    EventValidTracks localEvent = new EventValidTracks(tracks);
+                    analysis.processEvent(localEvent);
 
                     progress.updateStatus();
                     if(maxEvents>0){
