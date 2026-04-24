@@ -2,6 +2,8 @@ package org.clas.reader;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Collections;
 import org.jlab.jnp.hipo4.data.Bank;
 import org.jlab.jnp.hipo4.data.Event;
@@ -15,6 +17,7 @@ import org.clas.element.Hit;
 import org.clas.element.Cluster;
 import org.clas.element.Cross;
 import org.clas.element.Track;
+import org.clas.element.CovMat;
 import org.clas.element.AICandidate;
 import org.clas.element.RecEvent;
 import org.clas.element.URWellADC;
@@ -57,7 +60,8 @@ public class LocalEvent {
     private List<Hit> hitsTB = new ArrayList();
     private List<Cluster> clustersTB = new ArrayList();
     private List<Cross> crossesTB = new ArrayList();
-    private List<Track> tracksTB = new ArrayList();   
+    private List<Track> tracksTB = new ArrayList();  
+    private Map<Integer, CovMat> map_trkId_covMat;  
     private List<URWellHit> uRWellHits = new ArrayList();
     private List<URWellCluster> uRWellClusters = new ArrayList();
     private List<URWellCross> uRWellCrosses = new ArrayList();
@@ -301,6 +305,8 @@ public class LocalEvent {
             recHBEvent = reader.readRecEvent(event, trkType-1);
 
             // Clusters in TB tracks
+            map_trkId_covMat = reader.readTBCovMat(event, trkType);
+            
             hitsAllTB = reader.readHits(event, trkType);
             clustersAllTB = reader.readClusters(event, hitsAllTB, trkType);   
             
@@ -315,6 +321,8 @@ public class LocalEvent {
             
             tracksTB = reader.readTracks(event, trkType);                 
             for(Track trk : tracksTB) {
+                trk.setCovMat(map_trkId_covMat.get(trk.id()));
+                
                 trk.setCrosses(crossesAllTB);
                 for(Cross crs : trk.getCrosses()){
                     if(!crossesTB.contains(crs)) crossesTB.add(crs);                    
@@ -326,7 +334,7 @@ public class LocalEvent {
                         if(!hitsTB.contains(hit)) hitsTB.add(hit);
                     }
                 }
-            }
+            }            
             
             recTBEvent = reader.readRecEvent(event, trkType);
            
