@@ -66,11 +66,11 @@ public class ExploreTime extends BaseAnalysis{
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeHB.addDataSet(h1_clusterTime, i+4);            
 
-            H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
-                    "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
-            h1_propTime.setTitleX("propagation time (ns)");
-            h1_propTime.setTitleY("Counts");
-            histoGroupTimeHB.addDataSet(h1_propTime, i+8); 
+            H1F h1_flightTime = new H1F("flightTimeLayer" + Integer.toString(i + 1),
+                    "flight time for layer" + Integer.toString(i + 1), 100, 6, 10);
+            h1_flightTime.setTitleX("flight time (ns)");
+            h1_flightTime.setTitleY("Counts");
+            histoGroupTimeHB.addDataSet(h1_flightTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
                     "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
@@ -92,11 +92,11 @@ public class ExploreTime extends BaseAnalysis{
             h1_clusterTime.setTitleY("Counts");
             histoGroupTimeTB.addDataSet(h1_clusterTime, i+4);            
 
-            H1F h1_propTime = new H1F("propTimeLayer" + Integer.toString(i + 1),
-                    "propagation time for layer" + Integer.toString(i + 1), 100, 6, 10);
-            h1_propTime.setTitleX("propagation time (ns)");
-            h1_propTime.setTitleY("Counts");
-            histoGroupTimeTB.addDataSet(h1_propTime, i+8); 
+            H1F h1_flightTime = new H1F("flightTimeLayer" + Integer.toString(i + 1),
+                    "flight time for layer" + Integer.toString(i + 1), 100, 6, 10);
+            h1_flightTime.setTitleX("flight time (ns)");
+            h1_flightTime.setTitleY("Counts");
+            histoGroupTimeTB.addDataSet(h1_flightTime, i+8); 
             
             H1F h1_timeDiff = new H1F("timeDiffLayer" + Integer.toString(i + 1),
                     "time difference for layer" + Integer.toString(i + 1), 100, -50, 50);
@@ -119,28 +119,28 @@ public class ExploreTime extends BaseAnalysis{
             List<Track> tracksHB = localEvent.getTracksHB();
             
             for(Track trk : localEvent.getTracksHB()){
-                Particle particle = trk.particle();
+                Particle particle = trk.particle();                
                 if(particle != null){
-                    double beta = particle.p()/particle.e();                    
+                    double beta = particle.p()/particle.e(); 
 
                     for(URWellCross crs : trk.getURWellCrosses()){ 
                         int layerCluster1 = crs.getCluster1().layer();
                         double timeCluster1 = crs.getCluster1().time();
                         histoGroupTimeHB.getH1F("clusterTimeLayer" + layerCluster1).fill(timeCluster1); 
                         
-                        double propTimeCluster1 = crs.cluster1_pathLength()/(beta * Constants.LIGHTSPEED);
-                        histoGroupTimeHB.getH1F("propTimeLayer" + layerCluster1).fill(propTimeCluster1); 
+                        double flightTimeCluster1 = crs.cluster1_pathLength()/(beta * Constants.LIGHTSPEED);
+                        histoGroupTimeHB.getH1F("flightTimeLayer" + layerCluster1).fill(flightTimeCluster1); 
 
-                        histoGroupTimeHB.getH1F("timeDiffLayer" + layerCluster1).fill(timeCluster1 - startTime - propTimeCluster1);
+                        histoGroupTimeHB.getH1F("timeDiffLayer" + layerCluster1).fill(timeCluster1 - startTime - flightTimeCluster1);
 
                         int layerCluster2 = crs.getCluster2().layer();
                         double timeCluster2 = crs.getCluster2().time();
                         histoGroupTimeHB.getH1F("clusterTimeLayer" + layerCluster2).fill(timeCluster2);
                         
-                        double propTimeCluster2 = crs.cluster2_pathLength()/(beta * Constants.LIGHTSPEED);
-                        histoGroupTimeHB.getH1F("propTimeLayer" + layerCluster2).fill(propTimeCluster2); 
+                        double flightTimeCluster2 = crs.cluster2_pathLength()/(beta * Constants.LIGHTSPEED);
+                        histoGroupTimeHB.getH1F("flightTimeLayer" + layerCluster2).fill(flightTimeCluster2); 
                         
-                        histoGroupTimeHB.getH1F("timeDiffLayer" + layerCluster2).fill(timeCluster2 - startTime - propTimeCluster1);                    
+                        histoGroupTimeHB.getH1F("timeDiffLayer" + layerCluster2).fill(timeCluster2 - startTime - flightTimeCluster1);                    
                     } 
                 }
             }
@@ -163,19 +163,19 @@ public class ExploreTime extends BaseAnalysis{
                         double cluster1Time = crs.getCluster1().time();
                         histoGroupTimeTB.getH1F("clusterTimeLayer" + layerCluster1).fill(cluster1Time);  
 
-                        double propTimeCluster1 = crs.cluster1_pathLength()/(beta * Constants.LIGHTSPEED);
-                        histoGroupTimeTB.getH1F("propTimeLayer" + layerCluster1).fill(propTimeCluster1); 
+                        double flightTimeCluster1 = crs.cluster1_pathLength()/(beta * Constants.LIGHTSPEED);
+                        histoGroupTimeTB.getH1F("flightTimeLayer" + layerCluster1).fill(flightTimeCluster1); 
 
-                        histoGroupTimeTB.getH1F("timeDiffLayer" + layerCluster1).fill(cluster1Time - startTime - propTimeCluster1);
+                        histoGroupTimeTB.getH1F("timeDiffLayer" + layerCluster1).fill(cluster1Time - startTime - flightTimeCluster1);
 
                         int layerCluster2 = crs.getCluster2().layer();
                         double cluster2Time = crs.getCluster2().time();
                         histoGroupTimeTB.getH1F("clusterTimeLayer" + layerCluster2).fill(cluster2Time);                
                         
-                        double propTimeCluster2 = crs.cluster2_pathLength()/(beta * Constants.LIGHTSPEED);
-                        histoGroupTimeTB.getH1F("propTimeLayer" + layerCluster2).fill(propTimeCluster2); 
+                        double flightTimeCluster2 = crs.cluster2_pathLength()/(beta * Constants.LIGHTSPEED);
+                        histoGroupTimeTB.getH1F("flightTimeLayer" + layerCluster2).fill(flightTimeCluster2); 
                         
-                        histoGroupTimeTB.getH1F("timeDiffLayer" + layerCluster2).fill(cluster1Time - startTime - propTimeCluster2);                    
+                        histoGroupTimeTB.getH1F("timeDiffLayer" + layerCluster2).fill(cluster1Time - startTime - flightTimeCluster2);                    
                     }            
                 }
             }
