@@ -176,7 +176,15 @@ public class Reader {
                 track.index(it);
                 track.sector(trackingBank.getByte("sector", it));
                 track.NDF(trackingBank.getShort("ndf", it));
+                
                 track.chi2(trackingBank.getFloat("chi2", it));
+                
+                if(trackingBank.getSchema().hasEntry("ndf0")){
+                    track.NDF0(trackingBank.getShort("ndf0", it));
+                }
+                else{
+                    track.NDF0(trackingBank.getShort("ndf", it));
+                }
                 
                 track.preC1(trackingBank.getFloat("c1_x", it),
                         trackingBank.getFloat("c1_y", it),
@@ -252,7 +260,7 @@ public class Reader {
                     track.index(index);
                     track.sector(trackBank.getByte("sector", it));
                     track.NDF(trackBank.getShort("NDF", it));
-                    track.chi2(trackBank.getFloat("chi2", it)/trackBank.getShort("NDF", it));
+                    track.chi2(trackBank.getFloat("chi2", it));
                     track.status(status);
                     track.pid(particleBank.getInt("pid", pindex));                
                     track.chi2pid(particleBank.getFloat("chi2pid", pindex));    

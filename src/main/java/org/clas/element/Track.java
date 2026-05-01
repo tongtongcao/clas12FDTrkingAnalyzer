@@ -31,13 +31,14 @@ public class Track implements Comparable<Track> {
     private int trackSector = 0;
     private double trackPolarity = 0;
     private double trackChi2 = 0;
-    private int trackNDF = 0;
+    private int trackNDF = -1;
+    private int trackNDF0 = -1;
     private Vector3[] trackCrosses = new Vector3[3];
     private int[] clusterIds = new int[6];
     private int[] crossIds = new int[6];    
     private int uRWellCrossIds[] = new int[2];
     private int   trackSL = 0;
-    private int missingSL = -1;
+    private List<Integer> missingSLList = new ArrayList();
         
     private Point3D preC1Pos;
     private Point3D preC1Dir;
@@ -83,6 +84,32 @@ public class Track implements Comparable<Track> {
     
     public Track(int type, int id, int charge, double px, double py, double pz, double vx, double vy, double vz) {
         this.initTrack(type, id, charge, px, py, pz, vx, vy, vz);
+    }
+    
+    public int getTrackCategory(){
+        int category = -1;
+        if(this.getURWellCrosses() != null){
+            if(this.getURWellCrosses().size() == 2){
+                if(this.getNumClusters() == 6) category = 1;
+                else if(this.getNumClusters() == 5) category = 4;
+                else if(this.getNumClusters() == 4) category = 7;
+            }            
+            else if(this.getURWellCrosses().size() == 1){
+                if(this.getNumClusters() == 6) category = 2;
+                else if(this.getNumClusters() == 5) category = 5;
+                else if(this.getNumClusters() == 4) category = 8;
+            }            
+            else if(this.getURWellCrosses().size() == 0){
+                if(this.getNumClusters() == 6) category = 3;
+                else if(this.getNumClusters() == 5) category = 6;
+            }
+        }
+        else{
+            if(this.getNumClusters() == 6) category = 3;
+            else if(this.getNumClusters() == 5) category = 6;
+        }
+        
+        return category;
     }
             
     public static Track copyFrom(Track p){
@@ -148,9 +175,9 @@ public class Track implements Comparable<Track> {
     public void type(int m) {
         this.trackType=m;
     }
-    
-    public int getMissingSL(){
-        return missingSL;
+        
+    public List<Integer> getMissingSLList(){
+        return missingSLList;
     }
     
     public void setP(double mom) {
@@ -292,6 +319,14 @@ public class Track implements Comparable<Track> {
         this.trackNDF = trackNDF;
     }
     
+    public int NDF0() {
+        return trackNDF0;
+    }
+
+    public void NDF0(int trackNDF0) {
+        this.trackNDF0 = trackNDF0;
+    }    
+    
     public int[] uRWellCrossIds(){
         return this.uRWellCrossIds;
     }
@@ -350,7 +385,7 @@ public class Track implements Comparable<Track> {
         for(int i=0; i<6; i++) {
             if(this.clusterIds[i]<=0) {
                 this.clusterIds[i]=-1;
-                this.missingSL = i+1;
+                this.missingSLList.add(i+1);
             } //change 0 to -1 to allow matching of candidates to tracks
             if(this.clusterIds[i]>0)  this.trackSL++;
         }
@@ -754,6 +789,22 @@ public class Track implements Comparable<Track> {
         }
         return nmatch;
     }
+    
+    // Match: seed strips for both clusters are the same
+    public int matchedURWellCrosses(Track t) {
+        int nmatch = 0;
+        if(this.getURWellCrosses() != null && t.getURWellCrosses() != null){
+            for(URWellCross thisCrs : this.getURWellCrosses()){
+                for(URWellCross thatCrs : t.getURWellCrosses()){
+                    if(thisCrs.getCluster1().strip() == thatCrs.getCluster1().strip() && thisCrs.getCluster2().strip() == thatCrs.getCluster2().strip()) {
+                        nmatch++;
+                        break;
+                    }
+                }
+            }
+        }
+        return nmatch;
+    }    
     
     public int nHits() {
         if(this.hits != null) return hits.size();

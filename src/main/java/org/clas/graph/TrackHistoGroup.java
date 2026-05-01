@@ -14,7 +14,8 @@ import org.jlab.groot.group.DataGroup;
  */
 public class TrackHistoGroup extends HistoGroup{
     
-    
+    private LinkedHashMap<String,H1F> h1_category_map;
+    private LinkedHashMap<String,H1F> h1_ndf0_map;
     private LinkedHashMap<String,H1F> h1_chi2overndf_map;
     private LinkedHashMap<String,H1F> h1_p_map;
     private LinkedHashMap<String,H1F> h1_theta_map;
@@ -23,6 +24,8 @@ public class TrackHistoGroup extends HistoGroup{
     private LinkedHashMap<String,H1F> h1_vy_map;
     private LinkedHashMap<String,H1F> h1_vz_map;
     
+    private H2F h2_category_comp;
+    private H1F h1_ndf0_diff;
     private H1F h1_chi2overndf_diff;
     private H1F h1_p_diff;
     private H1F h1_theta_diff;
@@ -33,6 +36,8 @@ public class TrackHistoGroup extends HistoGroup{
         
     public TrackHistoGroup(String str) {
         super(str);
+        h1_category_map = new LinkedHashMap<String,H1F>();
+        h1_ndf0_map = new LinkedHashMap<String,H1F>();
         h1_chi2overndf_map = new LinkedHashMap<String,H1F>();
         h1_p_map = new LinkedHashMap<String,H1F>();
         h1_theta_map = new LinkedHashMap<String,H1F>();
@@ -44,6 +49,8 @@ public class TrackHistoGroup extends HistoGroup{
     
     public TrackHistoGroup(String str, int ncols, int nrows) {
         super(str, ncols, nrows);
+        h1_category_map = new LinkedHashMap<String,H1F>();
+        h1_ndf0_map = new LinkedHashMap<String,H1F>();
         h1_chi2overndf_map = new LinkedHashMap<String,H1F>();
         h1_p_map = new LinkedHashMap<String,H1F>();
         h1_theta_map = new LinkedHashMap<String,H1F>();
@@ -76,7 +83,15 @@ public class TrackHistoGroup extends HistoGroup{
             ranges[6][0] = -15;
             ranges[6][1] = 5;            
         }
-        
+                        
+        H1F h1_category= new H1F("category"+postflix, "category", 8, 0.5, 8.5);
+        h1_category.setTitleX("DC<N>UR<N>:62,61,60,52,51,50,42,41");
+        h1_category.setTitleY("Counts");
+        h1_category.setLineColor(color);                 
+        H1F h1_ndf0= new H1F("ndf0"+postflix, "ndf0", 100, 10, 50);
+        h1_ndf0.setTitleX("ndf0");
+        h1_ndf0.setTitleY("Counts");
+        h1_ndf0.setLineColor(color);         
         H1F h1_chi2overndf= new H1F("chi2overndf"+postflix, "#Chi^2/ndf", 100, ranges[0][0], ranges[0][1]);
         h1_chi2overndf.setTitleX("#Chi^2/ndf");
         h1_chi2overndf.setTitleY("Counts");
@@ -106,14 +121,18 @@ public class TrackHistoGroup extends HistoGroup{
         h1_vz.setTitleY("Counts");
         h1_vz.setLineColor(color);   
         
-        addDataSet(h1_chi2overndf, startOrder);
-        addDataSet(h1_p, startOrder+1);
-        addDataSet(h1_theta, startOrder+2);
-        addDataSet(h1_phi, startOrder+3);
-        addDataSet(h1_vx, startOrder+4);
-        addDataSet(h1_vy, startOrder+5);
-        addDataSet(h1_vz, startOrder+6); 
+        addDataSet(h1_category, startOrder);
+        addDataSet(h1_ndf0, startOrder+1);
+        addDataSet(h1_chi2overndf, startOrder+2);
+        addDataSet(h1_p, startOrder+3);
+        addDataSet(h1_theta, startOrder+4);
+        addDataSet(h1_phi, startOrder+5);
+        addDataSet(h1_vx, startOrder+6);
+        addDataSet(h1_vy, startOrder+7);
+        addDataSet(h1_vz, startOrder+8); 
         
+        h1_category_map.put(postflix, h1_category);
+        h1_ndf0_map.put(postflix, h1_ndf0);
         h1_chi2overndf_map.put(postflix, h1_chi2overndf);
         h1_p_map.put(postflix, h1_p);
         h1_theta_map.put(postflix, h1_theta);
@@ -124,6 +143,13 @@ public class TrackHistoGroup extends HistoGroup{
     }
     
     public void addTrackDiffHistos(int color, int startOrder){
+        h2_category_comp= new H2F("category comp", "category comp", 8, 0.5, 8.5, 8, 0.5, 8.5);
+        h2_category_comp.setTitleX("DC<N>UR<N>:62,61,60,52,51,50,42,41");
+        h2_category_comp.setTitleY("DC<N>UR<N>:62,61,60,52,51,50,42,41");
+        h1_ndf0_diff= new H1F("ndf0Diff", "Diff. of ndf0", 100, -10, 10);
+        h1_ndf0_diff.setTitleX("Diff. of ndf0");
+        h1_ndf0_diff.setTitleY("Counts");
+        h1_ndf0_diff.setLineColor(color);          
         h1_chi2overndf_diff= new H1F("chi2overndfDiff", "Diff. of #Chi^2/ndf", 100, -10, 10);
         h1_chi2overndf_diff.setTitleX("Diff. of #Chi^2/ndf");
         h1_chi2overndf_diff.setTitleY("Counts");
@@ -153,18 +179,36 @@ public class TrackHistoGroup extends HistoGroup{
         h1_vz_diff.setTitleY("Counts");
         h1_vz_diff.setLineColor(color);   
         
-        addDataSet(h1_chi2overndf_diff, startOrder);
-        addDataSet(h1_p_diff, startOrder+1);
-        addDataSet(h1_theta_diff, startOrder+2);
-        addDataSet(h1_phi_diff, startOrder+3);
-        addDataSet(h1_vx_diff, startOrder+4);
-        addDataSet(h1_vy_diff, startOrder+5);
-        addDataSet(h1_vz_diff, startOrder+6);         
+        addDataSet(h2_category_comp, startOrder);
+        addDataSet(h1_ndf0_diff, startOrder+1);
+        addDataSet(h1_chi2overndf_diff, startOrder+2);
+        addDataSet(h1_p_diff, startOrder+3);
+        addDataSet(h1_theta_diff, startOrder+4);
+        addDataSet(h1_phi_diff, startOrder+5);
+        addDataSet(h1_vx_diff, startOrder+6);
+        addDataSet(h1_vy_diff, startOrder+7);
+        addDataSet(h1_vz_diff, startOrder+8);         
     }
+    
+    public H1F getHistoCategory(){
+        return getHistoCategory("");
+    }     
+    
+    public H1F getHistoNDF0(){
+        return getHistoNDF0("");
+    }    
     
     public H1F getHistoChi2overndf(){
         return getHistoChi2overndf("");
     }
+    
+    public H1F getHistoCategory(String postflix){
+        return h1_category_map.get(postflix);
+    }     
+    
+    public H1F getHistoNDF0(String postflix){
+        return h1_ndf0_map.get(postflix);
+    }    
     
     public H1F getHistoChi2overndf(String postflix){
         return h1_chi2overndf_map.get(postflix);
@@ -216,7 +260,15 @@ public class TrackHistoGroup extends HistoGroup{
 
     public H1F getHistoVz(String postflix){
         return h1_vz_map.get(postflix);
-    } 
+    }
+    
+    public H2F getHistoCategoryComp(){
+        return h2_category_comp;
+    }     
+    
+    public H1F getHistoNDF0Diff(){
+        return h1_ndf0_diff;
+    }    
         
     public H1F getHistoChi2overndfDiff(){
         return h1_chi2overndf_diff;

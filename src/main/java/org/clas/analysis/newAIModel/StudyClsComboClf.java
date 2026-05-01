@@ -109,7 +109,7 @@ public void processEvent(Event event) {
                     input[i]   = (float) clusters.get(i).avgWire();
                     input[i+5] = (float) clusters.get(i).fitSlope();
                 }
-                input[10] = (float)trk.getMissingSL();
+                input[10] = (float)trk.getMissingSLList().get(0);
 
                 batchInputs5Cls.add(input);
                 batchTracks5Cls.add(trk);

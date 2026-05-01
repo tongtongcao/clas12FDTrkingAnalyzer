@@ -55,6 +55,11 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
     private static int extraValidTracksSp1 = 0;
     private static int extraValidTracksSp2 = 0;
     private static int matchedValidTracks = 0;
+    
+    private static String[] postflixes = {"1", "2"};
+    
+    private static int MATCHEDDCHITSCUT = 18;
+    private static int MATCHEDURWELLCROSSESCUT = 0;    
 
     public CompareParallelTracksHitLevel() {
     }
@@ -81,29 +86,58 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         h2_normalHitRatio.setTitleY("ratio of normal hits in sp2");
         histoGroupMatchingOverview.addDataSet(h2_normalHitRatio, 2);       
         histoGroupMap.put(histoGroupMatchingOverview.getName(), histoGroupMatchingOverview);
+        
+        TrackHistoGroup histoGroupTrackComp = new TrackHistoGroup("trackComp", 3, 3);
+        histoGroupTrackComp.addTrackHistos(postflixes[0], 1, 0);
+        histoGroupTrackComp.addTrackHistos(postflixes[1], 2, 0);
+        histoGroupMap.put(histoGroupTrackComp.getName(), histoGroupTrackComp);           
 
-        TrackHistoGroup histoGroupDiffTracksWithSharedHits = new TrackHistoGroup("diffTracksWithSharedHits", 4, 2);
+        TrackHistoGroup histoGroupDiffTracksWithSharedHits = new TrackHistoGroup("diffTracksWithSharedHits", 3, 3);
         histoGroupDiffTracksWithSharedHits.addTrackDiffHistos(1, 0);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHits.getName(), histoGroupDiffTracksWithSharedHits);
         
         TrackHistoGroup histoGroupDiffTracksWithSharedHitsLocal = new TrackHistoGroup("diffTracksWithSharedHitsLocal", 3, 2);
-        histoGroupDiffTracksWithSharedHitsLocal.addTrackDiffHistos(1, -1);
+        histoGroupDiffTracksWithSharedHitsLocal.addTrackDiffHistos(1, -3);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHitsLocal.getName(), histoGroupDiffTracksWithSharedHitsLocal);
         
-        TrackHistoGroup histoGroupExtraTracks1 = new TrackHistoGroup("extraTracks1", 4, 2);
+        TrackHistoGroup histoGroupExtraTracks1 = new TrackHistoGroup("extraTracks1", 3, 5);
         histoGroupExtraTracks1.addTrackHistos(1, 0);
+        H2F h2_thetaVsPExtraTracks1 = new H2F("thetaVsPExtraTracks1", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPExtraTracks1.setTitleX("p (GeV/c)");
+        h2_thetaVsPExtraTracks1.setTitleY("#theta (rad)");
+        histoGroupExtraTracks1.addDataSet(h2_thetaVsPExtraTracks1, 9);     
+        H2F h2_phiVsPExtraTracks1 = new H2F("phiVsPExtraTracks1", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
+        h2_phiVsPExtraTracks1.setTitleX("p (GeV/c)");
+        h2_phiVsPExtraTracks1.setTitleY("#phi (rad)");
+        histoGroupExtraTracks1.addDataSet(h2_phiVsPExtraTracks1, 10);          
+        H2F h2_thetaVsPhiExtraTracks1 = new H2F("thetaVsPhiExtraTracks1", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPhiExtraTracks1.setTitleX("#phi (rad)");
+        h2_thetaVsPhiExtraTracks1.setTitleY("#theta (rad)");
+        histoGroupExtraTracks1.addDataSet(h2_thetaVsPhiExtraTracks1, 11);                                 
         H2F h2_chi2OverNDFVsNormalHitRatioExtraTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraTracks1", "chi2/ndf vs ratio of normal hits for extra tracks1", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraTracks1.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraTracks1.setTitleY("chi2/ndf");
-        histoGroupExtraTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks1, 7); 
+        histoGroupExtraTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks1, 12); 
         histoGroupMap.put(histoGroupExtraTracks1.getName(), histoGroupExtraTracks1);
         
-        TrackHistoGroup histoGroupExtraTracks2 = new TrackHistoGroup("extraTracks2", 4, 2);
+        TrackHistoGroup histoGroupExtraTracks2 = new TrackHistoGroup("extraTracks2", 3, 5);
         histoGroupExtraTracks2.addTrackHistos(1, 0);
+        H2F h2_thetaVsPExtraTracks2 = new H2F("thetaVsPExtraTracks2", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPExtraTracks2.setTitleX("p (GeV/c)");
+        h2_thetaVsPExtraTracks2.setTitleY("#theta (rad)");
+        histoGroupExtraTracks2.addDataSet(h2_thetaVsPExtraTracks2, 9);     
+        H2F h2_phiVsPExtraTracks2 = new H2F("phiVsPExtraTracks2", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
+        h2_phiVsPExtraTracks2.setTitleX("p (GeV/c)");
+        h2_phiVsPExtraTracks2.setTitleY("#phi (rad)");
+        histoGroupExtraTracks2.addDataSet(h2_phiVsPExtraTracks2, 10);          
+        H2F h2_thetaVsPhiExtraTracks2 = new H2F("thetaVsPhiExtraTracks2", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
+        h2_thetaVsPhiExtraTracks2.setTitleX("#phi (rad)");
+        h2_thetaVsPhiExtraTracks2.setTitleY("#theta (rad)");
+        histoGroupExtraTracks2.addDataSet(h2_thetaVsPhiExtraTracks2, 11);         
         H2F h2_chi2OverNDFVsNormalHitRatioExtraTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraTracks2", "chi2/ndf vs ratio of normal hits for extra tracks2", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraTracks2.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraTracks2.setTitleY("chi2/ndf");
-        histoGroupExtraTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks2, 7); 
+        histoGroupExtraTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraTracks2, 12); 
         histoGroupMap.put(histoGroupExtraTracks2.getName(), histoGroupExtraTracks2);
         
         HistoGroup histoGroupValidCutParameterCompTracksWithSharedHits= new HistoGroup("validCutParameterCompTracksWithSharedHits", 2, 2);
@@ -143,52 +177,57 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         histoGroupMatchingOverviewValidTracks.addDataSet(h2_normalHitRatioValidTracks, 2);       
         histoGroupMap.put(histoGroupMatchingOverviewValidTracks.getName(), histoGroupMatchingOverviewValidTracks);
         
-        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = new TrackHistoGroup("diffTracksWithSharedHitsValidTracks", 4, 2);
+        TrackHistoGroup histoGroupValidTrackComp = new TrackHistoGroup("validTrackComp", 3, 3);
+        histoGroupValidTrackComp.addTrackHistos(postflixes[0], 1, 0);
+        histoGroupValidTrackComp.addTrackHistos(postflixes[1], 2, 0);
+        histoGroupMap.put(histoGroupValidTrackComp.getName(), histoGroupValidTrackComp);         
+        
+        TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = new TrackHistoGroup("diffTracksWithSharedHitsValidTracks", 3, 3);
         histoGroupDiffTracksWithSharedHitsValidTracks.addTrackDiffHistos(1, 0);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHitsValidTracks.getName(), histoGroupDiffTracksWithSharedHitsValidTracks);
         
         TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracksLocal = new TrackHistoGroup("diffTracksWithSharedHitsValidTracksLocal", 3, 2);
-        histoGroupDiffTracksWithSharedHitsValidTracksLocal.addTrackDiffHistos(1, -1);
+        histoGroupDiffTracksWithSharedHitsValidTracksLocal.addTrackDiffHistos(1, -3);
         histoGroupMap.put(histoGroupDiffTracksWithSharedHitsValidTracksLocal.getName(), histoGroupDiffTracksWithSharedHitsValidTracksLocal);
         
-        TrackHistoGroup histoGroupExtraValidTracks1 = new TrackHistoGroup("extraValidTracks1", 4, 3);
+        TrackHistoGroup histoGroupExtraValidTracks1 = new TrackHistoGroup("extraValidTracks1", 3, 5);
         histoGroupExtraValidTracks1.addTrackHistos(1, 0, true);
         H2F h2_thetaVsPExtraValidTracks1 = new H2F("thetaVsPExtraValidTracks1", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
         h2_thetaVsPExtraValidTracks1.setTitleX("p (GeV/c)");
         h2_thetaVsPExtraValidTracks1.setTitleY("#theta (rad)");
-        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPExtraValidTracks1, 7);     
+        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPExtraValidTracks1, 9);     
         H2F h2_phiVsPExtraValidTracks1 = new H2F("phiVsPExtraValidTracks1", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
         h2_phiVsPExtraValidTracks1.setTitleX("p (GeV/c)");
         h2_phiVsPExtraValidTracks1.setTitleY("#phi (rad)");
-        histoGroupExtraValidTracks1.addDataSet(h2_phiVsPExtraValidTracks1, 8);          
+        histoGroupExtraValidTracks1.addDataSet(h2_phiVsPExtraValidTracks1, 10);          
         H2F h2_thetaVsPhiExtraValidTracks1 = new H2F("thetaVsPhiExtraValidTracks1", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
         h2_thetaVsPhiExtraValidTracks1.setTitleX("#phi (rad)");
         h2_thetaVsPhiExtraValidTracks1.setTitleY("#theta (rad)");
-        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPhiExtraValidTracks1, 9);         
+        histoGroupExtraValidTracks1.addDataSet(h2_thetaVsPhiExtraValidTracks1, 11);         
         H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks1", "chi2/ndf vs ratio of normal hits", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1.setTitleY("chi2/ndf");
-        histoGroupExtraValidTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1, 10);         
+        histoGroupExtraValidTracks1.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks1, 12);       
         histoGroupMap.put(histoGroupExtraValidTracks1.getName(), histoGroupExtraValidTracks1);
         
-        TrackHistoGroup histoGroupExtraValidTracks2 = new TrackHistoGroup("extraValidTracks2", 4, 3);
+        TrackHistoGroup histoGroupExtraValidTracks2 = new TrackHistoGroup("extraValidTracks2", 3, 5);
         histoGroupExtraValidTracks2.addTrackHistos(1, 0, true);
         H2F h2_thetaVsPExtraValidTracks2 = new H2F("thetaVsPExtraValidTracks2", "#theta vs p", 100, 0, 12, 100, 0, Math.PI*50./180.);
         h2_thetaVsPExtraValidTracks2.setTitleX("p (GeV/c)");
         h2_thetaVsPExtraValidTracks2.setTitleY("#theta (rad)");
-        histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPExtraValidTracks2, 7); 
+        histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPExtraValidTracks2, 9); 
         H2F h2_phiVsPExtraValidTracks2 = new H2F("phiVsPExtraValidTracks2", "#phi vs p", 100, 0, 12, 100, -Math.PI, Math.PI);
         h2_phiVsPExtraValidTracks2.setTitleX("p (GeV/c)");
         h2_phiVsPExtraValidTracks2.setTitleY("#phi (rad)");
-        histoGroupExtraValidTracks2.addDataSet(h2_phiVsPExtraValidTracks2, 8);          
+        histoGroupExtraValidTracks2.addDataSet(h2_phiVsPExtraValidTracks2, 10);          
         H2F h2_thetaVsPhiExtraValidTracks2 = new H2F("thetaVsPhiExtraValidTracks2", "#theta vs #phi", 100, -Math.PI, Math.PI, 100, 0, Math.PI*50./180.);
         h2_thetaVsPhiExtraValidTracks2.setTitleX("#phi (rad)");
         h2_thetaVsPhiExtraValidTracks2.setTitleY("#theta (rad)");
-        histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPhiExtraValidTracks2, 9); 
+        histoGroupExtraValidTracks2.addDataSet(h2_thetaVsPhiExtraValidTracks2, 11); 
         H2F h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2 = new H2F("chi2OverNDFVsNormalHitRatioExtraValidTracks2", "chi2/ndf vs ratio of normal hits", 30, 0, 1.05, 30, 0, 100);
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleX("ratio of normal hits");
         h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2.setTitleY("chi2/ndf");
-        histoGroupExtraValidTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2, 10);                 
+        histoGroupExtraValidTracks2.addDataSet(h2_chi2OverNDFVsNormalHitRatioExtraValidTracks2, 12);                  
         histoGroupMap.put(histoGroupExtraValidTracks2.getName(), histoGroupExtraValidTracks2);
                 
         // Ratio of normal hits for tracks
@@ -226,26 +265,70 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         List<Track> trackList2 = localEvent2.getTracksTB();   
         
         //// All tracks
+        TrackHistoGroup histoGroupTrackComp = (TrackHistoGroup) histoGroupMap.get("trackComp");
+        TrackHistoGroup histoGroupValidTrackComp = (TrackHistoGroup) histoGroupMap.get("validTrackComp");
+        for (Track trk1 : trackList1) {
+                histoGroupTrackComp.getHistoCategory(postflixes[0]).fill(trk1.getTrackCategory());
+                histoGroupTrackComp.getHistoNDF0(postflixes[0]).fill(trk1.NDF0());
+                histoGroupTrackComp.getHistoChi2overndf(postflixes[0]).fill(trk1.chi2()/trk1.NDF());
+                histoGroupTrackComp.getHistoP(postflixes[0]).fill(trk1.p());
+                histoGroupTrackComp.getHistoTheta(postflixes[0]).fill(trk1.theta());
+                histoGroupTrackComp.getHistoPhi(postflixes[0]).fill(trk1.phi());
+                histoGroupTrackComp.getHistoVx(postflixes[0]).fill(trk1.vx());
+                histoGroupTrackComp.getHistoVy(postflixes[0]).fill(trk1.vy());
+                histoGroupTrackComp.getHistoVz(postflixes[0]).fill(trk1.vz());
+                
+                if(trk1.isValid()){
+                    histoGroupValidTrackComp.getHistoCategory(postflixes[0]).fill(trk1.getTrackCategory());
+                    histoGroupValidTrackComp.getHistoNDF0(postflixes[0]).fill(trk1.NDF0());
+                    histoGroupValidTrackComp.getHistoChi2overndf(postflixes[0]).fill(trk1.chi2()/trk1.NDF());
+                    histoGroupValidTrackComp.getHistoP(postflixes[0]).fill(trk1.p());
+                    histoGroupValidTrackComp.getHistoTheta(postflixes[0]).fill(trk1.theta());
+                    histoGroupValidTrackComp.getHistoPhi(postflixes[0]).fill(trk1.phi());
+                    histoGroupValidTrackComp.getHistoVx(postflixes[0]).fill(trk1.vx());
+                    histoGroupValidTrackComp.getHistoVy(postflixes[0]).fill(trk1.vy());
+                    histoGroupValidTrackComp.getHistoVz(postflixes[0]).fill(trk1.vz());
+                }
+        }
+        
+        for (Track trk2 : trackList2) {
+                histoGroupTrackComp.getHistoCategory(postflixes[1]).fill(trk2.getTrackCategory());
+                histoGroupTrackComp.getHistoNDF0(postflixes[1]).fill(trk2.NDF0());
+                histoGroupTrackComp.getHistoChi2overndf(postflixes[1]).fill(trk2.chi2()/trk2.NDF());
+                histoGroupTrackComp.getHistoP(postflixes[1]).fill(trk2.p());
+                histoGroupTrackComp.getHistoTheta(postflixes[1]).fill(trk2.theta());
+                histoGroupTrackComp.getHistoPhi(postflixes[1]).fill(trk2.phi());
+                histoGroupTrackComp.getHistoVx(postflixes[1]).fill(trk2.vx());
+                histoGroupTrackComp.getHistoVy(postflixes[1]).fill(trk2.vy());
+                histoGroupTrackComp.getHistoVz(postflixes[1]).fill(trk2.vz());
+                
+                if(trk2.isValid()){
+                    histoGroupValidTrackComp.getHistoCategory(postflixes[1]).fill(trk2.getTrackCategory());
+                    histoGroupValidTrackComp.getHistoNDF0(postflixes[1]).fill(trk2.NDF0());
+                    histoGroupValidTrackComp.getHistoChi2overndf(postflixes[1]).fill(trk2.chi2()/trk2.NDF());
+                    histoGroupValidTrackComp.getHistoP(postflixes[1]).fill(trk2.p());
+                    histoGroupValidTrackComp.getHistoTheta(postflixes[1]).fill(trk2.theta());
+                    histoGroupValidTrackComp.getHistoPhi(postflixes[1]).fill(trk2.phi());
+                    histoGroupValidTrackComp.getHistoVx(postflixes[1]).fill(trk2.vx());
+                    histoGroupValidTrackComp.getHistoVy(postflixes[1]).fill(trk2.vy());
+                    histoGroupValidTrackComp.getHistoVz(postflixes[1]).fill(trk2.vz());
+                }
+        } 
+        
         Map<Track, Track> map_track1_track2 = new HashMap();
         for (Track trk1 : trackList1) {
             int maxMatchedHits = 0;
             Track matchedTrack = null;
             for (Track trk2 : trackList2) {
                 int numMatchedHits = trk1.matchedHits(trk2);
-                if(Constants.URWELL && !trk1.getURWellCrosses().isEmpty() && !trk2.getURWellCrosses().isEmpty()){
-                    for(URWellCross crs1 : trk1.getURWellCrosses()){
-                        for(URWellCross crs2 : trk2.getURWellCrosses()){
-                            if(crs1.isMatchedCross(crs2)) numMatchedHits+=2;
-                        }
-                    }
-                }
                 if (numMatchedHits > maxMatchedHits) {
                     maxMatchedHits = numMatchedHits;
                     matchedTrack = trk2;
                 }
             }
             if (matchedTrack != null) {
-                map_track1_track2.put(trk1, matchedTrack);
+                int numMatchedURWellCrosses = trk1.matchedURWellCrosses(matchedTrack);                                
+                if(maxMatchedHits >= MATCHEDDCHITSCUT && numMatchedURWellCrosses >= MATCHEDURWELLCROSSESCUT) map_track1_track2.put(trk1, matchedTrack);
             }
         }
         
@@ -265,6 +348,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 goodTracks++;
             }            
 
+            histoGroupDiffTracksWithSharedHits.getHistoCategoryComp().fill(trk1.getTrackCategory(), trk2.getTrackCategory());
+            histoGroupDiffTracksWithSharedHits.getHistoNDF0Diff().fill(trk1.NDF0() - trk2.NDF0());            
             histoGroupDiffTracksWithSharedHits.getHistoChi2overndfDiff().fill(trk1.chi2()/trk1.NDF() - trk2.chi2()/trk2.NDF());
             histoGroupDiffTracksWithSharedHits.getHistoPDiff().fill(trk1.p() - trk2.p());
             histoGroupDiffTracksWithSharedHits.getHistoThetaDiff().fill(trk1.theta() - trk2.theta());
@@ -305,6 +390,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 extraTracksSp1++;
                 
                 trkList_extraSample1.add(trk1);
+                histoGroupExtraTracks1.getHistoCategory().fill(trk1.getTrackCategory());
+                histoGroupExtraTracks1.getHistoNDF0().fill(trk1.NDF0());                
                 histoGroupExtraTracks1.getHistoChi2overndf().fill(trk1.chi2()/trk1.NDF());
                 histoGroupExtraTracks1.getHistoP().fill(trk1.p());
                 histoGroupExtraTracks1.getHistoTheta().fill(trk1.theta());
@@ -312,6 +399,10 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraTracks1.getHistoVx().fill(trk1.vx());
                 histoGroupExtraTracks1.getHistoVy().fill(trk1.vy());
                 histoGroupExtraTracks1.getHistoVz().fill(trk1.vz());
+                
+                histoGroupExtraTracks1.getH2F("thetaVsPExtraTracks1").fill(trk1.p(), trk1.theta()); 
+                histoGroupExtraTracks1.getH2F("phiVsPExtraTracks1").fill(trk1.p(), trk1.phi());
+                histoGroupExtraTracks1.getH2F("thetaVsPhiExtraTracks1").fill(trk1.phi(), trk1.theta());                  
                 
                 if (Constants.MC) histoGroupExtraTracks1.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks1").fill(trk1.getRatioNormalHits(), trk1.chi2() / trk1.NDF());
             }
@@ -326,6 +417,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 extraTracksSp2++;
                 
                 trkList_extraSample2.add(trk2);
+                histoGroupExtraTracks2.getHistoCategory().fill(trk2.getTrackCategory());
+                histoGroupExtraTracks2.getHistoNDF0().fill(trk2.NDF0());                
                 histoGroupExtraTracks2.getHistoChi2overndf().fill(trk2.chi2()/trk2.NDF());
                 histoGroupExtraTracks2.getHistoP().fill(trk2.p());
                 histoGroupExtraTracks2.getHistoTheta().fill(trk2.theta());
@@ -333,6 +426,10 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 histoGroupExtraTracks2.getHistoVx().fill(trk2.vx());
                 histoGroupExtraTracks2.getHistoVy().fill(trk2.vy());
                 histoGroupExtraTracks2.getHistoVz().fill(trk2.vz()); 
+                
+                histoGroupExtraTracks2.getH2F("thetaVsPExtraTracks2").fill(trk2.p(), trk2.theta()); 
+                histoGroupExtraTracks2.getH2F("phiVsPExtraTracks2").fill(trk2.p(), trk2.phi());
+                histoGroupExtraTracks2.getH2F("thetaVsPhiExtraTracks2").fill(trk2.phi(), trk2.theta());                                                 
                 
                 if (Constants.MC) histoGroupExtraTracks2.getH2F("chi2OverNDFVsNormalHitRatioExtraTracks2").fill(trk2.getRatioNormalHits(), trk2.chi2() / trk2.NDF());
             }
@@ -368,20 +465,14 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
             Track matchedTrack = null;
             for (Track trk2 : validTrackListSp2) {
                 int numMatchedHits = trk1.matchedHits(trk2);
-                if(Constants.URWELL && !trk1.getURWellCrosses().isEmpty() && !trk2.getURWellCrosses().isEmpty()){
-                    for(URWellCross crs1 : trk1.getURWellCrosses()){
-                        for(URWellCross crs2 : trk2.getURWellCrosses()){
-                            if(crs1.isMatchedCross(crs2)) numMatchedHits+=2;
-                        }
-                    }
-                }
                 if (numMatchedHits > maxMatchedHits) {
                     maxMatchedHits = numMatchedHits;
                     matchedTrack = trk2;
                 }
             }
             if (matchedTrack != null) {
-                map_validTrack1_validTrack2.put(trk1, matchedTrack);
+                int numMatchedURWellCrosses = trk1.matchedURWellCrosses(matchedTrack);                                
+                if(maxMatchedHits >= MATCHEDDCHITSCUT && numMatchedURWellCrosses >= MATCHEDURWELLCROSSESCUT) map_validTrack1_validTrack2.put(trk1, matchedTrack);
             }
         }
         
@@ -398,6 +489,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
                 histoGroupMatchingOverviewValidTracks.getH2F("normalHitRatioValidTracks").fill(trk1.getRatioNormalHits(), trk2.getRatioNormalHits());
             }
             
+            histoGroupDiffTracksWithSharedHitsValidTracks.getHistoCategoryComp().fill(trk1.getTrackCategory(), trk2.getTrackCategory());
+            histoGroupDiffTracksWithSharedHitsValidTracks.getHistoNDF0Diff().fill(trk1.NDF0() - trk2.NDF0());
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoChi2overndfDiff().fill(trk1.chi2()/trk1.NDF() - trk2.chi2()/trk2.NDF());
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoPDiff().fill(trk1.p() - trk2.p());
             histoGroupDiffTracksWithSharedHitsValidTracks.getHistoThetaDiff().fill(trk1.theta() - trk2.theta());
@@ -445,6 +538,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         TrackHistoGroup histoGroupExtraValidTracks1 = (TrackHistoGroup) histoGroupMap.get("extraValidTracks1");
         TrackHistoGroup histoGroupExtraValidTracks2 = (TrackHistoGroup) histoGroupMap.get("extraValidTracks2");
         for (Track trk1 : trkList_validExtraSample1) {
+            histoGroupExtraValidTracks1.getHistoCategory().fill(trk1.getTrackCategory());
+            histoGroupExtraValidTracks1.getHistoNDF0().fill(trk1.NDF0());
             histoGroupExtraValidTracks1.getHistoChi2overndf().fill(trk1.chi2() / trk1.NDF());
             histoGroupExtraValidTracks1.getHistoP().fill(trk1.p());
             histoGroupExtraValidTracks1.getHistoTheta().fill(trk1.theta());
@@ -467,6 +562,8 @@ public class CompareParallelTracksHitLevel extends BaseAnalysis {
         }
         
         for (Track trk2 : trkList_validExtraSample2) {
+            histoGroupExtraValidTracks2.getHistoCategory().fill(trk2.getTrackCategory());
+            histoGroupExtraValidTracks2.getHistoNDF0().fill(trk2.NDF0()); 
             histoGroupExtraValidTracks2.getHistoChi2overndf().fill(trk2.chi2() / trk2.NDF());
             histoGroupExtraValidTracks2.getHistoP().fill(trk2.p());
             histoGroupExtraValidTracks2.getHistoTheta().fill(trk2.theta());
