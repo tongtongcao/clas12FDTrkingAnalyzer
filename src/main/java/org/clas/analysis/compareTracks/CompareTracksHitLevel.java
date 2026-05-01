@@ -181,8 +181,8 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         histoGroupMap.put(histoGroupMatchingOverviewValidTracks.getName(), histoGroupMatchingOverviewValidTracks);
         
         TrackHistoGroup histoGroupValidTrackComp = new TrackHistoGroup("validTrackComp", 3, 3);
-        histoGroupValidTrackComp.addTrackHistos(postflixes[0], 1, 0);
-        histoGroupValidTrackComp.addTrackHistos(postflixes[1], 2, 0);
+        histoGroupValidTrackComp.addTrackHistos(postflixes[0], 1, 0, true);
+        histoGroupValidTrackComp.addTrackHistos(postflixes[1], 2, 0, true);
         histoGroupMap.put(histoGroupValidTrackComp.getName(), histoGroupValidTrackComp);  
         
         TrackHistoGroup histoGroupDiffTracksWithSharedHitsValidTracks = new TrackHistoGroup("diffTracksWithSharedHitsValidTracks", 3, 3);
