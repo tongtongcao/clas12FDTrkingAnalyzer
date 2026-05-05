@@ -28,8 +28,8 @@ import org.clas.utilities.CommonFunctions;
 import org.jlab.geom.prim.Point3D;
 
 /**
- * For each valid TB track, find its corresponding HB track, and store doca and z of all hits in the HB track, and TB track parameters
- * Samples are used to train a model for estimation of HB track state at veretx with inputs of all hits
+ * For each valid TB track, find its corresponding HB track, and store all hits in the HB track, and TB track parameters
+ * Samples are used to train a model for estimation of HB track state at z = 229 cm with inputs of all hits in titled sector coordinates
  * @author Tongtong
  */
 
@@ -88,13 +88,13 @@ public class HBHitsTBTracksExtractor{
                                     int numHits = trkHB.getHits().size();
                                     for(int i = 0; i < numHits; i++){
                                         Hit hitHB = trkHB.getHits().get(i);
-                                        String docaz = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), 
+                                        String hitInfo = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", hitHB.trkDoca(), 
                                                 Constants.xm[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 Constants.xr[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 Constants.yr[hitHB.sector()-1][hitHB.superlayer()-1][hitHB.layer()-1][hitHB.wire()-1],
                                                 hitHB.z());
-                                        if(i < numHits -1) writer.write(docaz + ",");
-                                        else writer.write(docaz);
+                                        if(i < numHits -1) writer.write(hitInfo + ",");
+                                        else writer.write(hitInfo);
                                     }
                                     writer.write("\n"); 
                                     
