@@ -25,6 +25,7 @@ import org.jlab.groot.math.F1D;
 import org.clas.utilities.Constants;
 import org.clas.element.Track;
 import org.clas.element.Cluster;
+import org.clas.element.MCTrueHit;
 import org.clas.element.Hit;
 import org.clas.element.URWellHit;
 import org.clas.element.URWellCluster;
@@ -43,6 +44,7 @@ import org.clas.fit.ClusterFitLC;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.group.DataGroup;
 import org.clas.demo.DemoBase;
+import org.clas.element.MCTrueHit;
 
 /**
  *
@@ -54,6 +56,28 @@ public class ExploreTime extends BaseAnalysis{
     
     @Override
     public void createHistoGroupMap(){
+        HistoGroup histoGroupHitTimeTureComp = new HistoGroup("timeTureComp", 4, 3);
+        for (int i = 0; i < 4; i++) {
+            H1F h1_hitTimeTrue = new H1F("hitTimeTrue" + Integer.toString(i + 1),
+                    "hit true time for layer" + Integer.toString(i + 1), 100, 60, 160);
+            h1_hitTimeTrue.setTitleX("time (ns)");
+            h1_hitTimeTrue.setTitleY("Counts");
+            histoGroupHitTimeTureComp.addDataSet(h1_hitTimeTrue, i); 
+            
+            H1F h1_hitTimeMeas = new H1F("hitTimeMeas" + Integer.toString(i + 1),
+                    "hit measured time for layer" + Integer.toString(i + 1), 100, 60, 160);
+            h1_hitTimeMeas.setTitleX("time (ns)");
+            h1_hitTimeMeas.setTitleY("Counts");
+            histoGroupHitTimeTureComp.addDataSet(h1_hitTimeMeas, i+4); 
+
+            H1F h1_hitTimeDiff = new H1F("hitTimeDiff" + Integer.toString(i + 1),
+                    "hit time diff for layer" + Integer.toString(i + 1), 100, -50, 50);
+            h1_hitTimeDiff.setTitleX("time diff (ns)");
+            h1_hitTimeDiff.setTitleY("Counts");
+            histoGroupHitTimeTureComp.addDataSet(h1_hitTimeDiff, i+8);            
+        }
+        histoGroupMap.put(histoGroupHitTimeTureComp.getName(), histoGroupHitTimeTureComp); 
+        
         HistoGroup histoGroupTimeHB = new HistoGroup("timeHB", 4, 4);
         H1F h1_startTimeHB= new H1F("startTimeHB","start time for HB" , 100, 94, 98);
         h1_startTimeHB.setTitleX("start time (ns)");
@@ -110,6 +134,25 @@ public class ExploreTime extends BaseAnalysis{
              
     public void processEvent(Event event){        
         LocalEvent localEvent = new LocalEvent(reader, event, Constants.AITB, true);
+                
+        HistoGroup histoGroupHitTimeTureComp = histoGroupMap.get("timeTureComp"); 
+        
+        List<MCTrueHit> trueHits = localEvent.getMCTrue().getHitsURWell();        
+        List<URWellHit> measuredHits = new ArrayList();
+        for(URWellHit hit : localEvent.getURWellHits()){
+            if(hit.isNormalHit()) measuredHits.add(hit);
+        }        
+        
+        if(trueHits.size() == measuredHits.size()){
+            for(int i = 0; i < trueHits.size(); i++){
+                MCTrueHit trueHit = trueHits.get(i);
+                URWellHit measuredHit = measuredHits.get(i);
+                histoGroupHitTimeTureComp.getH1F("hitTimeTrue" + measuredHit.layer()).fill(trueHit.getTime()); 
+                histoGroupHitTimeTureComp.getH1F("hitTimeMeas" + measuredHit.layer()).fill(measuredHit.time()); 
+                histoGroupHitTimeTureComp.getH1F("hitTimeDiff" + measuredHit.layer()).fill(measuredHit.time() - trueHit.getTime());             
+            }
+        }
+        
         
         HistoGroup histoGroupTimeHB = histoGroupMap.get("timeHB");         
         if(localEvent.getRecHBEvent()!=null){
@@ -185,9 +228,18 @@ public class ExploreTime extends BaseAnalysis{
     
     public void postEventProcess() {
         
+        HistoGroup histoGroupHitTimeTureComp = histoGroupMap.get("timeTureComp"); 
         HistoGroup histoGroupTimeHB = histoGroupMap.get("timeHB");
         HistoGroup histoGroupTimeTB = histoGroupMap.get("timeTB");
         for(int i = 0; i < 4; i++){
+            F1D func_trueComp  = new F1D("func_trueComp for layer" +  Integer.toString(i + 1),"[amp]*gaus(x,[mean],[sigma])", -20,20);
+            func_trueComp.setParameter(0, histoGroupTimeHB.getH1F("clusterTimeLayer" + Integer.toString(i + 1)).getMax());
+            func_trueComp.setParameter(1, 0);
+            func_trueComp.setParameter(2, 10);
+            func_trueComp.setLineColor(2);
+            func_trueComp.setOptStat(1110);
+            histoGroupHitTimeTureComp.getH1F("hitTimeDiff" + Integer.toString(i + 1)).fit(func_trueComp); 
+            
             F1D func_HB  = new F1D("func_HB for layer" +  Integer.toString(i + 1),"[amp]*gaus(x,[mean],[sigma])", -20,20);
             func_HB.setParameter(0, histoGroupTimeHB.getH1F("clusterTimeLayer" + Integer.toString(i + 1)).getMax());
             func_HB.setParameter(1, 0);

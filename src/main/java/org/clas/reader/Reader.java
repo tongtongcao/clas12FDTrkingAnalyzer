@@ -882,7 +882,11 @@ public class Reader {
                             mcTrueBank.getInt("hitn", loop),
                             mcTrueBank.getFloat("avgX", loop),
                             mcTrueBank.getFloat("avgY", loop),
-                            mcTrueBank.getFloat("avgZ", loop)
+                            mcTrueBank.getFloat("avgZ", loop),
+                            mcTrueBank.getFloat("px", loop)/1000.,
+                            mcTrueBank.getFloat("py", loop)/1000.,
+                            mcTrueBank.getFloat("pz", loop)/1000.,                        
+                            mcTrueBank.getFloat("avgT", loop)
                             );
                 if(detector == 6) hitsDC.add(hit);
                 else if(detector == 23) hitsURWell.add(hit);
