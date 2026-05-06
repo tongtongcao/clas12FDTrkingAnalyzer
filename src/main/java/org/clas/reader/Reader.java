@@ -220,7 +220,12 @@ public class Reader {
                                               trackingBank.getFloat("URWell_R2_y", it),
                                               trackingBank.getFloat("URWell_R2_z", it));
                     
-                    
+                    track.setURWellMomentumR1(trackingBank.getFloat("URWell_R1_px", it),
+                                              trackingBank.getFloat("URWell_R1_py", it),
+                                              trackingBank.getFloat("URWell_R1_pz", it));
+                    track.setURWellMomentumR2(trackingBank.getFloat("URWell_R2_px", it),
+                                              trackingBank.getFloat("URWell_R2_py", it),
+                                              trackingBank.getFloat("URWell_R2_pz", it));                                        
                 }
                 track.polarity(torusScale);
                 tracks.add(track);

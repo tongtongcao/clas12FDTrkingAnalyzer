@@ -30,6 +30,7 @@ import org.clas.reader.LocalEvent;
 import org.clas.utilities.Constants;
 import org.clas.utilities.CommonFunctions;
 import org.jlab.geom.prim.Point3D;
+import org.jlab.clas.physics.Vector3;
 
 /**
  * For each valid TB uRWell-DC track, find its corresponding HB track, and store all hits in the HB track, and TB track parameters
@@ -194,12 +195,11 @@ public class HBHitsTBTracksURDCExtractor{
                                 }
                                 writer.write("\n"); 
 
-                                Point3D preC1Pos = trkTB.getPreC1Pos();
-                                Point3D preC1Dir = trkTB.getPreC1Dir();                                    
-                                double[] preC1DirSpherical = CommonFunctions.toSpherical(preC1Dir); 
+                                Point3D pos = trkTB.getURWellProjectionLocalR1();
+                                Vector3 mom = trkTB.getURWellMomentumLocalR1();  
 
                                 String trackParameters = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", 
-                                         preC1Pos.x(), preC1Pos.y(), preC1Dir.x()/preC1Dir.z(), preC1Dir.y()/preC1Dir.z(), (float)trkTB.charge()/trkTB.p());
+                                         pos.x(), pos.y(), mom.x()/mom.z(), mom.y()/mom.z(), (float)trkTB.charge()/mom.mag());
                                 writer.write(trackParameters + "\n");
 
                                 counter++;

@@ -74,6 +74,11 @@ public class Track implements Comparable<Track> {
     private Point3D uRWellProjectionGlobalR2 = null;
     private Point3D uRWellProjectionLocalR2 = null;    
     
+    private Vector3 uRWellMomentumGlobalR1 = null;
+    private Vector3 uRWellMomentumLocalR1 = null;
+    private Vector3 uRWellMomentumGlobalR2 = null;
+    private Vector3 uRWellMomentumLocalR2 = null;  
+    
     public Track() {
         this.initTrack(1, -1, 0, 0., 0., 0., 0., 0., 0.);
     }
@@ -907,6 +912,32 @@ public class Track implements Comparable<Track> {
     
     public Point3D getURWellProjectionLocalR2(){
         return uRWellProjectionLocalR2;
+    }
+
+    public void setURWellMomentumR1(double pxGlobal, double pyGlobal, double pzGlobal){
+        uRWellMomentumGlobalR1 = new Vector3(pxGlobal, pyGlobal, pzGlobal);
+        uRWellMomentumLocalR1 = CommonFunctions.getCoordsInLocal(uRWellMomentumGlobalR1, trackSector);
+    }
+    
+    public Vector3 getURWellMomentumGlobalR1(){
+        return uRWellMomentumGlobalR1;
+    }
+    
+    public Vector3 getURWellMomentumLocalR1(){
+        return uRWellMomentumLocalR1;
+    }
+    
+    public void setURWellMomentumR2(double xGlobal, double yGlobal, double zGlobal){
+        uRWellMomentumGlobalR2 = new Vector3(xGlobal, yGlobal, zGlobal);
+        uRWellMomentumLocalR2 = CommonFunctions.getCoordsInLocal(uRWellMomentumGlobalR2, trackSector);
+    }
+    
+    public Vector3 getURWellMomentumGlobalR2(){
+        return uRWellMomentumGlobalR2;
+    }
+    
+    public Vector3 getURWellMomentumLocalR2(){
+        return uRWellMomentumLocalR2;
     }    
         
     public int numMatchedClusters(Track otherTrk){
