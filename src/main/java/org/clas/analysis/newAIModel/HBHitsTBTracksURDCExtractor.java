@@ -166,14 +166,14 @@ public class HBHitsTBTracksURDCExtractor{
                                     
                                     String cls1Info = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", 
                                             crs.getCluster1().originalPointLocal().x(), 
-                                            crs.getCluster1().endPointLocal().y(),
-                                            crs.getCluster1().originalPointLocal().x(),
+                                            crs.getCluster1().originalPointLocal().y(),
+                                            crs.getCluster1().endPointLocal().x(),
                                             crs.getCluster1().endPointLocal().y(),
                                             crs.getCluster1().originalPointLocal().z());
                                     String cls2Info = String.format("%.4f,%.4f,%.4f,%.4f,%.4f", 
                                             crs.getCluster2().originalPointLocal().x(), 
-                                            crs.getCluster2().endPointLocal().y(),
-                                            crs.getCluster2().originalPointLocal().x(),
+                                            crs.getCluster2().originalPointLocal().y(),
+                                            crs.getCluster2().endPointLocal().x(),
                                             crs.getCluster2().endPointLocal().y(),
                                             crs.getCluster2().originalPointLocal().z()); 
                                     
