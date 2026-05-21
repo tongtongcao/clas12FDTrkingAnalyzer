@@ -619,7 +619,9 @@ public class Reader {
                 );
                 
                 if(aiCandidateBank.getSchema().hasEntry("ur1") && aiCandidateBank.getSchema().hasEntry("ur2")){
-                    
+                    cand.urCrosses(aiCandidateBank.getInt("ur1", loop),
+                               aiCandidateBank.getInt("ur2", loop)
+                    );
                 }
                 
                 cands.add(cand);
