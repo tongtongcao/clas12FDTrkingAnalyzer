@@ -618,6 +618,10 @@ public class Reader {
                                aiCandidateBank.getInt("c6", loop)
                 );
                 
+                if(aiCandidateBank.getSchema().hasEntry("ur1") && aiCandidateBank.getSchema().hasEntry("ur2")){
+                    
+                }
+                
                 cands.add(cand);
             }
         }

@@ -17,6 +17,7 @@ import org.clas.reader.LocalEvent;
 public class DemoSuperlayerWithURWell extends DemoSuperlayer{  
     private List<URWellCross> uRWellCrosses = new ArrayList();
     private List<URWellCross> uRWellCrossesClustering = new ArrayList();
+    private List<URWellCross> uRWellCrossesAI = new ArrayList();
     private List<URWellCross> uRWellCrossesHB = new ArrayList();
     private List<URWellCross> uRWellCrossesTB = new ArrayList();        
     
@@ -81,6 +82,7 @@ public class DemoSuperlayerWithURWell extends DemoSuperlayer{
     private void makeHBTBURWellCrossList(){
         for(URWellCross crs : uRWellCrosses){
             if(crs.isUsedClustering()) uRWellCrossesClustering.add(crs);
+            if(crs.isUsedAI()) uRWellCrossesAI.add(crs);
             if(crs.isUsedHB()) uRWellCrossesHB.add(crs);
             if(crs.isUsedTB()) uRWellCrossesTB.add(crs);
         }
@@ -122,7 +124,8 @@ public class DemoSuperlayerWithURWell extends DemoSuperlayer{
     public void addGraphsDenoisingClusteringAICandHBTBWithURWell(){
         addGraphsDenoisingClusteringAICandHBTB();
         addURWellGraph(uRWellCrosses, DemoConstants.MarkerColor.DENOISING.getMarkerColor()); 
-        addURWellGraph(uRWellCrossesClustering, DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());  
+        addURWellGraph(uRWellCrossesClustering, DemoConstants.MarkerColor.CLUSTERING.getMarkerColor()); 
+        addURWellGraph(uRWellCrossesAI, DemoConstants.MarkerColor.AICAND.getMarkerColor());  
         addURWellGraph(uRWellCrossesHB, DemoConstants.MarkerColor.HBTRK.getMarkerColor());  
         addURWellGraph(uRWellCrossesTB, DemoConstants.MarkerColor.TBTRK.getMarkerColor());  
     }
@@ -131,6 +134,7 @@ public class DemoSuperlayerWithURWell extends DemoSuperlayer{
         addGraphsRawDenoisingClusteringAICandHBTB();
         addURWellGraph(uRWellCrosses, DemoConstants.MarkerColor.DENOISING.getMarkerColor());  
         addURWellGraph(uRWellCrossesClustering, DemoConstants.MarkerColor.CLUSTERING.getMarkerColor());  
+        addURWellGraph(uRWellCrossesAI, DemoConstants.MarkerColor.AICAND.getMarkerColor()); 
         addURWellGraph(uRWellCrossesHB, DemoConstants.MarkerColor.HBTRK.getMarkerColor());  
         addURWellGraph(uRWellCrossesTB, DemoConstants.MarkerColor.TBTRK.getMarkerColor());  
     }

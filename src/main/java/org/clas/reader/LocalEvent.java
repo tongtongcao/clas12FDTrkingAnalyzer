@@ -67,6 +67,7 @@ public class LocalEvent {
     private List<URWellCluster> uRWellClusters = new ArrayList();
     private List<URWellCross> uRWellCrosses = new ArrayList();
     private List<URWellCross> uRWellCrossesNoCuts = new ArrayList();
+    private List<URWellCross> uRWellCrossesAICands = new ArrayList();
     private List<URWellCross> uRWellCrossesHB = new ArrayList();
     private List<URWellCross> uRWellCrossesTB = new ArrayList();
     private RecEvent recHBEvent = null;
@@ -221,6 +222,14 @@ public class LocalEvent {
                 clustersAICands.addAll(cand.getClusters());
                 for(Cluster cls : cand.getClusters()){
                     hitsAICands.addAll(cls.getHits());
+                }
+                
+                if(readURWell){
+                    cand.setURWellCrosses(uRWellCrosses);
+                    uRWellCrossesAICands.addAll(cand.getURWellCrosses());
+                    for(URWellCross urCrs : cand.getURWellCrosses()){
+                        urCrs.setIsUsedAI(true);
+                    }
                 }
             }                       
         }
@@ -525,7 +534,11 @@ public class LocalEvent {
     
     public List<Cross> getCrossesHB(){
         return crossesHB;
-    } 
+    }
+    
+    public List<URWellCross> getURWellCrossesAICands(){
+        return uRWellCrossesAICands;
+    }     
     
     public List<URWellCross> getURWellCrossesHB(){
         return uRWellCrossesHB;

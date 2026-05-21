@@ -41,6 +41,7 @@ public class URWellCross implements Comparable<URWellCross> {
     private URWellCluster cluster2 = null;
     
     private boolean isUsedClustering = false;
+    private boolean isUsedAI = false;
     private boolean isUsedHB = false;
     private boolean isUsedTB = false;
     
@@ -159,6 +160,14 @@ public class URWellCross implements Comparable<URWellCross> {
     public boolean isUsedClustering(){
         return isUsedClustering;
     }
+    
+    public void setIsUsedAI(boolean isUsedAI){
+        this.isUsedAI = isUsedAI;
+    }
+    
+    public boolean isUsedAI(){
+        return isUsedAI;
+    }    
     
     public void setIsUsedHB(boolean isUsedHB){
         this.isUsedHB = isUsedHB;

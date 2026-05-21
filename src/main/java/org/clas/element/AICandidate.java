@@ -15,7 +15,7 @@ public class AICandidate implements Comparable<AICandidate> {
     
     private int[] clusterIds = new int[6];
     private int numSL;
-    
+        
     private List<Cluster> clusters = null;
     private List<Hit> hits = null;
     List<Hit> normalHits = null;
@@ -23,6 +23,10 @@ public class AICandidate implements Comparable<AICandidate> {
     private int numNormalHits = -1;
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
+    
+    private int[] uRWellCrsIds = new int[2];
+    private int numURWellCrs;
+    private List<URWellCross> uRWellCrosses = null;
     
     public AICandidate(int id, int sector, double prob){
         this.id = id;
@@ -37,11 +41,24 @@ public class AICandidate implements Comparable<AICandidate> {
         this.clusterIds[3] = i4;
         this.clusterIds[4] = i5;
         this.clusterIds[5] = i6;
+        
+        numSL = 0;
         for(int i=0; i<6; i++) {
             if(this.clusterIds[i]<=0) this.clusterIds[i]=-1; //change 0 to -1 to allow matching of candidates to tracks
             if(this.clusterIds[i]>0)  this.numSL++;
         }
     }
+    
+    public void urCrosses(int i1, int i2) {
+        this.uRWellCrsIds[0] = i1;
+        this.uRWellCrsIds[1] = i2;
+        
+        numURWellCrs = 0;
+        for(int i=0; i<2; i++) {
+            if(this.uRWellCrsIds[i]<=0) this.uRWellCrsIds[i]=-1; //change 0 to -1 to allow matching of candidates to tracks
+            if(this.uRWellCrsIds[i]>0)  this.numURWellCrs++;
+        }
+    }    
     
     public int id(){
         return id;
@@ -131,6 +148,25 @@ public class AICandidate implements Comparable<AICandidate> {
             }
         } 
     } 
+    
+    public void setURWellCrosses(List<URWellCross> allURWellCrosses){
+        uRWellCrosses = new ArrayList();
+        for(int i = 0; i < 2; i++){
+            int crsId = uRWellCrsIds[i];
+            if(crsId > 0){
+                for(URWellCross crs : allURWellCrosses){
+                    if(crsId == crs.id()) {
+                        uRWellCrosses.add(crs);
+                        break;
+                    }
+                }
+            }
+        } 
+    } 
+
+    public List<URWellCross> getURWellCrosses(){
+        return uRWellCrosses;
+    }
     
     public List<Cluster> getClusters(){
         return clusters;
