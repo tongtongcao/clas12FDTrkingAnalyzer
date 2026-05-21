@@ -241,7 +241,8 @@ public class Reader {
                         Track track  = tracks.get(index); 
                         track.status(status);
                         track.pid(particleBank.getInt("pid", pindex));                
-                        track.chi2pid(particleBank.getFloat("chi2pid", pindex));                
+                        track.chi2pid(particleBank.getFloat("chi2pid", pindex));  
+                        track.beta(particleBank.getFloat("beta", pindex));  
                     }
                 }
             }

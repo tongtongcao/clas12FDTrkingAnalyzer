@@ -49,6 +49,7 @@ public class Track implements Comparable<Track> {
     private int    trackStatus  = 0;
     private double trackChi2pid = 0;
     private int    trackPid = 0;
+    private double trackBeta = -1;
     
     // from trajectory bank
     private Vector3[] trackTrajectory = new Vector3[9]; // size set to contain 3 DC regions, 3 FTOF and ECAL layers
@@ -533,6 +534,14 @@ public class Track implements Comparable<Track> {
     public int pid() {
         return this.trackPid;
     }
+    
+    public void beta(double beta) {
+        this.trackBeta = beta;
+    }
+    
+    public double beta() {
+        return this.trackBeta;
+    }    
     
     public void preC1(double x, double y, double z, double ux, double uy, double uz){
         preC1Pos = new Point3D(x, y, z);

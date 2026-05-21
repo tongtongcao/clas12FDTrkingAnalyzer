@@ -159,9 +159,35 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         H2F h2_chi2pidCompTracksWithSharedHits = new H2F("chi2pidCompTracksWithSharedHits", "chi2pid comp. for tracks with shared hits", 100, -10, 10, 100, -10, 10);
         h2_chi2pidCompTracksWithSharedHits.setTitleX("chi2pid in sp1");
         h2_chi2pidCompTracksWithSharedHits.setTitleY("chi2pid in sp2");
-        histoGroupValidCutParameterCompTracksWithSharedHits.addDataSet(h2_chi2pidCompTracksWithSharedHits, 3); 
-        
+        histoGroupValidCutParameterCompTracksWithSharedHits.addDataSet(h2_chi2pidCompTracksWithSharedHits, 3);         
         histoGroupMap.put(histoGroupValidCutParameterCompTracksWithSharedHits.getName(), histoGroupValidCutParameterCompTracksWithSharedHits);
+        
+        HistoGroup histoGroupValidCutParameterVsNormalHitRatio= new HistoGroup("validCutParameterVsNormalHitRatio", 3, 2);
+        H2F h2_zVsNormalHitRatioSp1 = new H2F("zVsNormalHitRatioSp1", "z vs normal hit ratio for sp1", 101, 0, 1.01, 100, -50, 50);
+        h2_zVsNormalHitRatioSp1.setTitleX("normal hit ratio");
+        h2_zVsNormalHitRatioSp1.setTitleY("z(cm)");
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_zVsNormalHitRatioSp1, 0);         
+        H2F h2_pVsNormalHitRatioSp1 = new H2F("pVsNormalHitRatioSp1", "p vs normal hit ratio for sp1", 101, 0, 1.01, 100, 0, 12);
+        h2_pVsNormalHitRatioSp1.setTitleX("normal hit ratio)");
+        h2_pVsNormalHitRatioSp1.setTitleY("p (GeV)");
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_pVsNormalHitRatioSp1, 1);        
+        H2F h2_chi2pidVsNormalHitRatioSp1 = new H2F("chi2pidVsNormalHitRatioSp1", "chi2pid vs normal hit ratio for sp1", 101, 0, 1.01, 100, -10, 10);
+        h2_chi2pidVsNormalHitRatioSp1.setTitleX("normal hit ratio");
+        h2_chi2pidVsNormalHitRatioSp1.setTitleY("chi2pid"); 
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_chi2pidVsNormalHitRatioSp1, 2); 
+        H2F h2_zVsNormalHitRatioSp2 = new H2F("zVsNormalHitRatioSp2", "z vs normal hit ratio for sp2", 101, 0, 1.01, 100, -50, 50);
+        h2_zVsNormalHitRatioSp2.setTitleX("normal hit ratio");
+        h2_zVsNormalHitRatioSp2.setTitleY("z(cm)");
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_zVsNormalHitRatioSp2, 3);         
+        H2F h2_pVsNormalHitRatioSp2 = new H2F("pVsNormalHitRatioSp2", "p vs normal hit ratio for sp2", 101, 0, 1.01, 100, 0, 12);
+        h2_pVsNormalHitRatioSp2.setTitleX("normal hit ratio)");
+        h2_pVsNormalHitRatioSp2.setTitleY("p (GeV)");
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_pVsNormalHitRatioSp2, 4);        
+        H2F h2_chi2pidVsNormalHitRatioSp2 = new H2F("chi2pidVsNormalHitRatioSp2", "chi2pid vs normal hit ratio for sp2", 101, 0, 1.01, 100, -10, 10);
+        h2_chi2pidVsNormalHitRatioSp2.setTitleX("normal hit ratio");
+        h2_chi2pidVsNormalHitRatioSp2.setTitleY("chi2pid");        
+        histoGroupValidCutParameterVsNormalHitRatio.addDataSet(h2_chi2pidVsNormalHitRatioSp2, 5);         
+        histoGroupMap.put(histoGroupValidCutParameterVsNormalHitRatio.getName(), histoGroupValidCutParameterVsNormalHitRatio);
         
         ////// Valid tracks
         HistoGroup histoGroupMatchingOverviewValidTracks = new HistoGroup("matchingOverviewValidTracks", 2, 2);
@@ -277,6 +303,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
         //// All tracks
         TrackHistoGroup histoGroupTrackComp = (TrackHistoGroup) histoGroupMap.get("trackComp");
         TrackHistoGroup histoGroupValidTrackComp = (TrackHistoGroup) histoGroupMap.get("validTrackComp");
+        HistoGroup histoGroupValidCutParameterVsNormalHitRatio = histoGroupMap.get("validCutParameterVsNormalHitRatio"); 
         for (Track trk1 : trackList1) {
                 histoGroupTrackComp.getHistoCategory(postflixes[0]).fill(trk1.getTrackCategory());
                 histoGroupTrackComp.getHistoNDF0(postflixes[0]).fill(trk1.NDF0());
@@ -287,6 +314,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupTrackComp.getHistoVx(postflixes[0]).fill(trk1.vx());
                 histoGroupTrackComp.getHistoVy(postflixes[0]).fill(trk1.vy());
                 histoGroupTrackComp.getHistoVz(postflixes[0]).fill(trk1.vz());
+                
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("zVsNormalHitRatioSp1").fill(trk1.getRatioNormalHits(), trk1.vz());
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("pVsNormalHitRatioSp1").fill(trk1.getRatioNormalHits(), trk1.p());
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("chi2pidVsNormalHitRatioSp1").fill(trk1.getRatioNormalHits(), trk1.chi2pid());                
                 
                 if(trk1.isValid()){
                     histoGroupValidTrackComp.getHistoCategory(postflixes[0]).fill(trk1.getTrackCategory());
@@ -311,6 +342,10 @@ public class CompareTracksHitLevel extends BaseAnalysis {
                 histoGroupTrackComp.getHistoVx(postflixes[1]).fill(trk2.vx());
                 histoGroupTrackComp.getHistoVy(postflixes[1]).fill(trk2.vy());
                 histoGroupTrackComp.getHistoVz(postflixes[1]).fill(trk2.vz());
+                
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("zVsNormalHitRatioSp2").fill(trk2.getRatioNormalHits(), trk2.vz());
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("pVsNormalHitRatioSp2").fill(trk2.getRatioNormalHits(), trk2.p());
+                histoGroupValidCutParameterVsNormalHitRatio.getH2F("chi2pidVsNormalHitRatioSp2").fill(trk2.getRatioNormalHits(), trk2.chi2pid());                
                 
                 if(trk2.isValid()){
                     histoGroupValidTrackComp.getHistoCategory(postflixes[1]).fill(trk2.getTrackCategory());
