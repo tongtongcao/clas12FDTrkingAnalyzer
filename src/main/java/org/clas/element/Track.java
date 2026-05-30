@@ -282,10 +282,17 @@ public class Track implements Comparable<Track> {
         
     }
     
-    public double euclideanDistance(Track part) {
-        double xx = (this.vector().px() - part.vector().px());
-        double yy = (this.vector().py() - part.vector().py());
-        double zz = (this.vector().pz() - part.vector().pz());
+    public double euclideanVtxDistance(Track part) {
+        double xx = this.vx() - part.vx();
+        double yy = this.vy() - part.vy();
+        double zz = this.vz() - part.vz();
+        return Math.sqrt(xx * xx + yy * yy + zz * zz);
+    }    
+    
+    public double euclideanMomDistance(Track part) {
+        double xx = this.vector().px() - part.vector().px();
+        double yy = this.vector().py() - part.vector().py();
+        double zz = this.vector().pz() - part.vector().pz();
         return Math.sqrt(xx * xx + yy * yy + zz * zz);
     }
     
@@ -818,7 +825,20 @@ public class Track implements Comparable<Track> {
             }
         }
         return nmatch;
-    }    
+    } 
+    
+    public int matchedURWellClusters(Track t) {
+        int nmatch = 0;
+        if(this.getURWellCrosses() != null && t.getURWellCrosses() != null){
+            for(URWellCross thisCrs : this.getURWellCrosses()){
+                for(URWellCross thatCrs : t.getURWellCrosses()){
+                    if(thisCrs.getCluster1().strip() == thatCrs.getCluster1().strip()) nmatch++;
+                    if(thisCrs.getCluster2().strip() == thatCrs.getCluster2().strip()) nmatch++;
+                }
+            }
+        }
+        return nmatch;
+    }
     
     public int nHits() {
         if(this.hits != null) return hits.size();

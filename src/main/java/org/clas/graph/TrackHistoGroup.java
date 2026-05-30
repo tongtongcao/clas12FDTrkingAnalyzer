@@ -143,6 +143,10 @@ public class TrackHistoGroup extends HistoGroup{
     }
     
     public void addTrackDiffHistos(int color, int startOrder){
+        addTrackDiffHistos(color, startOrder, 1);
+    }
+    
+    public void addTrackDiffHistos(int color, int startOrder, double rangeFacotr){
         h2_category_comp= new H2F("category comp", "category comp", 8, 0.5, 8.5, 8, 0.5, 8.5);
         h2_category_comp.setTitleX("DC<N>UR<N>:62,61,60,52,51,50,42,41");
         h2_category_comp.setTitleY("DC<N>UR<N>:62,61,60,52,51,50,42,41");
@@ -154,27 +158,27 @@ public class TrackHistoGroup extends HistoGroup{
         h1_chi2overndf_diff.setTitleX("Diff. of #Chi^2/ndf");
         h1_chi2overndf_diff.setTitleY("Counts");
         h1_chi2overndf_diff.setLineColor(color);                
-        h1_p_diff = new H1F("pDiff", "Diff. of p", 100, -1, 1);
+        h1_p_diff = new H1F("pDiff", "Diff. of p", 100, -1*rangeFacotr, 1*rangeFacotr);
         h1_p_diff.setTitleX("Diff. of p (GeV/c)");
         h1_p_diff.setTitleY("Counts");
         h1_p_diff.setLineColor(color);
-        h1_theta_diff = new H1F("thetaDiff", "Diff. of #theta", 100, -0.1, 0.1);
+        h1_theta_diff = new H1F("thetaDiff", "Diff. of #theta", 100, -0.1*rangeFacotr, 0.1*rangeFacotr);
         h1_theta_diff.setTitleX("Diff. of #theta (rad)");
         h1_theta_diff.setTitleY("Counts");
         h1_theta_diff.setLineColor(color);
-        h1_phi_diff = new H1F("phiDiff", "Diff. of #phi", 100, -0.5, 0.5);
+        h1_phi_diff = new H1F("phiDiff", "Diff. of #phi", 100, -0.5*rangeFacotr, 0.5*rangeFacotr);
         h1_phi_diff.setTitleX("Diff. of #phi (rad)");
         h1_phi_diff.setTitleY("Counts");
         h1_phi_diff.setLineColor(color);
-        h1_vx_diff = new H1F("vxDiff", "Diff. of vx", 100, -5, 5);
+        h1_vx_diff = new H1F("vxDiff", "Diff. of vx", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vx_diff.setTitleX("Diff. of vx (cm)");
         h1_vx_diff.setTitleY("Counts");
         h1_vx_diff.setLineColor(color);        
-        h1_vy_diff = new H1F("vyDiff", "Diff. of vy", 100, -5, 5);
+        h1_vy_diff = new H1F("vyDiff", "Diff. of vy", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vy_diff.setTitleX("Diff. of vy (cm)");
         h1_vy_diff.setTitleY("Counts");
         h1_vy_diff.setLineColor(color);                
-        h1_vz_diff = new H1F("vzDiff", "Diff. of vz", 100, -5, 5);
+        h1_vz_diff = new H1F("vzDiff", "Diff. of vz", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vz_diff.setTitleX("Diff. of vz (cm)");
         h1_vz_diff.setTitleY("Counts");
         h1_vz_diff.setLineColor(color);   
