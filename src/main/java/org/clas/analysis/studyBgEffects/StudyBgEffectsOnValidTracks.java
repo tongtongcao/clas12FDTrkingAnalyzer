@@ -53,7 +53,8 @@ import org.clas.fit.ClusterFitLC;
  * @author Tongtong Cao
  */
 public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
-    private double ratioNormalHitsCut = 0.;
+    private double ratioNormalHitsCut = 0.3;
+    private int numMatchedHitsCut = 1;
     private int[] numAllNormalHits = new int[6];
     private int[] numLostClustersWith3MoreNormalHits = new int[6];
     private int[] numMatchedClustersNotAllNormalHits = new int[6];
@@ -836,27 +837,27 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_chi2pidValidTBTrackDiff.setTitleX("Difference of chi2pid");
         h1_chi2pidValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_chi2pidValidTBTrackDiff, 1);         
-        H1F h1_pValidTBTrackDiff = new H1F("pValidTBTrackDiff", "Difference of p", 100, -0.1, 0.1);
+        H1F h1_pValidTBTrackDiff = new H1F("pValidTBTrackDiff", "Difference of p", 100, -0.0001, 0.0001);
         h1_pValidTBTrackDiff.setTitleX("Difference of p (GeV/c)");
         h1_pValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_pValidTBTrackDiff, 3); 
-        H1F h1_thetaValidTBTrackDiff = new H1F("thetaValidTBTrackDiff", "Difference of theta", 100, -0.02, 0.02);
+        H1F h1_thetaValidTBTrackDiff = new H1F("thetaValidTBTrackDiff", "Difference of theta", 100, -0.0001, 0.0001);
         h1_thetaValidTBTrackDiff.setTitleX("Difference of theta (rad)");
         h1_thetaValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_thetaValidTBTrackDiff, 4); 
-        H1F h1_phiValidTBTrackDiff = new H1F("phiValidTBTrackDiff", "Difference of phi", 100, -0.02, 0.02);
+        H1F h1_phiValidTBTrackDiff = new H1F("phiValidTBTrackDiff", "Difference of phi", 100, -0.0002, 0.0002);
         h1_phiValidTBTrackDiff.setTitleX("Difference of phi (rad)");
         h1_phiValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_phiValidTBTrackDiff, 5);         
-        H1F h1_vxValidTBTrackDiff = new H1F("vxValidTBTrackDiff", "Difference of vx", 100, -1, 1);
+        H1F h1_vxValidTBTrackDiff = new H1F("vxValidTBTrackDiff", "Difference of vx", 100, -0.4, 0.4);
         h1_vxValidTBTrackDiff.setTitleX("Difference of vx (cm)");
         h1_vxValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_vxValidTBTrackDiff, 6);         
-        H1F h1_vyValidTBTrackDiff = new H1F("vyValidTBTrackDiff", "Difference of vy", 100, -1, 1);
+        H1F h1_vyValidTBTrackDiff = new H1F("vyValidTBTrackDiff", "Difference of vy", 100, -0.4, 0.4);
         h1_vyValidTBTrackDiff.setTitleX("Difference of vy (cm)");
         h1_vyValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_vyValidTBTrackDiff, 7); 
-        H1F h1_vzValidTBTrackDiff = new H1F("vzValidTBTrackDiff", "Difference of vz", 100, -1, 1);
+        H1F h1_vzValidTBTrackDiff = new H1F("vzValidTBTrackDiff", "Difference of vz", 100, -0.5, 0.5);
         h1_vzValidTBTrackDiff.setTitleX("Difference of vz (cm)");
         h1_vzValidTBTrackDiff.setTitleY("counts");
         histoGroupValidTBTrackDiff.addDataSet(h1_vzValidTBTrackDiff, 8);                  
@@ -990,7 +991,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
             for(Cluster cls2 : localEvent2.getClusters()){
                 if(cls2.getRatioNormalHits() >= ratioNormalHitsCut){
                     int numMatchedHits = cls1.numMatchedHits(cls2);
-                    if(numMatchedHits > 0){
+                    if(numMatchedHits >= numMatchedHitsCut){
                         if(numMatchedHits > maxMatchedHits) {
                             maxMatchedHits = numMatchedHits;
                             matchedClustersWithMostMatchedHits.clear();
@@ -1874,6 +1875,11 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         this.ratioNormalHitsCut = ratioNormalHitsCut;
     }
 
+    public void setNumMatchedHitsCut(int numMatchedHitsCut){
+        this.numMatchedHitsCut = numMatchedHitsCut;
+    }
+    
+    
     public static void main(String[] args) {
         OptionParser parser = new OptionParser("studyBgEffectsDC");
         parser.setRequiresInputList(false);
@@ -1886,7 +1892,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         parser.addOption("-mDemo", "1000", "maxium for number of demonstrated cases");
         parser.addOption("-trkType"      ,"22",   "tracking type: 12 (ConvTB) or 22 (AITB)");
         parser.addOption("-mc", "1", "if mc (0/1)");
-        parser.addOption("-ratioNormalHitsCut", "0", "ratio of normal hits cut for matched clustered between nobg and bg samples");
+        parser.addOption("-ratioNormalHitsCut", "0.3", "ratio of normal hits cut for matched clustered between nobg and bg samples");
+        parser.addOption("-numMatchedHitsCut", "1", "number of matched hits cut for matched clustered between nobg and bg samples");
         parser.addOption("-uRWell", "0", "if uRWell is included (0/1)");
 
 
@@ -1906,6 +1913,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         boolean mc = (parser.getOption("-mc").intValue() != 0);
         boolean uRWell = (parser.getOption("-uRWell").intValue() != 0);
         double ratioNormalHitsCut = parser.getOption("-ratioNormalHitsCut").doubleValue();
+        int numMatchedHitsCut = parser.getOption("-numMatchedHitsCut").intValue();
         Constants.MC = mc;
         Constants.URWELL = uRWell;
         Constants.MAXDEMOCASES = maxDemoCases;
@@ -1921,6 +1929,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         
         StudyBgEffectsOnValidTracks analysis = new StudyBgEffectsOnValidTracks();
         analysis.setRatioNormalHitsCut(ratioNormalHitsCut);
+        analysis.setNumMatchedHitsCut(numMatchedHitsCut);
         analysis.createHistoGroupMap();        
         
         if (!readHistos) {
