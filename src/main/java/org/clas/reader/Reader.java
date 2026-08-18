@@ -92,6 +92,30 @@ public class Reader {
             for(int it = 0; it < tbCovMatBank.getRows(); it++){
                 int id = tbCovMatBank.getInt("id", it);
 
+                double c16 = 0, c26 = 0, c36 = 0, c46 = 0, c56 = 0, c61 = 0, c62 = 0, c63 = 0, c64 = 0, c65 = 0, c66 = 0;
+                if(tbCovMatBank.getSchema().hasEntry("C16"))                    
+                    c16 = tbCovMatBank.getFloat("C16", it);
+                if(tbCovMatBank.getSchema().hasEntry("C26"))                    
+                    c26 = tbCovMatBank.getFloat("C26", it);
+                if(tbCovMatBank.getSchema().hasEntry("C36"))                    
+                    c36 = tbCovMatBank.getFloat("C36", it);
+                if(tbCovMatBank.getSchema().hasEntry("C46"))                    
+                    c46 = tbCovMatBank.getFloat("C46", it);
+                if(tbCovMatBank.getSchema().hasEntry("C56"))                    
+                    c56 = tbCovMatBank.getFloat("C56", it);
+                if(tbCovMatBank.getSchema().hasEntry("C61"))                    
+                    c61 = tbCovMatBank.getFloat("C61", it);
+                if(tbCovMatBank.getSchema().hasEntry("C62"))                    
+                    c62 = tbCovMatBank.getFloat("C62", it);
+                if(tbCovMatBank.getSchema().hasEntry("C63"))                    
+                    c63 = tbCovMatBank.getFloat("C63", it);
+                if(tbCovMatBank.getSchema().hasEntry("C64"))                    
+                    c64 = tbCovMatBank.getFloat("C64", it);
+                if(tbCovMatBank.getSchema().hasEntry("C65"))                    
+                    c65 = tbCovMatBank.getFloat("C65", it);
+                if(tbCovMatBank.getSchema().hasEntry("C66"))                    
+                    c66 = tbCovMatBank.getFloat("C66", it);
+                        
                 CovMat covMat = new CovMat(type, 
                         id,
                         tbCovMatBank.getFloat("C11", it),
@@ -99,37 +123,32 @@ public class Reader {
                         tbCovMatBank.getFloat("C13", it),
                         tbCovMatBank.getFloat("C14", it),
                         tbCovMatBank.getFloat("C15", it),
-                        tbCovMatBank.getFloat("C16", it),
+                        c16,
                         tbCovMatBank.getFloat("C21", it),
                         tbCovMatBank.getFloat("C22", it),
                         tbCovMatBank.getFloat("C23", it),
                         tbCovMatBank.getFloat("C24", it),
                         tbCovMatBank.getFloat("C25", it),
-                        tbCovMatBank.getFloat("C26", it),                    
+                        c26,                    
                         tbCovMatBank.getFloat("C31", it),
                         tbCovMatBank.getFloat("C32", it),
                         tbCovMatBank.getFloat("C33", it),
                         tbCovMatBank.getFloat("C34", it),
                         tbCovMatBank.getFloat("C35", it),
-                        tbCovMatBank.getFloat("C36", it),                    
+                        c36,                    
                         tbCovMatBank.getFloat("C41", it),
                         tbCovMatBank.getFloat("C42", it),
                         tbCovMatBank.getFloat("C43", it),
                         tbCovMatBank.getFloat("C44", it),
                         tbCovMatBank.getFloat("C45", it),
-                        tbCovMatBank.getFloat("C46", it),                    
+                        c46,                    
                         tbCovMatBank.getFloat("C51", it),
                         tbCovMatBank.getFloat("C52", it),
                         tbCovMatBank.getFloat("C53", it),
                         tbCovMatBank.getFloat("C54", it),
                         tbCovMatBank.getFloat("C55", it),
-                        tbCovMatBank.getFloat("C56", it),                    
-                        tbCovMatBank.getFloat("C61", it),
-                        tbCovMatBank.getFloat("C62", it),
-                        tbCovMatBank.getFloat("C63", it),
-                        tbCovMatBank.getFloat("C64", it),
-                        tbCovMatBank.getFloat("C65", it),
-                        tbCovMatBank.getFloat("C66", it)
+                        c56,                    
+                        c61, c62, c63, c64, c65, c66
                 );
 
                 map_id_covMat.put(id, covMat);            
