@@ -55,6 +55,7 @@ import org.clas.fit.ClusterFitLC;
 public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
     private double ratioNormalHitsCut = 0.3;
     private int numMatchedHitsCut = 1;
+    private double purityCut = 0.9;
     private int[] numAllNormalHits = new int[6];
     private int[] numLostClustersWith3MoreNormalHits = new int[6];
     private int[] numMatchedClustersNotAllNormalHits = new int[6];
@@ -662,7 +663,12 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         H1F h1_vzTBTrackDiff = new H1F("vzTBTrackDiff", "Difference of vz", 100, -1, 1);
         h1_vzTBTrackDiff.setTitleX("Difference of vz (cm)");
         h1_vzTBTrackDiff.setTitleY("counts");
-        histoGroupTBTrackDiff.addDataSet(h1_vzTBTrackDiff, 8);                  
+        histoGroupTBTrackDiff.addDataSet(h1_vzTBTrackDiff, 8); 
+        histoGroupTBTrackDiff.addDataSet(h1_ratioNormalHitsTBTrack, 9);        
+        H1F h1_ratioNormalHitsDAFWeightTBTrack = new H1F("ratioNormalHitsDAFWeightTBTrack", "ratio of normal hits with DAF weight", 100, 0, 1);
+        h1_ratioNormalHitsDAFWeightTBTrack.setTitleX("ratio of normal hits with DAF weight");
+        h1_ratioNormalHitsDAFWeightTBTrack.setTitleY("counts");
+        histoGroupTBTrackDiff.addDataSet(h1_ratioNormalHitsDAFWeightTBTrack, 10);        
         histoGroupMap.put(histoGroupTBTrackDiff.getName(), histoGroupTBTrackDiff); 
         
         HistoGroup histoGroupTBTrackDiffDiffPId= new HistoGroup("TBTrackDiffDiffPId", 3, 4);
@@ -860,7 +866,16 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         H1F h1_vzValidTBTrackDiff = new H1F("vzValidTBTrackDiff", "Difference of vz", 100, -0.5, 0.5);
         h1_vzValidTBTrackDiff.setTitleX("Difference of vz (cm)");
         h1_vzValidTBTrackDiff.setTitleY("counts");
-        histoGroupValidTBTrackDiff.addDataSet(h1_vzValidTBTrackDiff, 8);                  
+        histoGroupValidTBTrackDiff.addDataSet(h1_vzValidTBTrackDiff, 8);          
+        H1F h1_ratioNormalHitsValidTBTrack = new H1F("ratioNormalHitsValidTBTrack", "ratio of normal hits", 100, 0, 1);
+        h1_ratioNormalHitsValidTBTrack.setTitleX("ratio of normal hits");
+        h1_ratioNormalHitsValidTBTrack.setTitleY("counts");
+        histoGroupValidTBTrackDiff.addDataSet(h1_ratioNormalHitsValidTBTrack, 9);        
+        H1F h1_ratioNormalHitsDAFWeightValidTBTrack = new H1F("ratioNormalHitsDAFWeightValidTBTrack", "ratio of normal hits with DAF weight", 100, 0, 1);
+        h1_ratioNormalHitsDAFWeightValidTBTrack.setTitleX("ratio of normal hits with DAF weight");
+        h1_ratioNormalHitsDAFWeightValidTBTrack.setTitleY("counts");
+        histoGroupValidTBTrackDiff.addDataSet(h1_ratioNormalHitsDAFWeightValidTBTrack, 10);
+        
         histoGroupMap.put(histoGroupValidTBTrackDiff.getName(), histoGroupValidTBTrackDiff); 
         
         HistoGroup histoGroupValidTBTrackDiffDiffPId= new HistoGroup("ValidTBTrackDiffDiffPId", 3, 4);
@@ -931,7 +946,13 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         H2F h2_vzValidTBTrackDiffVsRatioNormalHits = new H2F("vzValidTBTrackDiffVsRatioNormalHits", "Diff of vz", 100, 0.6, 1.01, 100, -1, 1);
         h2_vzValidTBTrackDiffVsRatioNormalHits.setTitleX("ratio of normal hits");
         h2_vzValidTBTrackDiffVsRatioNormalHits.setTitleY("Diff of vz (cm)");
-        histoGroupValidTBTrackDiffVsRatioNormalHits.addDataSet(h2_vzValidTBTrackDiffVsRatioNormalHits, 8);                 
+        histoGroupValidTBTrackDiffVsRatioNormalHits.addDataSet(h2_vzValidTBTrackDiffVsRatioNormalHits, 8); 
+        
+        H1F h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut = new H1F("numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut", "# of clusters in valid TB tracks for fully matched with cut for ratio of noral hits with DAF weight", 2, 4.5, 6.5);
+        h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut.setTitleX("# of clusters in valid TB tracks for fully matched with cut");
+        h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut.setTitleY("Counts");
+        histoGroupValidTBTrackDiffVsRatioNormalHits.addDataSet(h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut, 9);          
+        
         histoGroupMap.put(histoGroupValidTBTrackDiffVsRatioNormalHits.getName(), histoGroupValidTBTrackDiffVsRatioNormalHits); 
         
         // Summary
@@ -949,7 +970,9 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numClustersFullyMatchedTBTracks.setLineColor(6);
         histoGroupTrackLostSummary.addDataSet(h1_numClustersFullyMatchedTBTracks, 5);  
         h1_numClustersFullyMatchedValidTBTracks.setLineColor(7);
-        histoGroupTrackLostSummary.addDataSet(h1_numClustersFullyMatchedValidTBTracks, 6);         
+        histoGroupTrackLostSummary.addDataSet(h1_numClustersFullyMatchedValidTBTracks, 6); 
+        h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut.setLineColor(8);
+        histoGroupTrackLostSummary.addDataSet(h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut, 7);         
         histoGroupMap.put(histoGroupTrackLostSummary.getName(), histoGroupTrackLostSummary); 
         
         
@@ -961,6 +984,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         histoGroupTrackLostSummary2.addDataSet(h1_numClustersFullyMatchedHBTracks, 0);
         histoGroupTrackLostSummary2.addDataSet(h1_numClustersFullyMatchedTBTracks, 0);
         histoGroupTrackLostSummary2.addDataSet(h1_numClustersFullyMatchedValidTBTracks, 0);
+        histoGroupTrackLostSummary2.addDataSet(h1_numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut, 0);  
         histoGroupMap.put(histoGroupTrackLostSummary2.getName(), histoGroupTrackLostSummary2);
         
         HistoGroup histoGroupTrackLostSummary3= new HistoGroup("trackLostSummary3", 1, 3);
@@ -1589,7 +1613,9 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                     histoGroupTBTrackDiff.getH1F("vxTBTrackDiff").fill(trk1.vx() - matchedTrk2.vx());                    
                     histoGroupTBTrackDiff.getH1F("vyTBTrackDiff").fill(trk1.vy() - matchedTrk2.vy());                    
                     histoGroupTBTrackDiff.getH1F("vzTBTrackDiff").fill(trk1.vz() - matchedTrk2.vz());
-                    
+                                        
+                    histoGroupTBTrackDiff.getH1F("ratioNormalHitsDAFWeightTBTrack").fill(matchedTrk2.getRatioNormalHitsDAFWeight());
+                            
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("chi2overndfTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.chi2()/trk1.NDF() - matchedTrk2.chi2()/matchedTrk2.NDF());                    
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("chi2pidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.chi2pid() - matchedTrk2.chi2pid());                    
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("pTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.p() - matchedTrk2.p());                    
@@ -1597,8 +1623,8 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("phiTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.phi() - matchedTrk2.phi());                    
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("vxTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vx() - matchedTrk2.vx());                    
                     histoGroupTBTrackDiffVsRatioNormalHits.getH2F("vyTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vy() - matchedTrk2.vy());                    
-                    histoGroupTBTrackDiffVsRatioNormalHits.getH2F("vzTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vz() - matchedTrk2.vz());
-                    
+                    histoGroupTBTrackDiffVsRatioNormalHits.getH2F("vzTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vz() - matchedTrk2.vz());                                           
+                        
                     if(trk1.pid() == matchedTrk2.pid()){
                         histoGroupTBTrackComp.getH1F("pidStatusTBTrack").fill(1); 
                     }
@@ -1671,6 +1697,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 histoGroupValidTBTrackDiff.getH1F("vxValidTBTrackDiff").fill(trk1.vx() - matchedTrk2.vx());                    
                 histoGroupValidTBTrackDiff.getH1F("vyValidTBTrackDiff").fill(trk1.vy() - matchedTrk2.vy());                    
                 histoGroupValidTBTrackDiff.getH1F("vzValidTBTrackDiff").fill(trk1.vz() - matchedTrk2.vz());
+                
+                histoGroupValidTBTrackDiff.getH1F("ratioNormalHitsValidTBTrack").fill(matchedTrk2.getRatioNormalHits());
+                histoGroupValidTBTrackDiff.getH1F("ratioNormalHitsDAFWeightValidTBTrack").fill(matchedTrk2.getRatioNormalHitsDAFWeight());
+                
 
                 histoGroupValidTBTrackDiffVsRatioNormalHits.getH2F("chi2overndfValidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.chi2()/trk1.NDF() - matchedTrk2.chi2()/matchedTrk2.NDF());                    
                 histoGroupValidTBTrackDiffVsRatioNormalHits.getH2F("chi2pidValidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.chi2pid() - matchedTrk2.chi2pid());                    
@@ -1680,6 +1710,9 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
                 histoGroupValidTBTrackDiffVsRatioNormalHits.getH2F("vxValidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vx() - matchedTrk2.vx());                    
                 histoGroupValidTBTrackDiffVsRatioNormalHits.getH2F("vyValidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vy() - matchedTrk2.vy());                    
                 histoGroupValidTBTrackDiffVsRatioNormalHits.getH2F("vzValidTBTrackDiffVsRatioNormalHits").fill(matchedTrk2.getRatioNormalHits(), trk1.vz() - matchedTrk2.vz());
+                
+                if(matchedTrk2.getRatioNormalHitsDAFWeight() >= purityCut)
+                        histoGroupValidTBTrackDiffVsRatioNormalHits.getH1F("numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut").fill(matchedTrk2.nClusters()); 
 
                 if(trk1.pid() == matchedTrk2.pid()){
                     histoGroupValidTBTrackComp.getH1F("pidStatusValidTBTrack").fill(1); 
@@ -1800,7 +1833,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         } 
         
         HistoGroup histoGroupTrackLostSummary2 = histoGroupMap.get("trackLostSummary2");
-        H1F[] h1_trackLostSummary2 = new H1F[7];        
+        H1F[] h1_trackLostSummary2 = new H1F[8];        
         h1_trackLostSummary2[0] = histoGroupTrackLostSummary2.getH1F("numClustersOnValidTracks").histClone("numClustersOnValidTracks");
         h1_trackLostSummary2[1] = histoGroupTrackLostSummary2.getH1F("5or6ClustersLeftDenoising").histClone("5or6ClustersLeftDenoising");        
         h1_trackLostSummary2[2] = histoGroupTrackLostSummary2.getH1F("5or6MatchedClustersWithValidTracks").histClone("5or6MatchedClustersWithValidTracks");
@@ -1808,12 +1841,13 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_trackLostSummary2[4] = histoGroupTrackLostSummary2.getH1F("numClustersFullyMatchedHBTracks").histClone("numClustersFullyMatchedHBTracks");
         h1_trackLostSummary2[5] = histoGroupTrackLostSummary2.getH1F("numClustersFullyMatchedTBTracks").histClone("numClustersFullyMatchedTBTracks");
         h1_trackLostSummary2[6] = histoGroupTrackLostSummary2.getH1F("numClustersFullyMatchedValidTBTracks").histClone("numClustersFullyMatchedValidTBTracks");
-
-        H1F h1_num5ClusterTrackLostSummary2 = new H1F("num5ClusterTrackLostSummary2", "# of 5-cluster tracks", 7, 0.5, 7.5);
-        H1F h1_num6ClusterTrackLostSummary2 = new H1F("num6ClusterTrackLostSummary2", "# of 6-cluster tracks", 7, 0.5, 7.5);
+        h1_trackLostSummary2[7] = histoGroupTrackLostSummary2.getH1F("numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut").histClone("numClustersFullyMatchedValidTBTracksAfterNormalHitsRatioDAFWeightCut");
+       
+        H1F h1_num5ClusterTrackLostSummary2 = new H1F("num5ClusterTrackLostSummary2", "# of 5-cluster tracks", 8, 0.5, 8.5);
+        H1F h1_num6ClusterTrackLostSummary2 = new H1F("num6ClusterTrackLostSummary2", "# of 6-cluster tracks", 8, 0.5, 8.5);
         H1F h1_numTrackLostSummary2 = new H1F("numTrackLostSummary2", "# of tracks", 7, 0.5, 7.5);
-        double[] numAllTrackLostSummary2 = new double[7];
-        for(int i = 0; i < 7; i++){
+        double[] numAllTrackLostSummary2 = new double[8];
+        for(int i = 0; i < 8; i++){
             h1_num5ClusterTrackLostSummary2.setBinContent(i, h1_trackLostSummary2[i].getBinContent(0));
             h1_num6ClusterTrackLostSummary2.setBinContent(i, h1_trackLostSummary2[i].getBinContent(1));
             numAllTrackLostSummary2[i] = h1_trackLostSummary2[i].getBinContent(0) + h1_trackLostSummary2[i].getBinContent(1);
@@ -1829,10 +1863,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         h1_numTrackLostSummary2.setTitleY("counts");
         histoGroupTrackLostSummary2.addDataSet(h1_numTrackLostSummary2, 3);
         
-        H1F h1_ratioRemainingMatchedTrackLostSummary2 = new H1F("ratioRemainingMatchedTrackLostSummary2", "ratio of remaining matched tracks", 7, 0.5, 7.5);
-        double[] ratio = new double[7];
-        double[] ratio_err = new double[7];
-        for(int i = 0; i < 7; i++){
+        H1F h1_ratioRemainingMatchedTrackLostSummary2 = new H1F("ratioRemainingMatchedTrackLostSummary2", "ratio of remaining matched tracks", 8, 0.5, 8.5);
+        double[] ratio = new double[8];
+        double[] ratio_err = new double[8];
+        for(int i = 0; i < 8; i++){
             ratio[i] = numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0];
             ratio_err[i] = Math.sqrt(numAllTrackLostSummary2[i] * numAllTrackLostSummary2[0] * numAllTrackLostSummary2[0] + numAllTrackLostSummary2[i] * numAllTrackLostSummary2[i] * numAllTrackLostSummary2[0]) / Math.pow(numAllTrackLostSummary2[0], 2);
             h1_ratioRemainingMatchedTrackLostSummary2.setBinContent(i, numAllTrackLostSummary2[i]/numAllTrackLostSummary2[0]);
@@ -1847,21 +1881,21 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         
         System.out.println("+-----------------------------------------------------------------------------------------------------+");
         System.out.println("                                   Evolution of tracking efficiency                                   ");
-        System.out.println("           |     origin |  denoising | clustering |         AI |HB tracking |TB tracking | valid cuts |");        
-        System.out.println(String.format("efficiency " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
-                ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6]));
-        System.out.println(String.format("error      " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
-                ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6]));
+        System.out.println("           |     origin |  denoising | clustering |         AI |HB tracking |TB tracking | valid cuts | purity cuts|");        
+        System.out.println(String.format("efficiency " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
+                ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6], ratio[7]));
+        System.out.println(String.format("error      " + "| %10.4f | % 10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f |", 
+                ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6], ratio_err[7]));
 
         if(saveEffStats){
             try (PrintWriter out = new PrintWriter(new FileWriter(effFileName))) {      
                 out.println(String.format(
-                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
-                    ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6]
+                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
+                    ratio[0], ratio[1], ratio[2], ratio[3], ratio[4], ratio[5], ratio[6], ratio[7]
                 ));
                 out.println(String.format(
-                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
-                    ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6]
+                    "%10.4f,% 10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f,%10.4f", 
+                    ratio_err[0], ratio_err[1], ratio_err[2], ratio_err[3], ratio_err[4], ratio_err[5], ratio_err[6], ratio_err[7]
                 ));
 
             } catch (IOException e) {
@@ -1878,7 +1912,10 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
     public void setNumMatchedHitsCut(int numMatchedHitsCut){
         this.numMatchedHitsCut = numMatchedHitsCut;
     }
-    
+  
+    public void setPurityCut(double purityCut){
+        this.purityCut = purityCut;
+    }                    
     
     public static void main(String[] args) {
         OptionParser parser = new OptionParser("studyBgEffectsDC");
@@ -1894,6 +1931,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         parser.addOption("-mc", "1", "if mc (0/1)");
         parser.addOption("-ratioNormalHitsCut", "0.3", "ratio of normal hits cut for matched clustered between nobg and bg samples");
         parser.addOption("-numMatchedHitsCut", "1", "number of matched hits cut for matched clustered between nobg and bg samples");
+        parser.addOption("-purityCut", "0.9", "purity cut on final valid tracks");
         parser.addOption("-uRWell", "0", "if uRWell is included (0/1)");
 
 
@@ -1914,6 +1952,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         boolean uRWell = (parser.getOption("-uRWell").intValue() != 0);
         double ratioNormalHitsCut = parser.getOption("-ratioNormalHitsCut").doubleValue();
         int numMatchedHitsCut = parser.getOption("-numMatchedHitsCut").intValue();
+        double purityCut = parser.getOption("-purityCut").doubleValue();
         Constants.MC = mc;
         Constants.URWELL = uRWell;
         Constants.MAXDEMOCASES = maxDemoCases;
@@ -1930,6 +1969,7 @@ public class StudyBgEffectsOnValidTracks extends BaseAnalysis {
         StudyBgEffectsOnValidTracks analysis = new StudyBgEffectsOnValidTracks();
         analysis.setRatioNormalHitsCut(ratioNormalHitsCut);
         analysis.setNumMatchedHitsCut(numMatchedHitsCut);
+        analysis.setPurityCut(purityCut);
         analysis.createHistoGroupMap();        
         
         if (!readHistos) {

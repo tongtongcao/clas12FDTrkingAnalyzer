@@ -69,6 +69,7 @@ public class Track implements Comparable<Track> {
     private int numNormalHits = -1;
     private int numBgHits = -1;
     private double ratioNormalHits = -1;
+    private double ratioNormalHitsDAFWeight = -1;
     
     private Point3D uRWellProjectionGlobalR1 = null;
     private Point3D uRWellProjectionLocalR1 = null;
@@ -884,15 +885,21 @@ public class Track implements Comparable<Track> {
         else {
             normalHits = new ArrayList();
             bgHits = new ArrayList();
+            double sumDAFWeightAllHits = 0;
+            double sumDAFWeightNormalHits = 0;
             for(Hit hit : hits){
-                if(hit.isNormalHit())
-                    normalHits.add(hit);                
+                sumDAFWeightAllHits += hit.dafWeight();
+                if(hit.isNormalHit()){
+                    normalHits.add(hit);
+                    sumDAFWeightNormalHits += hit.dafWeight();
+                }
                 else bgHits.add(hit);
             }
             
             numNormalHits = normalHits.size();
             numBgHits = bgHits.size();
             ratioNormalHits = (double) numNormalHits/hits.size();
+            if(sumDAFWeightAllHits != 0) ratioNormalHitsDAFWeight = sumDAFWeightNormalHits/sumDAFWeightAllHits;
             return true;
         }
     }
@@ -912,10 +919,14 @@ public class Track implements Comparable<Track> {
     public int getNumBgHits(){
         return numBgHits;
     }
-    
+        
     public double getRatioNormalHits(){
         return ratioNormalHits;
-    }
+    }    
+
+    public double getRatioNormalHitsDAFWeight(){
+        return ratioNormalHitsDAFWeight;
+    }    
     
     public void setURWellProjectionR1(double xGlobal, double yGlobal, double zGlobal){
         uRWellProjectionGlobalR1 = new Point3D(xGlobal, yGlobal, zGlobal);
