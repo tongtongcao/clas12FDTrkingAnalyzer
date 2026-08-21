@@ -45,7 +45,21 @@ public class analysisHitOccupancy extends BaseAnalysis{
     public analysisHitOccupancy(){}
     
     @Override
-    public void createHistoGroupMap(){                         
+    public void createHistoGroupMap(){     
+        HistoGroup histoGroupNumTotalHits = new HistoGroup("numTotalHits", 2, 1); 
+        H1F h1_numTotalHits = new H1F("numTotalHits", "# of total hits", 100, 0, 10000);
+        h1_numTotalHits.setTitleX("# of total hits");
+        h1_numTotalHits.setTitleY("counts");
+        histoGroupNumTotalHits.addDataSet(h1_numTotalHits, 0); 
+        
+        H1F h1_numTotalHitsDenoising = new H1F("numTotalHitsDenoising", "# of total hits after denoising", 100, 0, 5000);
+        h1_numTotalHitsDenoising.setTitleX("# of total hits");
+        h1_numTotalHitsDenoising.setTitleY("counts");
+        histoGroupNumTotalHits.addDataSet(h1_numTotalHitsDenoising, 1); 
+        histoGroupMap.put(histoGroupNumTotalHits.getName(), histoGroupNumTotalHits);
+        
+       
+        
         HistoGroup histoGroupHitOccupancyInSectors = new HistoGroup("hitOccupancyInSectors", 3, 2);        
         for (int i = 0; i < 6; i++) {
             H2F h2_hitOccupancy = new H2F("hit occupancy in sector" + Integer.toString(i + 1),
@@ -138,6 +152,8 @@ public class analysisHitOccupancy extends BaseAnalysis{
         LocalEvent localEvent = new LocalEvent(reader, event);        
         List<TDC> tdcs = localEvent.getTDCs();
         
+        HistoGroup histoGroupNumTotalHits = histoGroupMap.get("numTotalHits");
+        
         HistoGroup histoGroupHitOccupancyInSectors = histoGroupMap.get("hitOccupancyInSectors");
         HistoGroup histoGroupHitOccupancyInRegions = histoGroupMap.get("hitOccupancyInRegions");
         
@@ -148,7 +164,11 @@ public class analysisHitOccupancy extends BaseAnalysis{
         HistoGroup histoGroupSignalHitOccupancyInRegionsDenoising = histoGroupMap.get("signalHitOccupancyInRegionsDenoising");        
         
         HistoGroup histoGroupNoiseHitOccupancyInSectorsDenoising = histoGroupMap.get("noiseHitOccupancyInSectorsDenoising");
-        HistoGroup histoGroupNoiseHitOccupancyInRegionsDenoising = histoGroupMap.get("noiseHitOccupancyInRegionsDenoising");        
+        HistoGroup histoGroupNoiseHitOccupancyInRegionsDenoising = histoGroupMap.get("noiseHitOccupancyInRegionsDenoising"); 
+        
+        histoGroupNumTotalHits.getH1F("numTotalHits").fill(tdcs.size());
+        
+        int numTotalHitsDenoising = 0;
         for(TDC tdc : tdcs){
             int sector = tdc.sector();
             int superlayer = tdc.superlayer();
@@ -167,6 +187,7 @@ public class analysisHitOccupancy extends BaseAnalysis{
             }
             
             if(tdc.isRemainedAfterAIDenoising()){
+                numTotalHitsDenoising++;
                 if(Constants.MC){
                     histoGroupHitOccupancyInSectorsDenoising.getH2F("hit occupancy after denoising in sector" + Integer.toString(sector)).fill((superlayer-1)*6 + layer, wire, RWINDOWS[region - 1] / TIMEWINDOW);
                     histoGroupHitOccupancyInRegionsDenoising.getH1F("hit occupancy after denoising in region" + Integer.toString(region)).fill(sector, RWINDOWS[region - 1] / TIMEWINDOW); 
@@ -189,6 +210,8 @@ public class analysisHitOccupancy extends BaseAnalysis{
                 }                
             }
         }
+        
+        histoGroupNumTotalHits.getH1F("numTotalHitsDenoising").fill(numTotalHitsDenoising);
                                        
     }
 
