@@ -23,16 +23,16 @@ public class TrackHistoGroup extends HistoGroup{
     private LinkedHashMap<String,H1F> h1_vx_map;
     private LinkedHashMap<String,H1F> h1_vy_map;
     private LinkedHashMap<String,H1F> h1_vz_map;
-    
-    private H2F h2_category_comp;
-    private H1F h1_ndf0_diff;
-    private H1F h1_chi2overndf_diff;
-    private H1F h1_p_diff;
-    private H1F h1_theta_diff;
-    private H1F h1_phi_diff;
-    private H1F h1_vx_diff;
-    private H1F h1_vy_diff;
-    private H1F h1_vz_diff;    
+         
+    private LinkedHashMap<String,H2F> h2_category_comp_map;
+    private LinkedHashMap<String,H1F> h1_ndf0_diff_map;
+    private LinkedHashMap<String,H1F> h1_chi2overndf_diff_map;
+    private LinkedHashMap<String,H1F> h1_p_diff_map;
+    private LinkedHashMap<String,H1F> h1_theta_diff_map;
+    private LinkedHashMap<String,H1F> h1_phi_diff_map;
+    private LinkedHashMap<String,H1F> h1_vx_diff_map;
+    private LinkedHashMap<String,H1F> h1_vy_diff_map;
+    private LinkedHashMap<String,H1F> h1_vz_diff_map;    
         
     public TrackHistoGroup(String str) {
         super(str);
@@ -45,6 +45,16 @@ public class TrackHistoGroup extends HistoGroup{
         h1_vx_map = new LinkedHashMap<String,H1F>();
         h1_vy_map = new LinkedHashMap<String,H1F>();
         h1_vz_map = new LinkedHashMap<String,H1F>();
+        
+        h2_category_comp_map = new LinkedHashMap<String,H2F>();
+        h1_ndf0_diff_map = new LinkedHashMap<String,H1F>();
+        h1_chi2overndf_diff_map = new LinkedHashMap<String,H1F>();
+        h1_p_diff_map = new LinkedHashMap<String,H1F>();
+        h1_theta_diff_map = new LinkedHashMap<String,H1F>();
+        h1_phi_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vx_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vy_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vz_diff_map = new LinkedHashMap<String,H1F>();         
     }
     
     public TrackHistoGroup(String str, int ncols, int nrows) {
@@ -58,6 +68,16 @@ public class TrackHistoGroup extends HistoGroup{
         h1_vx_map = new LinkedHashMap<String,H1F>();
         h1_vy_map = new LinkedHashMap<String,H1F>();
         h1_vz_map = new LinkedHashMap<String,H1F>();
+        
+        h2_category_comp_map = new LinkedHashMap<String,H2F>();
+        h1_ndf0_diff_map = new LinkedHashMap<String,H1F>();
+        h1_chi2overndf_diff_map = new LinkedHashMap<String,H1F>();
+        h1_p_diff_map = new LinkedHashMap<String,H1F>();
+        h1_theta_diff_map = new LinkedHashMap<String,H1F>();
+        h1_phi_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vx_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vy_diff_map = new LinkedHashMap<String,H1F>();
+        h1_vz_diff_map = new LinkedHashMap<String,H1F>();        
     } 
     
     public void addTrackHistos(int color, int startOrder){ 
@@ -84,39 +104,39 @@ public class TrackHistoGroup extends HistoGroup{
             ranges[6][1] = 5;            
         }
                         
-        H1F h1_category= new H1F("category"+postflix, "category", 8, 0.5, 8.5);
+        H1F h1_category= new H1F("category"+postflix, "", 8, 0.5, 8.5);
         h1_category.setTitleX("DC<N>UR<N>:62,61,60,52,51,50,42,41");
         h1_category.setTitleY("Counts");
         h1_category.setLineColor(color);                 
-        H1F h1_ndf0= new H1F("ndf0"+postflix, "ndf0", 100, 10, 50);
+        H1F h1_ndf0= new H1F("ndf0"+postflix, "", 100, 10, 50);
         h1_ndf0.setTitleX("ndf0");
         h1_ndf0.setTitleY("Counts");
         h1_ndf0.setLineColor(color);         
-        H1F h1_chi2overndf= new H1F("chi2overndf"+postflix, "#Chi^2/ndf", 100, ranges[0][0], ranges[0][1]);
+        H1F h1_chi2overndf= new H1F("chi2overndf"+postflix, "", 100, ranges[0][0], ranges[0][1]);
         h1_chi2overndf.setTitleX("#Chi^2/ndf");
         h1_chi2overndf.setTitleY("Counts");
         h1_chi2overndf.setLineColor(color);                
-        H1F h1_p = new H1F("p"+postflix, "p", 100, ranges[1][0], ranges[1][1]);
+        H1F h1_p = new H1F("p"+postflix, "", 100, ranges[1][0], ranges[1][1]);
         h1_p.setTitleX("p (GeV/c)");
         h1_p.setTitleY("Counts");
         h1_p.setLineColor(color);
-        H1F h1_theta = new H1F("theta"+postflix, "#theta", 100, ranges[2][0], ranges[2][1]);
+        H1F h1_theta = new H1F("theta"+postflix, "", 100, ranges[2][0], ranges[2][1]);
         h1_theta.setTitleX("#theta (rad)");
         h1_theta.setTitleY("Counts");
         h1_theta.setLineColor(color);
-        H1F h1_phi = new H1F("phi"+postflix, "#phi", 100, ranges[3][0], ranges[3][1]);
+        H1F h1_phi = new H1F("phi"+postflix, "", 100, ranges[3][0], ranges[3][1]);
         h1_phi.setTitleX("#phi (rad)");
         h1_phi.setTitleY("Counts");
         h1_phi.setLineColor(color);
-        H1F h1_vx = new H1F("vx"+postflix, "vx", 100, ranges[4][0], ranges[4][1]);
+        H1F h1_vx = new H1F("vx"+postflix, "", 100, ranges[4][0], ranges[4][1]);
         h1_vx.setTitleX("vx (cm)");
         h1_vx.setTitleY("Counts");
         h1_vx.setLineColor(color);        
-        H1F h1_vy = new H1F("vy"+postflix, "vy", 100, ranges[5][0], ranges[5][1]);
+        H1F h1_vy = new H1F("vy"+postflix, "", 100, ranges[5][0], ranges[5][1]);
         h1_vy.setTitleX("vy (cm)");
         h1_vy.setTitleY("Counts");
         h1_vy.setLineColor(color);                
-        H1F h1_vz = new H1F("vz"+postflix, "vz", 100, ranges[6][0], ranges[6][1]);
+        H1F h1_vz = new H1F("vz"+postflix, "", 100, ranges[6][0], ranges[6][1]);
         h1_vz.setTitleX("vz (cm)");
         h1_vz.setTitleY("Counts");
         h1_vz.setLineColor(color);   
@@ -147,38 +167,46 @@ public class TrackHistoGroup extends HistoGroup{
     }
     
     public void addTrackDiffHistos(int color, int startOrder, double rangeFacotr){
-        h2_category_comp= new H2F("category comp", "category comp", 8, 0.5, 8.5, 8, 0.5, 8.5);
+        addTrackDiffHistos("", color, startOrder, rangeFacotr);
+    }
+    
+    public void addTrackDiffHistos(String postflix, int color, int startOrder){
+        addTrackDiffHistos(postflix, color, startOrder, 1);
+    }    
+    
+    public void addTrackDiffHistos(String postflix, int color, int startOrder, double rangeFacotr){
+        H2F h2_category_comp= new H2F("category comp"+postflix, "", 8, 0.5, 8.5, 8, 0.5, 8.5);
         h2_category_comp.setTitleX("DC<N>UR<N>:62,61,60,52,51,50,42,41");
         h2_category_comp.setTitleY("DC<N>UR<N>:62,61,60,52,51,50,42,41");
-        h1_ndf0_diff= new H1F("ndf0Diff", "Diff. of ndf0", 100, -10, 10);
+        H1F h1_ndf0_diff= new H1F("ndf0Diff"+postflix, "", 100, -10, 10);
         h1_ndf0_diff.setTitleX("Diff. of ndf0");
         h1_ndf0_diff.setTitleY("Counts");
         h1_ndf0_diff.setLineColor(color);          
-        h1_chi2overndf_diff= new H1F("chi2overndfDiff", "Diff. of #Chi^2/ndf", 100, -10, 10);
+        H1F h1_chi2overndf_diff= new H1F("chi2overndfDiff"+postflix, "", 100, -10, 10);
         h1_chi2overndf_diff.setTitleX("Diff. of #Chi^2/ndf");
         h1_chi2overndf_diff.setTitleY("Counts");
         h1_chi2overndf_diff.setLineColor(color);                
-        h1_p_diff = new H1F("pDiff", "Diff. of p", 100, -1*rangeFacotr, 1*rangeFacotr);
+        H1F h1_p_diff = new H1F("pDiff"+postflix, "", 100, -1*rangeFacotr, 1*rangeFacotr);
         h1_p_diff.setTitleX("Diff. of p (GeV/c)");
         h1_p_diff.setTitleY("Counts");
         h1_p_diff.setLineColor(color);
-        h1_theta_diff = new H1F("thetaDiff", "Diff. of #theta", 100, -0.1*rangeFacotr, 0.1*rangeFacotr);
+        H1F h1_theta_diff = new H1F("thetaDiff"+postflix, "", 100, -0.1*rangeFacotr, 0.1*rangeFacotr);
         h1_theta_diff.setTitleX("Diff. of #theta (rad)");
         h1_theta_diff.setTitleY("Counts");
         h1_theta_diff.setLineColor(color);
-        h1_phi_diff = new H1F("phiDiff", "Diff. of #phi", 100, -0.5*rangeFacotr, 0.5*rangeFacotr);
+        H1F h1_phi_diff = new H1F("phiDiff"+postflix, "", 100, -0.5*rangeFacotr, 0.5*rangeFacotr);
         h1_phi_diff.setTitleX("Diff. of #phi (rad)");
         h1_phi_diff.setTitleY("Counts");
         h1_phi_diff.setLineColor(color);
-        h1_vx_diff = new H1F("vxDiff", "Diff. of vx", 100, -5*rangeFacotr, 5*rangeFacotr);
+        H1F h1_vx_diff = new H1F("vxDiff"+postflix, "", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vx_diff.setTitleX("Diff. of vx (cm)");
         h1_vx_diff.setTitleY("Counts");
         h1_vx_diff.setLineColor(color);        
-        h1_vy_diff = new H1F("vyDiff", "Diff. of vy", 100, -5*rangeFacotr, 5*rangeFacotr);
+        H1F h1_vy_diff = new H1F("vyDiff"+postflix, "", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vy_diff.setTitleX("Diff. of vy (cm)");
         h1_vy_diff.setTitleY("Counts");
         h1_vy_diff.setLineColor(color);                
-        h1_vz_diff = new H1F("vzDiff", "Diff. of vz", 100, -5*rangeFacotr, 5*rangeFacotr);
+        H1F h1_vz_diff = new H1F("vzDiff"+postflix, "", 100, -5*rangeFacotr, 5*rangeFacotr);
         h1_vz_diff.setTitleX("Diff. of vz (cm)");
         h1_vz_diff.setTitleY("Counts");
         h1_vz_diff.setLineColor(color);   
@@ -191,7 +219,17 @@ public class TrackHistoGroup extends HistoGroup{
         addDataSet(h1_phi_diff, startOrder+5);
         addDataSet(h1_vx_diff, startOrder+6);
         addDataSet(h1_vy_diff, startOrder+7);
-        addDataSet(h1_vz_diff, startOrder+8);         
+        addDataSet(h1_vz_diff, startOrder+8); 
+
+        h2_category_comp_map.put(postflix, h2_category_comp);
+        h1_ndf0_diff_map.put(postflix, h1_ndf0_diff);
+        h1_chi2overndf_diff_map.put(postflix, h1_chi2overndf_diff);
+        h1_p_diff_map.put(postflix, h1_p_diff);
+        h1_theta_diff_map.put(postflix, h1_theta_diff);
+        h1_phi_diff_map.put(postflix, h1_phi_diff);
+        h1_vx_diff_map.put(postflix, h1_vx_diff);
+        h1_vy_diff_map.put(postflix, h1_vy_diff);
+        h1_vz_diff_map.put(postflix, h1_vz_diff);        
     }
     
     public H1F getHistoCategory(){
@@ -267,40 +305,76 @@ public class TrackHistoGroup extends HistoGroup{
     }
     
     public H2F getHistoCategoryComp(){
-        return h2_category_comp;
+        return h2_category_comp_map.get("");
+    }
+    
+    public H2F getHistoCategoryComp(String postflix){
+        return h2_category_comp_map.get(postflix);
     }     
     
     public H1F getHistoNDF0Diff(){
-        return h1_ndf0_diff;
-    }    
+        return h1_ndf0_diff_map.get("");
+    }  
+    
+    public H1F getHistoNDF0Diff(String postflix){
+        return h1_ndf0_diff_map.get(postflix);
+    }     
         
     public H1F getHistoChi2overndfDiff(){
-        return h1_chi2overndf_diff;
+        return h1_chi2overndf_diff_map.get("");
     }
+    
+    public H1F getHistoChi2overndfDiff(String postflix){
+        return h1_chi2overndf_diff_map.get(postflix);
+    }    
     
     public H1F getHistoPDiff(){
-        return h1_p_diff;
+        return h1_p_diff_map.get("");
     }
+    
+    public H1F getHistoPDiff(String postflix){
+        return h1_p_diff_map.get(postflix);
+    }    
     
     public H1F getHistoThetaDiff(){
-        return h1_theta_diff;
+        return h1_theta_diff_map.get("");
     }
     
+    public H1F getHistoThetaDiff(String postflix){
+        return h1_theta_diff_map.get(postflix);
+    }    
+    
     public H1F getHistoPhiDiff(){
-        return h1_phi_diff;
+        return h1_phi_diff_map.get("");
     }
+    
+    public H1F getHistoPhiDiff(String postflix){
+        return h1_phi_diff_map.get(postflix);
+    }    
 
     public H1F getHistoVxDiff(){
-        return h1_vx_diff;
+        return h1_vx_diff_map.get("");
     }
+    
+    public H1F getHistoVxDiff(String postflix){
+        return h1_vx_diff_map.get(postflix);
+    }    
 
     public H1F getHistoVyDiff(){
-        return h1_vy_diff;
+        return h1_vy_diff_map.get("");
     }
+    
+    public H1F getHistoVyDiff(String postflix){
+        return h1_vy_diff_map.get(postflix);
+    }    
 
     public H1F getHistoVzDiff(){
-        return h1_vz_diff;
-    } 
+        return h1_vz_diff_map.get("");
+    }
+    
+    public H1F getHistoVzDiff(String postflix){
+        return h1_vz_diff_map.get(postflix);
+    }     
     
         
 }

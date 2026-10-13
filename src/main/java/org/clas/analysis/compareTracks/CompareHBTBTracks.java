@@ -76,40 +76,43 @@ public class CompareHBTBTracks extends BaseAnalysis{
         histoGroupMap.put(histoGroupKinematicsComp.getName(), histoGroupKinematicsComp);
         
         TrackHistoGroup histoGroupDiff = new TrackHistoGroup("diff", 4, 2);
-        histoGroupDiff.addTrackDiffHistos(1, 0);
+        histoGroupDiff.addTrackDiffHistos( "conv", 1, -3);
+        histoGroupDiff.addTrackDiffHistos( "ai", 2, -3);
         histoGroupMap.put(histoGroupDiff.getName(), histoGroupDiff);
   
         TrackHistoGroup histoGroupDiffLocal = new TrackHistoGroup("diffLocal", 3, 2);
-        histoGroupDiffLocal.addTrackDiffHistos(1, -1);
+        histoGroupDiffLocal.addTrackDiffHistos("conv", 1, -3);
+        histoGroupDiffLocal.addTrackDiffHistos("ai", 2, -3);
         histoGroupMap.put(histoGroupDiffLocal.getName(), histoGroupDiffLocal);
         
     }
              
-    public void processEvent(Event event, int trkType){        
-        List<Track> tracksHB = reader.readTracks(event, trkType - 1);  
-        List<Track> tracksTB = reader.readTracks(event, trkType);
+    public void processEvent(Event event){        
+        List<Track> tracksHBConv = reader.readTracks(event, Constants.CONVHB);  
+        List<Track> tracksTBConv = reader.readTracks(event, Constants.CONVTB);
+        
+        List<Track> tracksHBAI = reader.readTracks(event, Constants.AIHB);  
+        List<Track> tracksTBAI = reader.readTracks(event, Constants.AITB);        
         
         HistoGroup histoGroupKinematicsComp = histoGroupMap.get("kinematicsComp");
         TrackHistoGroup histoGroupDiff = (TrackHistoGroup) histoGroupMap.get("diff");
         TrackHistoGroup histoGroupDiffLocal = (TrackHistoGroup) histoGroupMap.get("diffLocal");
-        boolean flag = false;
-        for(Track trkHB : tracksHB){
-           for(Track trkTB : tracksTB){ 
+
+        
+        
+        for(Track trkHB : tracksHBConv){
+           for(Track trkTB : tracksTBConv){ 
                int nMatchedClusters = trkHB.matchedClusters(trkTB);
                if(nMatchedClusters == 6 || nMatchedClusters == 5){
-                   histoGroupKinematicsComp.getH2F("chi2OverNDF_comp").fill(trkHB.chi2()/trkHB.NDF(), trkTB.chi2()/trkTB.NDF());
-                   histoGroupKinematicsComp.getH2F("z_comp").fill(trkHB.vz(), trkTB.vz());
-                   histoGroupKinematicsComp.getH2F("p_comp").fill(trkHB.p(), trkTB.p());
-                   flag = true;
                    
                    if(trkTB.isValid()){
-                        histoGroupDiff.getHistoChi2overndfDiff().fill(trkTB.chi2()/trkTB.NDF() - trkHB.chi2()/trkHB.NDF());
-                        histoGroupDiff.getHistoPDiff().fill(trkTB.p() - trkHB.p());
-                        histoGroupDiff.getHistoThetaDiff().fill(trkTB.theta() - trkHB.theta());
-                        histoGroupDiff.getHistoPhiDiff().fill(trkTB.phi() - trkHB.phi());
-                        histoGroupDiff.getHistoVxDiff().fill(trkTB.vx() - trkHB.vx());
-                        histoGroupDiff.getHistoVyDiff().fill(trkTB.vy() - trkHB.vy());
-                        histoGroupDiff.getHistoVzDiff().fill(trkTB.vz() - trkHB.vz());
+                        histoGroupDiff.getHistoChi2overndfDiff("conv").fill(trkTB.chi2()/trkTB.NDF() - trkHB.chi2()/trkHB.NDF());
+                        histoGroupDiff.getHistoPDiff("conv").fill(trkTB.p() - trkHB.p());
+                        histoGroupDiff.getHistoThetaDiff("conv").fill(trkTB.theta() - trkHB.theta());
+                        histoGroupDiff.getHistoPhiDiff("conv").fill(trkTB.phi() - trkHB.phi());
+                        histoGroupDiff.getHistoVxDiff("conv").fill(trkTB.vx() - trkHB.vx());
+                        histoGroupDiff.getHistoVyDiff("conv").fill(trkTB.vy() - trkHB.vy());
+                        histoGroupDiff.getHistoVzDiff("conv").fill(trkTB.vz() - trkHB.vz());
                         
                         Point3D momLocalTB = CommonFunctions.getCoordsInLocal(trkTB.px(), trkTB.py(), trkTB.pz(), trkTB.sector());
                         Point3D vtxLocalTB = CommonFunctions.getCoordsInLocal(trkTB.vx(), trkTB.vy(), trkTB.vz(), trkTB.sector());            
@@ -119,12 +122,52 @@ public class CompareHBTBTracks extends BaseAnalysis{
                         double[] momLocalTBSpherical = CommonFunctions.toSpherical(momLocalTB);
                         double[] momLocalHBSpherical = CommonFunctions.toSpherical(momLocalHB);
 
-                        histoGroupDiffLocal.getHistoPDiff().fill(momLocalTBSpherical[0] - momLocalHBSpherical[0]);
-                        histoGroupDiffLocal.getHistoThetaDiff().fill(momLocalTBSpherical[1] - momLocalHBSpherical[1]);
-                        histoGroupDiffLocal.getHistoPhiDiff().fill(momLocalTBSpherical[2] - momLocalHBSpherical[2]);
-                        histoGroupDiffLocal.getHistoVxDiff().fill(vtxLocalTB.x() - vtxLocalHB.x());
-                        histoGroupDiffLocal.getHistoVyDiff().fill(vtxLocalTB.y() - vtxLocalHB.y());
-                        histoGroupDiffLocal.getHistoVzDiff().fill(vtxLocalTB.z() - vtxLocalHB.z());                                                
+                        histoGroupDiffLocal.getHistoPDiff("conv").fill(momLocalTBSpherical[0] - momLocalHBSpherical[0]);
+                        histoGroupDiffLocal.getHistoThetaDiff("conv").fill(momLocalTBSpherical[1] - momLocalHBSpherical[1]);
+                        histoGroupDiffLocal.getHistoPhiDiff("conv").fill(momLocalTBSpherical[2] - momLocalHBSpherical[2]);
+                        histoGroupDiffLocal.getHistoVxDiff("conv").fill(vtxLocalTB.x() - vtxLocalHB.x());
+                        histoGroupDiffLocal.getHistoVyDiff("conv").fill(vtxLocalTB.y() - vtxLocalHB.y());
+                        histoGroupDiffLocal.getHistoVzDiff("conv").fill(vtxLocalTB.z() - vtxLocalHB.z());                                                
+                   }                   
+                   
+                   break;
+               }
+           }    
+        } 
+        
+        boolean flag = false;
+        for(Track trkHB : tracksHBAI){
+           for(Track trkTB : tracksTBAI){ 
+               int nMatchedClusters = trkHB.matchedClusters(trkTB);
+               if(nMatchedClusters == 6 || nMatchedClusters == 5){
+                   histoGroupKinematicsComp.getH2F("chi2OverNDF_comp").fill(trkHB.chi2()/trkHB.NDF(), trkTB.chi2()/trkTB.NDF());
+                   histoGroupKinematicsComp.getH2F("z_comp").fill(trkHB.vz(), trkTB.vz());
+                   histoGroupKinematicsComp.getH2F("p_comp").fill(trkHB.p(), trkTB.p());
+                   flag = true;
+                   
+                   if(trkTB.isValid()){
+                        histoGroupDiff.getHistoChi2overndfDiff("ai").fill(trkTB.chi2()/trkTB.NDF() - trkHB.chi2()/trkHB.NDF());
+                        histoGroupDiff.getHistoPDiff("ai").fill(trkTB.p() - trkHB.p());
+                        histoGroupDiff.getHistoThetaDiff("ai").fill(trkTB.theta() - trkHB.theta());
+                        histoGroupDiff.getHistoPhiDiff("ai").fill(trkTB.phi() - trkHB.phi());
+                        histoGroupDiff.getHistoVxDiff("ai").fill(trkTB.vx() - trkHB.vx());
+                        histoGroupDiff.getHistoVyDiff("ai").fill(trkTB.vy() - trkHB.vy());
+                        histoGroupDiff.getHistoVzDiff("ai").fill(trkTB.vz() - trkHB.vz());
+                        
+                        Point3D momLocalTB = CommonFunctions.getCoordsInLocal(trkTB.px(), trkTB.py(), trkTB.pz(), trkTB.sector());
+                        Point3D vtxLocalTB = CommonFunctions.getCoordsInLocal(trkTB.vx(), trkTB.vy(), trkTB.vz(), trkTB.sector());            
+                        Point3D momLocalHB = CommonFunctions.getCoordsInLocal(trkHB.px(), trkHB.py(), trkHB.pz(), trkHB.sector());
+                        Point3D vtxLocalHB = CommonFunctions.getCoordsInLocal(trkHB.vx(), trkHB.vy(), trkHB.vz(), trkHB.sector());
+
+                        double[] momLocalTBSpherical = CommonFunctions.toSpherical(momLocalTB);
+                        double[] momLocalHBSpherical = CommonFunctions.toSpherical(momLocalHB);
+
+                        histoGroupDiffLocal.getHistoPDiff("ai").fill(momLocalTBSpherical[0] - momLocalHBSpherical[0]);
+                        histoGroupDiffLocal.getHistoThetaDiff("ai").fill(momLocalTBSpherical[1] - momLocalHBSpherical[1]);
+                        histoGroupDiffLocal.getHistoPhiDiff("ai").fill(momLocalTBSpherical[2] - momLocalHBSpherical[2]);
+                        histoGroupDiffLocal.getHistoVxDiff("ai").fill(vtxLocalTB.x() - vtxLocalHB.x());
+                        histoGroupDiffLocal.getHistoVyDiff("ai").fill(vtxLocalTB.y() - vtxLocalHB.y());
+                        histoGroupDiffLocal.getHistoVzDiff("ai").fill(vtxLocalTB.z() - vtxLocalHB.z());                                                
                    }                   
                    
                    break;
@@ -135,8 +178,7 @@ public class CompareHBTBTracks extends BaseAnalysis{
                histoGroupKinematicsComp.getH1F("z_noMatchedHB").fill(trkHB.vz());
                histoGroupKinematicsComp.getH1F("p_noMatchedHB").fill(trkHB.p());
            }
-     
-        }           
+        }   
         
     }
                         
@@ -148,7 +190,6 @@ public class CompareHBTBTracks extends BaseAnalysis{
         parser.addOption("-n"          ,"-1",   "maximum number of events to process");
         parser.addOption("-energy"     ,"10.6", "beam energy");
         parser.addOption("-target"     ,"2212", "target PDG");
-        parser.addOption("-trkType"    ,"22",   "tracking type: ConvTB(12), AITB(22)");
         parser.addOption("-edge"       ,"",     "colon-separated DC, FTOF, ECAL edge cuts in cm (e.g. 5:10:5)");
         
         parser.addOption("-plot"       ,"1",    "display histograms (0/1)");
@@ -162,7 +203,6 @@ public class CompareHBTBTracks extends BaseAnalysis{
         int   maxEvents  = parser.getOption("-n").intValue();
         Constants.BEAMENERGY = parser.getOption("-energy").doubleValue();
         Constants.TARGETPID  = parser.getOption("-target").intValue();  
-        int trkType = parser.getOption("-trkType").intValue(); 
         String[] edge  = parser.getOption("-edge").stringValue().split(":");
         if(!parser.getOption("-edge").stringValue().isBlank() && edge.length != 3) {
             System.out.println("\n >>>> error: incorrect edge parameters...\n");
@@ -206,7 +246,7 @@ public class CompareHBTBTracks extends BaseAnalysis{
                 
                 reader.nextEvent(event);
                 
-                analysis.processEvent(event, trkType);
+                analysis.processEvent(event);
 
                 progress.updateStatus();
                 if(maxEvents>0){
