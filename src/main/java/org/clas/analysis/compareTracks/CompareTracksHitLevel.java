@@ -61,7 +61,7 @@ public class CompareTracksHitLevel extends BaseAnalysis {
     
     private static String[] postflixes = {"1", "2"};
     
-    private static int MATCHEDDCHITSCUT = 18;
+    private static int MATCHEDDCHITSCUT = 0;
     private static int MATCHEDURWELLCROSSESCUT = 0;
 
     public CompareTracksHitLevel() {
