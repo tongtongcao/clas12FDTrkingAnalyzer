@@ -103,7 +103,7 @@ public class HitsLabeledByTracksAllSectors {
                 
                 List<Hit> hitList = new ArrayList();
                 for(Track trk : localEvent.getTracksTB()){
-                    if(trk.vz() > -15 && trk.vz() < 10){
+                    if(trk.vz() > -20 && trk.vz() < 15){
                         hitList.addAll(trk.getHits());
                     }
                 }

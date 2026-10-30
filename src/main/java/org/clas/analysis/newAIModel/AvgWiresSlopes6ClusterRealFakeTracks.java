@@ -80,7 +80,7 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trk : localEvent.getTracksTB()){  
-                        if(trk.isValid(true) && trk.getNumClusters() == 6){                  
+                        if(trk.isValid(false) && trk.vz() > -20 && trk.vz() < 15 && trk.getNumClusters() == 6){                  
                             
                             List<Integer> clsIdsInTrack = new ArrayList();
                             for(Cluster clsInTrack : trk.getClusters()){

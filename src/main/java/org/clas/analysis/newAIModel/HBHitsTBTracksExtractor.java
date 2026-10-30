@@ -82,7 +82,7 @@ public class HBHitsTBTracksExtractor{
 
                     LocalEvent localEvent = new LocalEvent(localReader, event, trkType);
                     for(Track trkTB : localEvent.getTracksTB()){  
-                        if(trkTB.isValid(true)){  
+                        if(trkTB.isValid(false) && trkTB.vz() > -20 && trkTB.vz() < 15){  
                             for(Track trkHB : localEvent.getTracksHB()){
                                 if(trkHB.id() == trkTB.id() && trkHB.getNumClusters() == trkTB.getNumClusters() && Math.abs(trkHB.getNumHits() - trkTB.getNumHits()) <= 3){
                                     int numHits = trkHB.getHits().size();
