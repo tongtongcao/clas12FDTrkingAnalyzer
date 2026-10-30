@@ -100,7 +100,15 @@ public class HitsLabeledByTracksAllSectors {
                     int wire = tdc.component();                            
                     if(tdc.isRemainedAfterDecoding()) tdcs[sector-1][(superlayer-1)*6 + layer-1][wire-1] = 1;
                 }
-                for(Hit hit : localEvent.getHitsTB()){
+                
+                List<Hit> hitList = new ArrayList();
+                for(Track trk : localEvent.getTracksTB()){
+                    if(trk.vz() > -15 && trk.vz() < 10){
+                        hitList.addAll(trk.getHits());
+                    }
+                }
+                
+                for(Hit hit : hitList){
                     int sector = hit.sector();
                     int superlayer = hit.superlayer();
                     int layer = hit.layer();
