@@ -376,15 +376,15 @@ public class Reader {
         return crosses;
     }
       
-    public List<Cluster> readClusters(Event event) {
-        return readClusters(event, Constants.AITB);
+    public List<Cluster> readClusters(Event event, int type) {
+        return readClusters(event, type, false);
     }
     
     //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22) or Cluster from clusterring(others)
-    public List<Cluster> readClusters(Event event, int type) {
+    public List<Cluster> readClusters(Event event, int type, boolean dn) {
         Bank clusterBank = null;
         if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
-            clusterBank = banks.getDCClusterBank();
+            clusterBank = dn ? banks.getDCDNClusterBank() : banks.getDCClusterBank();
         }
         else {
             clusterBank = banks.getTrackingClusterBank(type);           
@@ -454,13 +454,13 @@ public class Reader {
         
         return clusters;
     }
-    
-    public List<Cluster> readClusters(Event event, List<Hit> hits){
-        return readClusters(event, hits, Constants.AITB);
+
+    public List<Cluster> readClusters(Event event, List<Hit> hits, int type) {       
+        return readClusters(event, hits, type, false);
     }
     
-    public List<Cluster> readClusters(Event event, List<Hit> hits, int type) {        
-        List<Cluster> clusters = readClusters(event, type);
+    public List<Cluster> readClusters(Event event, List<Hit> hits, int type, boolean dn) {        
+        List<Cluster> clusters = readClusters(event, type, dn);
         for(Cluster cls: clusters) {
             cls.setHits(hits);
             cls.separateNormalBgHits();
@@ -469,12 +469,12 @@ public class Reader {
         return clusters;
     }
     
-    public List<Hit> readHits(Event event) {
-        return readHits(event, Constants.AITB);
+    public List<Hit> readHits(Event event, int type) {
+        return readHits(event, type, false);
     }
     
-    //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22) or Cluster from clusterring(others)
-    public List<Hit> readHits(Event event, int type) {
+    //ConvHB(11) or ConvTB(12) or AIHB(21) or AITB(22) or Cluster from clustering(others)
+    public List<Hit> readHits(Event event, int type, boolean dn) {
         Bank dcTDCBank = banks.getDCTDCBank();
         List<TDC> tdcs = new ArrayList();
         if(dcTDCBank != null){
@@ -499,7 +499,7 @@ public class Reader {
         
         Bank hitBank = null;
         if(type!=Constants.CONVHB && type!=Constants.CONVTB && type!=Constants.AIHB && type!=Constants.AITB){
-            hitBank = banks.getDCHitBank();
+            hitBank = dn ? banks.getDCDNHitBank() : banks.getDCHitBank();
         }
         else {
             hitBank = banks.getTrackingHitBank(type);           
@@ -615,7 +615,11 @@ public class Reader {
     } 
     
     public List<AICandidate> readAICandidates(Event event) {
-        Bank aiCandidateBank = banks.getAICandidateBank();
+        return readAICandidates(event, false);
+    }
+    
+    public List<AICandidate> readAICandidates(Event event, boolean dn) {
+        Bank aiCandidateBank = dn ? banks.getAIDNCandidateBank() : banks.getAICandidateBank();
         List<AICandidate> cands = new ArrayList();
         
         if(aiCandidateBank != null){

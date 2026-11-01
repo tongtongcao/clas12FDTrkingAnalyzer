@@ -22,6 +22,7 @@ import org.clas.element.Cluster;
 import org.clas.reader.Reader;
 import org.clas.reader.Banks;
 import org.clas.reader.LocalEvent;
+import org.clas.utilities.Constants;
 
 /**
  * Extract average wires and slopes of clusters from 6-cluster valid TB tracks, and label such 6-cluster-combos as 1
@@ -41,12 +42,15 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
         parser.addOption("-o", "", "output file name prefix");
         parser.addOption("-n", "10000000", "maximum output entries");
         parser.addOption("-trkType"    ,"12",   "tracking type: ConvTB(12), AITB(22)");
+        parser.addOption("-dn", "0", "if use DN hit and cluster banks (0/1)");
         
         parser.parse(args);
 
         String namePrefix = parser.getOption("-o").stringValue();
         int maxOutputEntries = parser.getOption("-n").intValue();
-        int trkType = parser.getOption("-trkType").intValue();         
+        int trkType = parser.getOption("-trkType").intValue();  
+        boolean dn = (parser.getOption("-dn").intValue() != 0);
+        Constants.DN = dn;
 
         List<String> inputList = parser.getInputList();
         if (inputList.isEmpty() == true) {
@@ -87,7 +91,7 @@ public class AvgWiresSlopes6ClusterRealFakeTracks{
                                 clsIdsInTrack.add(clsInTrack.id());
                             }
                             
-                            List<Cluster> clustersInSector = localEvent.getClustersInSector(trk.sector());
+                            List<Cluster> clustersInSector = localEvent.getClustersInSector(trk.sector(), dn);
                             List<Cluster> clustersInTrack = new ArrayList();
                             for(Cluster cls : clustersInSector){
                                 for(int clsIdInTrack : clsIdsInTrack){

@@ -41,12 +41,18 @@ public class LocalEvent {
     private List<MCParticle> mcParticles = new ArrayList();
     private MCTrue mcTrue = null;
     private List<TDC> tdcs = new ArrayList();
-    private List<Hit> hits = new ArrayList(); //Hits in bank HitBasedTrkg::Hits, which are fetched after denoising and input into clustering
+    private List<Hit> hits = new ArrayList(); //Hits in bank HitBasedTrkg::Hits, which are fetched and input into clustering
+    private List<Hit> hitsDN = new ArrayList(); //Hits in bank HitBasedTrkg::DNHits, which are fetched and input into clustering
     private List<Cluster> clusters = new ArrayList();
+    private List<Cluster> clustersDN = new ArrayList();
     private List<Hit> hitsClustering = new ArrayList();
+    private List<Hit> hitsDNClustering = new ArrayList();
     private List<Hit> hitsAICands = new ArrayList();
+    private List<Hit> hitsAIDNCands = new ArrayList();
     private List<Cluster> clustersAICands = new ArrayList();
+    private List<Cluster> clustersAIDNCands = new ArrayList();
     private List<AICandidate> aiCands = new ArrayList();   
+    private List<AICandidate> aiDNCands = new ArrayList(); 
     private List<Hit> hitsAllHB = new ArrayList();
     private List<Cluster> clustersAllHB = new ArrayList();
     private List<Cross> crossesAllHB = new ArrayList();
@@ -191,7 +197,9 @@ public class LocalEvent {
               
         // Hits and clusters from clustring
         hits = reader.readHits(event, 0);
-        clusters = reader.readClusters(event, hits, 0);       
+        hitsDN = reader.readHits(event, 0, true);
+        clusters = reader.readClusters(event, hits, 0);  
+        clustersDN = reader.readClusters(event, hitsDN, 0, true);
         hitsClustering = new ArrayList();
         for(Cluster cls : clusters){
             hitsClustering.addAll(cls.getHits());
@@ -211,11 +219,33 @@ public class LocalEvent {
                 }
             }            
             cls.setMatchedURWellCrosses(matchedURWellCrosses);            
-        }                      
+        }
+        
+        hitsDNClustering = new ArrayList();
+        for(Cluster cls : clustersDN){
+            hitsDNClustering.addAll(cls.getHits());
+            List<URWellCross> matchedURWellCrosses = new ArrayList();             
+            for (URWellCross uRWellCross : uRWellCrosses) {
+                if (uRWellCross.id() == cls.getMatchedURWellCrossIds()[0]) {
+                    matchedURWellCrosses.add(uRWellCross);
+                    uRWellCross.setIsUsedClustering(true);
+                    break;
+                }
+            }
+            for (URWellCross uRWellCross : uRWellCrosses) {
+                if (uRWellCross.id() == cls.getMatchedURWellCrossIds()[1]) {
+                    matchedURWellCrosses.add(uRWellCross);
+                    uRWellCross.setIsUsedClustering(true);
+                    break;
+                }
+            }            
+            cls.setMatchedURWellCrosses(matchedURWellCrosses);            
+        }        
         
         // Clusters in AI candidates
         if(trkType == Constants.AIHB || trkType == Constants.AITB){
             aiCands = reader.readAICandidates(event);
+            aiDNCands = reader.readAICandidates(event, true);
             for(AICandidate cand : aiCands) {
                 cand.setHitsClusters(clusters);
                 if(!cand.getClusters().isEmpty()) cand.setSector(cand.getClusters().get(0).sector()); // sector is not correct in bank ai::tracks, so need to be set by a cluster
@@ -231,7 +261,24 @@ public class LocalEvent {
                         urCrs.setIsUsedAI(true);
                     }
                 }
-            }                       
+            }
+            
+            for(AICandidate cand : aiDNCands) {
+                cand.setHitsClusters(clustersDN);
+                if(!cand.getClusters().isEmpty()) cand.setSector(cand.getClusters().get(0).sector()); // sector is not correct in bank ai::tracks, so need to be set by a cluster
+                clustersAIDNCands.addAll(cand.getClusters());
+                for(Cluster cls : cand.getClusters()){
+                    hitsAIDNCands.addAll(cls.getHits());
+                }
+                
+                if(readURWell){
+                    cand.setURWellCrosses(uRWellCrosses);
+                    uRWellCrossesAICands.addAll(cand.getURWellCrosses());
+                    for(URWellCross urCrs : cand.getURWellCrosses()){
+                        urCrs.setIsUsedAI(true);
+                    }
+                }
+            }            
         }
         
         if(trkType == Constants.CONVHB || trkType == Constants.AIHB){
@@ -484,13 +531,26 @@ public class LocalEvent {
         return hits;
     }
     
+    public List<Hit> getHitsDN(){
+        return hitsDN;
+    }    
+    
     public List<Cluster> getClusters(){
         return clusters;
     }
     
+    public List<Cluster> getClustersDN(){
+        return clustersDN;
+    }  
+    
     public List<Cluster> getClustersInSector(int sector){
+        return getClustersInSector(sector, false);
+    }    
+    
+    public List<Cluster> getClustersInSector(int sector, boolean dn){
         List<Cluster> clustersInSector = new ArrayList();
-        for(Cluster cls : clusters){
+        List<Cluster> clusterList = dn ? clustersDN : clusters;
+        for(Cluster cls : clusterList){
             if(cls.sector() == sector) clustersInSector.add(cls);
         }
         return clustersInSector;
@@ -500,17 +560,33 @@ public class LocalEvent {
         return hitsClustering;
     }
     
+    public List<Hit> getHitsDNClustering(){
+        return hitsDNClustering;
+    }    
+    
     public List<Hit> getHitsAICands(){
         return hitsAICands;
     }
+    
+    public List<Hit> getHitsAIDNCands(){
+        return hitsAIDNCands;
+    }    
     
     public List<Cluster> getClustersAICands(){
         return clustersAICands;
     }
     
+    public List<Cluster> getClustersAIDNCands(){
+        return clustersAIDNCands;
+    }    
+    
     public List<AICandidate> getAICands(){
         return aiCands;
     }
+
+    public List<AICandidate> getAIDNCands(){
+        return aiDNCands;
+    }    
     
     public List<Hit> getHitsAllHB(){
         return hitsAllHB;

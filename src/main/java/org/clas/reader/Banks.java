@@ -23,7 +23,9 @@ public class Banks {
     private Bank dcTDCBank;
     private Bank dcTOTBank;
     private Bank dcHitBank;
-    private Bank dcClusterBank;  
+    private Bank dcDNHitBank;
+    private Bank dcClusterBank; 
+    private Bank dcDNClusterBank; 
     
     // uRWell banks
     private Bank uRWellADCBank;
@@ -61,6 +63,7 @@ public class Banks {
     
     // ai banks
     private Bank aiCandidates;
+    private Bank aiDNCandidates;
     private Bank aiHBParticleBank;
     private Bank aiHBTrajectoryBank;
     private Bank aiHBTrackBank;
@@ -103,8 +106,12 @@ public class Banks {
             this.dcTDCBank        = new Bank(schema.getSchema("DC::tdc"));
         if(schema.hasSchema("HitBasedTrkg::Hits"))
             this.dcHitBank        = new Bank(schema.getSchema("HitBasedTrkg::Hits"));
+        if(schema.hasSchema("HitBasedTrkg::DNHits"))
+            this.dcDNHitBank        = new Bank(schema.getSchema("HitBasedTrkg::DNHits"));        
         if(schema.hasSchema("HitBasedTrkg::Clusters"))
             this.dcClusterBank    = new Bank(schema.getSchema("HitBasedTrkg::Clusters"));     
+        if(schema.hasSchema("HitBasedTrkg::DNClusters"))
+            this.dcDNClusterBank    = new Bank(schema.getSchema("HitBasedTrkg::DNClusters"));           
         
         // uRWell banks
         if(schema.hasSchema("URWT::adc"))
@@ -187,6 +194,8 @@ public class Banks {
         // AI HB banks
         if(schema.hasSchema("ai::tracks"))
             this.aiCandidates     = new Bank(schema.getSchema("ai::tracks"));
+        if(schema.hasSchema("aidn::tracks"))
+            this.aiDNCandidates     = new Bank(schema.getSchema("aidn::tracks"));        
         if(schema.hasSchema("RECHBAI::Particle"))
             this.aiHBParticleBank   = new Bank(schema.getSchema("RECHBAI::Particle"));
         if(schema.hasSchema("RECHBAI::Traj"))
@@ -274,10 +283,18 @@ public class Banks {
     public Bank getDCHitBank() {
 	return dcHitBank;
     }
+
+    public Bank getDCDNHitBank() {
+	return dcDNHitBank;
+    }    
     
     public Bank getDCClusterBank() {
 	return dcClusterBank;
     }
+    
+    public Bank getDCDNClusterBank() {
+	return dcDNClusterBank;
+    }    
     
     public Bank getURWellADCBank() {
 	return uRWellADCBank;
@@ -475,4 +492,8 @@ public class Banks {
     public Bank getAICandidateBank() {
 	return aiCandidates;
     }
+    
+    public Bank getAIDNCandidateBank() {
+	return aiDNCandidates;
+    }    
 }
