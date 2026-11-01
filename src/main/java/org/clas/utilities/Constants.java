@@ -69,6 +69,9 @@ public class Constants {
     public static final int AIHB = 21;
     public static final int AITB = 22;
     
+    // if use DN hit and cluster banks
+    public static boolean DN = false;
+    
     // Orders for normal hits
     public static final int[] NORMALHITORDERS = {0, 20, 40, 50, 60};
     
